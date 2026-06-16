@@ -13,7 +13,7 @@ window.COLO_CONFIG = {
   /* --- WhatsApp ---
      Número COM indicativo de Angola, só dígitos, sem "+" nem espaços.
      Exemplo para +244 923 000 000  ->  "244923000000"               */
-  whatsapp: "244900000000",
+  whatsapp: "244924644918",
 
   /* Link do Instagram (perfil completo) */
   instagram: "https://instagram.com/coloangola",
