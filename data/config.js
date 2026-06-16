@@ -28,7 +28,7 @@ window.COLO_CONFIG = {
 
   /* --- Mensagem da Colo (semanal/diária) ---
      Deixa "" para esconder a secção. Escreve algo curto e carinhoso. */
-  mensagemDaSemana: "Esta semana escolhi pratos mais leves para acompanhar a fase folicular. Cuida de ti — começa pelo prato. 💛",
+  mensagemDaSemana: "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
 
   /* Moeda (apenas o símbolo apresentado nos preços) */
   moeda: "Kz"
