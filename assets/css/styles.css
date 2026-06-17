@@ -213,9 +213,9 @@ p { margin: 0 0 1.1rem; }
 }
 .brand { display: flex; align-items: center; line-height: 1; }
 .brand-logo {
-  height: 36px;
-  width: auto;
-  max-width: 120px;
+  height: auto;
+  width: 130px;
+  max-height: 52px;
   display: block;
   object-fit: contain;
   transition: opacity .2s ease;
@@ -778,8 +778,9 @@ p { margin: 0 0 1.1rem; }
 .footer-brand { display: flex; justify-content: center; }
 .footer-brand p { color: var(--rose-soft); margin: 6px 0 0; font-size: 1.05rem; }
 .footer-logo {
-  height: 90px;
-  width: auto;
+  height: auto;
+  width: 180px;
+  max-height: 90px;
   display: block;
   object-fit: contain;
   opacity: .92;
