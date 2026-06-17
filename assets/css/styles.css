@@ -6,28 +6,31 @@
    ========================================================= */
 
 :root {
-  --brown:        #6b4a2e;
-  --brown-dark:   #543a24;
-  --cream:        #f6ede2;
-  --cream-2:      #efe1d2;
-  --cream-3:      #faf4ec;
-  --rose:         #cf9b91;
-  --rose-deep:    #bd8579;
-  --rose-soft:    #e7c3bb;
-  --sage:         #8b8e6c;
-  --ink:          #4a3a2c;
-  --muted:        #8a7766;
+  /* Paleta oficial do manual de marca Colo */
+  --brown:        #6b3f1f;   /* castanho principal do logo */
+  --brown-dark:   #4e2e13;   /* castanho escuro para texto */
+  --cream:        #f7ede3;   /* creme claro de fundo */
+  --cream-2:      #eedfd0;   /* creme médio */
+  --cream-3:      #faf5ef;   /* creme muito claro */
+  --rose:         #c98b82;   /* rosa queimado principal */
+  --rose-deep:    #b87268;   /* rosa mais escuro */
+  --rose-soft:    #e2b8b0;   /* rosa suave */
+  --sage:         #7d9178;   /* verde-sálvia do manual */
+  --sage-light:   #a8b8a4;   /* verde-sálvia claro */
+  --terracota:    #c07055;   /* terracota do manual */
+  --ink:          #3e2a18;   /* castanho muito escuro para texto */
+  --muted:        #8a7060;   /* cinza-castanho para texto secundário */
   --white:        #ffffff;
 
   --radius:   20px;
   --radius-sm:14px;
-  --shadow:   0 20px 60px -20px rgba(84, 58, 36, .38);
-  --shadow-sm:0 8px 28px -12px rgba(84, 58, 36, .32);
-  --shadow-xs:0 4px 16px -8px rgba(84, 58, 36, .22);
+  --shadow:   0 20px 60px -20px rgba(78, 46, 19, .36);
+  --shadow-sm:0 8px 28px -12px rgba(78, 46, 19, .28);
+  --shadow-xs:0 4px 16px -8px rgba(78, 46, 19, .20);
   --maxw:     1140px;
 
   --serif:  "Cormorant Garamond", Georgia, serif;
-  --sans:   "Jost", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --sans:   "Montserrat", "Lato", -apple-system, "Segoe UI", system-ui, sans-serif;
   --script: "Parisienne", cursive;
 }
 
@@ -467,6 +470,23 @@ p { margin: 0 0 1.1rem; }
 .pillar h3 { color: var(--brown); }
 .pillar p { color: var(--muted); margin: 0; font-size: .97rem; line-height: 1.65; }
 
+/* Variantes de cor dos pilares — paleta oficial */
+.pillar-rose .pillar-icon { background: rgba(201, 139, 130, .15); }
+.pillar-rose { border-top: 3px solid var(--rose); }
+.pillar-sage .pillar-icon { background: rgba(125, 145, 120, .15); }
+.pillar-sage { border-top: 3px solid var(--sage); }
+.pillar-terra .pillar-icon { background: rgba(192, 112, 85, .15); }
+.pillar-terra { border-top: 3px solid var(--terracota); }
+
+/* Frase conceito da marca */
+.conceito-frase {
+  font-family: var(--script);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: var(--rose-deep);
+  margin: 1.4rem auto 0;
+  letter-spacing: .01em;
+}
+
 /* ----------------------- menu ----------------------- */
 .menu-banner {
   max-width: 660px;
@@ -758,20 +778,29 @@ p { margin: 0 0 1.1rem; }
 }
 
 /* ----------------------- rodapé ----------------------- */
-.site-footer { background: var(--brown); color: var(--cream-2); }
+.site-footer { background: var(--brown-dark); color: var(--cream-2); }
 .footer-strip { background: var(--sage); color: var(--cream-3); }
 .footer-strip-inner {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px 44px;
-  padding: 18px 28px;
-  font-size: .84rem;
-  letter-spacing: .05em;
+  gap: 12px 40px;
+  padding: 16px 28px;
+  font-size: .78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 .footer-strip-inner span {
-  opacity: .9;
+  opacity: .88;
   transition: opacity .2s ease;
+  position: relative;
+}
+.footer-strip-inner span:not(:last-child)::after {
+  content: '•';
+  position: absolute;
+  right: -22px;
+  opacity: .5;
 }
 .footer-strip-inner span:hover { opacity: 1; }
 .footer-main { padding: 56px 28px 44px; text-align: center; }
