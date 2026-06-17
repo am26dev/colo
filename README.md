@@ -1,5 +1,7 @@
 # Colo — *Comida que cuida de ti* 🤍
 
+> 🌐 **No ar:** https://am26dev.github.io/colo/
+
 Micro-site (landing page) da marca **Colo**: comida pensada na mulher — saudável,
 anti-inflamatória e personalizada conforme o ciclo menstrual. Mercado: **Angola**.
 
@@ -70,10 +72,16 @@ python -m http.server 8000
 Qualquer alojamento estático serve: **Netlify**, **Vercel**, **Cloudflare Pages**
 ou **GitHub Pages**. Não precisa de servidor nem base de dados.
 
+O site já está publicado em **GitHub Pages**: https://am26dev.github.io/colo/
+(branch `main`, atualiza sozinho a cada `git push`).
+
 ### Domínio `.ao`
 1. Regista o domínio (ex.: `colo.ao`) junto de um registador angolano.
-2. No alojamento, adiciona o domínio personalizado.
-3. Aponta o DNS para o alojamento (registos A/CNAME indicados pelo serviço).
+2. Em **Settings → Pages → Custom domain** do repositório, escreve `colo.ao`
+   (isto cria um ficheiro `CNAME` no repo).
+3. No teu DNS, aponta o domínio para o GitHub Pages:
+   - `A` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - (ou `CNAME` de `www` → `am26dev.github.io`)
 4. Atualiza `dominio` em `data/config.js`.
 
 ---
