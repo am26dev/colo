@@ -207,10 +207,11 @@
         </div>
 
         <div class="field">
-          <label>Pratos que queres</label>
-          <div class="pratos-picker" id="pratos-picker" data-pratos-picker>
-            <!-- pratos gerados dinamicamente por JS a partir de data/menu.js -->
-          </div>
+          <label for="pratos">Pratos que queres</label>
+          <select id="pratos" name="pratos" data-pratos-select>
+            <option value="">Escolhe um prato…</option>
+            <!-- opções geradas dinamicamente por JS a partir de data/menu.js -->
+          </select>
           <p class="pratos-total" id="pratos-total" hidden>Total: <strong id="pratos-total-val">0 Kz</strong></p>
         </div>
 

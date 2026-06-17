@@ -260,83 +260,42 @@
     }
   }
 
-  /* ---------- seletor de pratos no formulário ---------- */
+  /* ---------- seletor de pratos no formulário (select nativo) ---------- */
   function renderPratosPicker() {
-    var picker = $('[data-pratos-picker]');
-    if (!picker) return;
+    var sel = $('[data-pratos-select]');
+    if (!sel) return;
     var pratos = MENU.pratos || [];
-    if (!pratos.length) {
-      picker.innerHTML = '<p class="picker-empty">O menu ainda não está disponível.</p>';
-      return;
-    }
-    picker.innerHTML = pratos.map(function (p, i) {
-      var id = 'prato-' + i;
-      return '<div class="prato-item" data-prato-item>' +
-        '<div class="prato-item-info">' +
-          '<span class="prato-item-nome">' + esc(p.nome) + '</span>' +
-          '<span class="prato-item-preco">' + esc(fmtPreco(p.preco)) + '</span>' +
-        '</div>' +
-        '<div class="prato-item-qty">' +
-          '<button type="button" class="qty-btn qty-minus" data-qty-minus aria-label="Remover">&#8722;</button>' +
-          '<span class="qty-val" data-qty-val>0</span>' +
-          '<button type="button" class="qty-btn qty-plus" data-qty-plus aria-label="Adicionar">&#43;</button>' +
-        '</div>' +
-      '</div>';
-    }).join('');
-
-    // lógica dos botões +/-
-    var items = $$('[data-prato-item]', picker);
-    items.forEach(function (item, i) {
-      var qtyEl = $('[data-qty-val]', item);
-      var minusBtn = $('[data-qty-minus]', item);
-      var plusBtn = $('[data-qty-plus]', item);
-      var qty = 0;
-
-      function update() {
-        qtyEl.textContent = qty;
-        item.classList.toggle('prato-selected', qty > 0);
-        minusBtn.disabled = qty <= 0;
-        atualizarTotal();
+    if (!pratos.length) return;
+    // adicionar as opções ao select
+    pratos.forEach(function (p) {
+      var opt = document.createElement('option');
+      opt.value = p.nome;
+      opt.textContent = p.nome + ' — ' + fmtPreco(p.preco);
+      opt.setAttribute('data-preco', p.preco || 0);
+      sel.appendChild(opt);
+    });
+    // mostrar preço selecionado
+    sel.addEventListener('change', function () {
+      var totalEl = $('#pratos-total');
+      var totalValEl = $('#pratos-total-val');
+      if (!totalEl || !totalValEl) return;
+      var opt = sel.options[sel.selectedIndex];
+      var preco = parseInt(opt.getAttribute('data-preco'), 10) || 0;
+      if (!sel.value || !preco) {
+        totalEl.hidden = true;
+      } else {
+        totalValEl.textContent = fmtPreco(preco);
+        totalEl.hidden = false;
       }
-
-      plusBtn.addEventListener('click', function () {
-        qty++;
-        update();
-      });
-      minusBtn.addEventListener('click', function () {
-        if (qty > 0) { qty--; update(); }
-      });
-      update();
     });
   }
 
   function getPratosEscolhidos() {
-    var picker = $('[data-pratos-picker]');
-    if (!picker) return [];
-    var pratos = MENU.pratos || [];
-    var escolhidos = [];
-    var items = $$('[data-prato-item]', picker);
-    items.forEach(function (item, i) {
-      var qty = parseInt($('[data-qty-val]', item).textContent, 10) || 0;
-      if (qty > 0 && pratos[i]) {
-        escolhidos.push({ nome: pratos[i].nome, preco: pratos[i].preco, qty: qty });
-      }
-    });
-    return escolhidos;
-  }
-
-  function atualizarTotal() {
-    var escolhidos = getPratosEscolhidos();
-    var totalEl = $('#pratos-total');
-    var totalValEl = $('#pratos-total-val');
-    if (!totalEl || !totalValEl) return;
-    if (!escolhidos.length) {
-      totalEl.hidden = true;
-      return;
-    }
-    var total = escolhidos.reduce(function (acc, p) { return acc + (p.preco * p.qty); }, 0);
-    totalValEl.textContent = fmtPreco(total);
-    totalEl.hidden = false;
+    var sel = $('[data-pratos-select]');
+    if (!sel || !sel.value) return [];
+    var opt = sel.options[sel.selectedIndex];
+    var preco = parseInt(opt.getAttribute('data-preco'), 10) || 0;
+    return [{ nome: sel.value, preco: preco, qty: 1 }];
   }
 
   /* ---------- formulário de pedido ---------- */
