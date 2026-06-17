@@ -39,6 +39,21 @@
     return texto ? base + "?text=" + encodeURIComponent(texto) : base;
   }
 
+  /* ---------- cabeçalho: scroll state ---------- */
+  (function headerScroll() {
+    var header = $(".site-header");
+    if (!header) return;
+    var onScroll = function () {
+      if (window.scrollY > 20) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
+
   /* ---------- cabeçalho: menu móvel ---------- */
   (function nav() {
     var header = $(".site-header");
@@ -47,13 +62,41 @@
     toggle.addEventListener("click", function () {
       var open = header.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
     });
     $$(".nav a").forEach(function (a) {
       a.addEventListener("click", function () {
         header.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Abrir menu");
       });
     });
+    // fechar ao clicar fora
+    document.addEventListener("click", function (e) {
+      if (header.classList.contains("open") && !header.contains(e.target)) {
+        header.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+
+  /* ---------- animações de entrada com IntersectionObserver ---------- */
+  (function revealOnScroll() {
+    var els = $$(".reveal");
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("visible"); });
+      return;
+    }
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: "0px 0px -20px 0px" });
+    els.forEach(function (el) { obs.observe(el); });
   })();
 
   /* ---------- semana / cabeçalhos ---------- */
@@ -115,9 +158,9 @@
       return;
     }
     var aberto = pedidosAbertos();
-    grid.innerHTML = pratos.map(function (p) {
+    grid.innerHTML = pratos.map(function (p, i) {
       var foto = p.foto
-        ? "style=\"background-image:url('" + esc(p.foto) + "')\""
+        ? "style=\"background-image:url('" + esc(p.foto) + "');background-size:cover;background-position:center\""
         : "";
       var ph = p.foto ? "" : "<span class=\"ph\">Colo</span>";
       var tags = (p.tags || []).map(function (t) {
@@ -127,8 +170,9 @@
       var botao = aberto
         ? "<a class=\"btn btn-ghost\" href=\"#pedido\" data-pick=\"" + esc(p.nome) + "\">Quero este prato</a>"
         : "<span class=\"tag\">indisponível</span>";
+      var delay = i < 3 ? " reveal-delay-" + (i + 1) : "";
       return "" +
-        "<article class=\"dish\">" +
+        "<article class=\"dish reveal" + delay + "\">" +
           "<div class=\"dish-photo\" " + foto + ">" + ph + "</div>" +
           "<div class=\"dish-body\">" +
             "<div class=\"dish-tags\">" + tags + "</div>" +
@@ -139,6 +183,24 @@
         "</article>";
     }).join("");
 
+    // activar reveal nos cards recém-criados
+    (function () {
+      var newEls = $$(".reveal", grid);
+      if (!("IntersectionObserver" in window)) {
+        newEls.forEach(function (el) { el.classList.add("visible"); });
+        return;
+      }
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+      newEls.forEach(function (el) { obs.observe(el); });
+    })();
+
     // "Quero este prato" -> pré-preenche o campo de pratos
     $$("[data-pick]", grid).forEach(function (a) {
       a.addEventListener("click", function () {
@@ -147,6 +209,14 @@
         var nome = a.getAttribute("data-pick");
         var atual = campo.value.trim();
         campo.value = atual ? atual + "\n1x " + nome : "1x " + nome;
+        // feedback visual no campo
+        campo.focus();
+        campo.style.borderColor = "var(--rose-deep)";
+        campo.style.boxShadow = "0 0 0 4px rgba(207, 155, 145, .2)";
+        setTimeout(function () {
+          campo.style.borderColor = "";
+          campo.style.boxShadow = "";
+        }, 1200);
       });
     });
   }
@@ -168,7 +238,7 @@
     if (!sec || !txt) return;
     var msg = (CFG.mensagemDaSemana || "").trim();
     if (!msg) { sec.hidden = true; return; }
-    txt.textContent = "“" + msg + "”";
+    txt.textContent = "\u201C" + msg + "\u201D";
     sec.hidden = false;
   }
 
@@ -205,6 +275,23 @@
       if (btn) btn.textContent = "Avisem-me na próxima semana";
     }
 
+    // validação visual nos campos obrigatórios
+    var inputs = $$("input[required], textarea[required]", form);
+    inputs.forEach(function (inp) {
+      inp.addEventListener("blur", function () {
+        if (!inp.value.trim()) {
+          inp.style.borderColor = "var(--rose-deep)";
+        } else {
+          inp.style.borderColor = "var(--sage)";
+        }
+      });
+      inp.addEventListener("input", function () {
+        if (inp.value.trim()) {
+          inp.style.borderColor = "";
+        }
+      });
+    });
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var nome = $("#nome").value.trim();
@@ -214,8 +301,23 @@
       var notas = $("#notas").value.trim();
 
       if (!nome || !contacto) {
-        alert("Por favor preenche o teu nome e contacto. 💛");
+        // destaca campos em falta
+        if (!nome) {
+          var nomeEl = $("#nome");
+          nomeEl.style.borderColor = "var(--rose-deep)";
+          nomeEl.focus();
+        } else if (!contacto) {
+          var contEl = $("#contacto");
+          contEl.style.borderColor = "var(--rose-deep)";
+          contEl.focus();
+        }
         return;
+      }
+
+      var btn = $("[data-order-submit]", form);
+      if (btn) {
+        btn.setAttribute("disabled", "true");
+        btn.textContent = "A abrir o WhatsApp…";
       }
 
       var linhas = [];
@@ -229,6 +331,13 @@
       if (notas) linhas.push("Notas: " + notas);
 
       window.open(whatsappLink(linhas.join("\n")), "_blank");
+
+      setTimeout(function () {
+        if (btn) {
+          btn.removeAttribute("disabled");
+          btn.textContent = "Enviar pedido pelo WhatsApp";
+        }
+      }, 2500);
     });
   }
 
@@ -242,8 +351,10 @@
         navigator.clipboard.writeText(url).then(function () {
           var txt = btn.textContent;
           btn.textContent = "Link copiado! ✓";
-          setTimeout(function () { btn.textContent = txt; }, 1800);
+          setTimeout(function () { btn.textContent = txt; }, 2000);
         });
+      } else if (navigator.share) {
+        navigator.share({ title: "Colo — Comida que cuida de ti", url: url });
       }
     });
   }
