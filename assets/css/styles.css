@@ -211,15 +211,16 @@ p { margin: 0 0 1.1rem; }
   padding-top: 13px;
   padding-bottom: 13px;
 }
-.brand { display: flex; flex-direction: column; line-height: 1; }
-.brand .brand-word { font-size: 2.1rem; }
-.brand-tag {
-  font-size: .57rem;
-  letter-spacing: .36em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 2px;
+.brand { display: flex; align-items: center; line-height: 1; }
+.brand-logo {
+  height: 56px;
+  width: auto;
+  max-width: 160px;
+  display: block;
+  object-fit: contain;
+  transition: opacity .2s ease;
 }
+.brand:hover .brand-logo { opacity: .85; }
 .nav { display: flex; align-items: center; gap: 30px; }
 .nav a {
   font-size: .94rem;
@@ -774,7 +775,15 @@ p { margin: 0 0 1.1rem; }
 }
 .footer-strip-inner span:hover { opacity: 1; }
 .footer-main { padding: 56px 28px 44px; text-align: center; }
+.footer-brand { display: flex; justify-content: center; }
 .footer-brand p { color: var(--rose-soft); margin: 6px 0 0; font-size: 1.05rem; }
+.footer-logo {
+  height: 90px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  opacity: .92;
+}
 .footer-links {
   display: flex;
   justify-content: center;
