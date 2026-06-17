@@ -207,8 +207,11 @@
         </div>
 
         <div class="field">
-          <label for="pratos">Pratos que queres</label>
-          <textarea id="pratos" name="pratos" rows="3" placeholder="Ex.: 2x Salmão com batata&#10;1x Buddha bowl"></textarea>
+          <label>Pratos que queres</label>
+          <div class="pratos-picker" id="pratos-picker" data-pratos-picker>
+            <!-- pratos gerados dinamicamente por JS a partir de data/menu.js -->
+          </div>
+          <p class="pratos-total" id="pratos-total" hidden>Total: <strong id="pratos-total-val">0 Kz</strong></p>
         </div>
 
         <div class="field">
@@ -231,6 +234,14 @@
           Enviar pedido pelo WhatsApp
         </button>
         <p class="form-hint">Abre o WhatsApp com o teu pedido já escrito. É só enviares. 💛</p>
+
+        <div class="comprovativo-section">
+          <div class="comprovativo-divider"><span>Já fizeste o pagamento?</span></div>
+          <button type="button" class="btn btn-ghost btn-block btn-comprovativo" data-comprovativo-btn>
+            📤 Enviar comprovativo pelo WhatsApp
+          </button>
+          <p class="form-hint">Abre o WhatsApp da Colo para enviares a imagem do comprovativo.</p>
+        </div>
       </form>
     </div>
   </section>

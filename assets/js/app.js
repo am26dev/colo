@@ -260,82 +260,172 @@
     }
   }
 
+  /* ---------- seletor de pratos no formulário ---------- */
+  function renderPratosPicker() {
+    var picker = $('[data-pratos-picker]');
+    if (!picker) return;
+    var pratos = MENU.pratos || [];
+    if (!pratos.length) {
+      picker.innerHTML = '<p class="picker-empty">O menu ainda não está disponível.</p>';
+      return;
+    }
+    picker.innerHTML = pratos.map(function (p, i) {
+      var id = 'prato-' + i;
+      return '<div class="prato-item" data-prato-item>' +
+        '<div class="prato-item-info">' +
+          '<span class="prato-item-nome">' + esc(p.nome) + '</span>' +
+          '<span class="prato-item-preco">' + esc(fmtPreco(p.preco)) + '</span>' +
+        '</div>' +
+        '<div class="prato-item-qty">' +
+          '<button type="button" class="qty-btn qty-minus" data-qty-minus aria-label="Remover">&#8722;</button>' +
+          '<span class="qty-val" data-qty-val>0</span>' +
+          '<button type="button" class="qty-btn qty-plus" data-qty-plus aria-label="Adicionar">&#43;</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // lógica dos botões +/-
+    var items = $$('[data-prato-item]', picker);
+    items.forEach(function (item, i) {
+      var qtyEl = $('[data-qty-val]', item);
+      var minusBtn = $('[data-qty-minus]', item);
+      var plusBtn = $('[data-qty-plus]', item);
+      var qty = 0;
+
+      function update() {
+        qtyEl.textContent = qty;
+        item.classList.toggle('prato-selected', qty > 0);
+        minusBtn.disabled = qty <= 0;
+        atualizarTotal();
+      }
+
+      plusBtn.addEventListener('click', function () {
+        qty++;
+        update();
+      });
+      minusBtn.addEventListener('click', function () {
+        if (qty > 0) { qty--; update(); }
+      });
+      update();
+    });
+  }
+
+  function getPratosEscolhidos() {
+    var picker = $('[data-pratos-picker]');
+    if (!picker) return [];
+    var pratos = MENU.pratos || [];
+    var escolhidos = [];
+    var items = $$('[data-prato-item]', picker);
+    items.forEach(function (item, i) {
+      var qty = parseInt($('[data-qty-val]', item).textContent, 10) || 0;
+      if (qty > 0 && pratos[i]) {
+        escolhidos.push({ nome: pratos[i].nome, preco: pratos[i].preco, qty: qty });
+      }
+    });
+    return escolhidos;
+  }
+
+  function atualizarTotal() {
+    var escolhidos = getPratosEscolhidos();
+    var totalEl = $('#pratos-total');
+    var totalValEl = $('#pratos-total-val');
+    if (!totalEl || !totalValEl) return;
+    if (!escolhidos.length) {
+      totalEl.hidden = true;
+      return;
+    }
+    var total = escolhidos.reduce(function (acc, p) { return acc + (p.preco * p.qty); }, 0);
+    totalValEl.textContent = fmtPreco(total);
+    totalEl.hidden = false;
+  }
+
   /* ---------- formulário de pedido ---------- */
   function ligarFormulario() {
-    var form = $("[data-order-form]");
+    var form = $('[data-order-form]');
     if (!form) return;
 
     if (!pedidosAbertos()) {
-      var aviso = document.createElement("div");
-      aviso.className = "form-closed";
-      aviso.innerHTML = "Os pedidos desta semana estão <strong>encerrados</strong>. " +
-        "Deixa a tua mensagem que avisamos-te quando abrir a próxima semana.";
+      var aviso = document.createElement('div');
+      aviso.className = 'form-closed';
+      aviso.innerHTML = 'Os pedidos desta semana estão <strong>encerrados</strong>. ' +
+        'Deixa a tua mensagem que avisamos-te quando abrir a próxima semana.';
       form.insertBefore(aviso, form.firstChild);
-      var btn = $("[data-order-submit]", form);
-      if (btn) btn.textContent = "Avisem-me na próxima semana";
+      var btn = $('[data-order-submit]', form);
+      if (btn) btn.textContent = 'Avisem-me na próxima semana';
     }
 
     // validação visual nos campos obrigatórios
-    var inputs = $$("input[required], textarea[required]", form);
+    var inputs = $$('input[required], textarea[required]', form);
     inputs.forEach(function (inp) {
-      inp.addEventListener("blur", function () {
+      inp.addEventListener('blur', function () {
         if (!inp.value.trim()) {
-          inp.style.borderColor = "var(--rose-deep)";
+          inp.style.borderColor = 'var(--rose-deep)';
         } else {
-          inp.style.borderColor = "var(--sage)";
+          inp.style.borderColor = 'var(--sage)';
         }
       });
-      inp.addEventListener("input", function () {
-        if (inp.value.trim()) {
-          inp.style.borderColor = "";
-        }
+      inp.addEventListener('input', function () {
+        if (inp.value.trim()) inp.style.borderColor = '';
       });
     });
 
-    form.addEventListener("submit", function (e) {
+    // botão comprovativo
+    var btnComp = $('[data-comprovativo-btn]', form);
+    if (btnComp) {
+      btnComp.addEventListener('click', function () {
+        var nome = $('#nome').value.trim();
+        var msg = 'Olá Colo! 💛 Aqui está o comprovativo do meu pagamento.';
+        if (nome) msg += ' (' + nome + ')';
+        msg += '\nSemana: ' + (MENU.semana || '—');
+        window.open(whatsappLink(msg), '_blank');
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var nome = $("#nome").value.trim();
-      var contacto = $("#contacto").value.trim();
-      var pratos = $("#pratos").value.trim();
-      var ciclo = $("#ciclo").value;
-      var notas = $("#notas").value.trim();
+      var nome = $('#nome').value.trim();
+      var contacto = $('#contacto').value.trim();
+      var ciclo = $('#ciclo').value;
+      var notas = $('#notas').value.trim();
+      var escolhidos = getPratosEscolhidos();
 
       if (!nome || !contacto) {
-        // destaca campos em falta
-        if (!nome) {
-          var nomeEl = $("#nome");
-          nomeEl.style.borderColor = "var(--rose-deep)";
-          nomeEl.focus();
-        } else if (!contacto) {
-          var contEl = $("#contacto");
-          contEl.style.borderColor = "var(--rose-deep)";
-          contEl.focus();
-        }
+        if (!nome) { var nEl = $('#nome'); nEl.style.borderColor = 'var(--rose-deep)'; nEl.focus(); }
+        else { var cEl = $('#contacto'); cEl.style.borderColor = 'var(--rose-deep)'; cEl.focus(); }
         return;
       }
 
-      var btn = $("[data-order-submit]", form);
-      if (btn) {
-        btn.setAttribute("disabled", "true");
-        btn.textContent = "A abrir o WhatsApp…";
+      var submitBtn = $('[data-order-submit]', form);
+      if (submitBtn) {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.textContent = 'A abrir o WhatsApp…';
       }
 
       var linhas = [];
-      linhas.push("Olá Colo! Quero fazer um pedido. 💛");
-      linhas.push("");
-      linhas.push("Semana: " + (MENU.semana || "—"));
-      linhas.push("Nome: " + nome);
-      linhas.push("Contacto: " + contacto);
-      if (pratos) linhas.push("Pratos: " + pratos.replace(/\n/g, ", "));
-      if (ciclo) linhas.push("Fase do ciclo: " + ciclo);
-      if (notas) linhas.push("Notas: " + notas);
+      linhas.push('Olá Colo! Quero fazer um pedido. 💛');
+      linhas.push('');
+      linhas.push('Semana: ' + (MENU.semana || '—'));
+      linhas.push('Nome: ' + nome);
+      linhas.push('Contacto: ' + contacto);
+      if (escolhidos.length) {
+        linhas.push('');
+        linhas.push('Pratos:');
+        escolhidos.forEach(function (p) {
+          linhas.push('  ' + p.qty + 'x ' + p.nome + ' (' + fmtPreco(p.preco) + ' cada)');
+        });
+        var total = escolhidos.reduce(function (acc, p) { return acc + p.preco * p.qty; }, 0);
+        linhas.push('  Total: ' + fmtPreco(total));
+      }
+      if (ciclo) linhas.push('');
+      if (ciclo) linhas.push('Fase do ciclo: ' + ciclo);
+      if (notas) linhas.push('Notas: ' + notas);
 
-      window.open(whatsappLink(linhas.join("\n")), "_blank");
+      window.open(whatsappLink(linhas.join('\n')), '_blank');
 
       setTimeout(function () {
-        if (btn) {
-          btn.removeAttribute("disabled");
-          btn.textContent = "Enviar pedido pelo WhatsApp";
+        if (submitBtn) {
+          submitBtn.removeAttribute('disabled');
+          submitBtn.textContent = 'Enviar pedido pelo WhatsApp';
         }
       }, 2500);
     });
@@ -360,11 +450,12 @@
   }
 
   /* ---------- arranque ---------- */
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener('DOMContentLoaded', function () {
     preencherSemana();
     preencherChip();
     preencherBanner();
     renderMenu();
+    renderPratosPicker();
     preencherPagamento();
     preencherNota();
     preencherLinks();
