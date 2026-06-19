@@ -175,6 +175,7 @@ unset($_SESSION['flash'], $_SESSION['flash_type']);
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
   .logo{font-family:Georgia,serif;font-size:1.7rem;color:var(--brown);font-weight:700}
   .logo small{display:block;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);font-weight:400}
+  .logo-img{height:52px;width:auto;display:block;margin-bottom:4px}
   h1{font-family:Georgia,serif;color:var(--brown-dark);font-size:1.5rem;margin:.2em 0}
   h2{font-family:Georgia,serif;color:var(--brown-dark);font-size:1.2rem;margin:0 0 4px}
   .card{background:#fff;border:1px solid rgba(107,74,46,.1);border-radius:var(--radius);
@@ -224,7 +225,7 @@ unset($_SESSION['flash'], $_SESSION['flash_type']);
 <?php if (!$admin): /* ---------- SETUP INICIAL ---------- */ ?>
 <div class="center">
   <div class="card login-card">
-    <div class="logo">Colo<small>Painel de gestão</small></div>
+    <div class="logo"><img src="/assets/img/logo-header.webp" alt="Colo — Comida que cuida de ti" class="logo-img"><small>Painel de gestão</small></div>
     <h1>Bem-vinda! 💛</h1>
     <p class="sub">Cria o teu acesso ao painel. Guarda bem estes dados.</p>
     <form method="post">
@@ -244,7 +245,7 @@ unset($_SESSION['flash'], $_SESSION['flash_type']);
 <?php elseif (!$loggedIn): /* ---------- LOGIN ---------- */ ?>
 <div class="center">
   <div class="card login-card">
-    <div class="logo">Colo<small>Painel de gestão</small></div>
+    <div class="logo"><img src="/assets/img/logo-header.webp" alt="Colo — Comida que cuida de ti" class="logo-img"><small>Painel de gestão</small></div>
     <h1>Entrar</h1>
     <form method="post">
       <input type="hidden" name="csrf" value="<?= h($csrf) ?>">
@@ -261,7 +262,7 @@ unset($_SESSION['flash'], $_SESSION['flash_type']);
 <?php else: /* ---------- PAINEL ---------- */ ?>
 <div class="wrap">
   <div class="topbar">
-    <div class="logo">Colo<small>Painel de gestão</small></div>
+    <div class="logo"><img src="/assets/img/logo-header.webp" alt="Colo — Comida que cuida de ti" class="logo-img"><small>Painel de gestão</small></div>
     <div style="display:flex;gap:8px">
       <a class="btn ghost sm" href="/" target="_blank">Ver site ↗</a>
       <form method="post" style="margin:0">
