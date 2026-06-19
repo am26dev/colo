@@ -12,3 +12,8 @@ desktop.ini
 node_modules/
 dist/
 .cache/
+
+# Dados do painel (gerados no servidor, nunca versionados)
+colo_data/
+data/site.json
+data/admin.json

@@ -1,0 +1,64 @@
+{
+  "config": {
+    "dominio": "colo.ao",
+    "whatsapp": "244924644918",
+    "instagram": "https://instagram.com/coloangola",
+    "pagamento": [
+      { "etiqueta": "Multicaixa Express", "valor": "923 000 000" },
+      { "etiqueta": "IBAN", "valor": "AO06 0000 0000 0000 0000 0000 0" },
+      { "etiqueta": "Titular", "valor": "Nome da Titular" }
+    ],
+    "mensagemDaSemana": "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
+    "moeda": "Kz"
+  },
+  "menu": {
+    "semana": "22 a 26 de junho",
+    "estado": "aberto",
+    "vagasTotais": 6,
+    "vagasRestantes": 6,
+    "pratos": [
+      {
+        "nome": "Salmão assado com batata e feijão-verde",
+        "descricao": "Salmão no forno com ervas, batata corada e feijão-verde. Rico em ómega-3 — um miminho para os dias do ciclo.",
+        "preco": 8500,
+        "tags": ["Anti-inflamatória", "Rica em proteína"],
+        "foto": "assets/img/salmao.jpg"
+      },
+      {
+        "nome": "Frango grelhado com salada da época",
+        "descricao": "Frango do campo grelhado sobre salada fresca, tomate e parmesão. Energia leve que dura o dia todo.",
+        "preco": 7000,
+        "tags": ["Nutritiva", "Mais energia"],
+        "foto": "assets/img/frango.jpg"
+      },
+      {
+        "nome": "Buddha bowl da Colo",
+        "descricao": "Abóbora assada, grão-de-bico, abacate, espinafres e quinoa com um fio de limão. Para os dias sem carne.",
+        "preco": 6500,
+        "tags": ["Vegetariana", "Apoio ao ciclo"],
+        "foto": "assets/img/buddha.jpg"
+      },
+      {
+        "nome": "Couve-flor assada com quinoa",
+        "descricao": "Bifes de couve-flor assada com ervas, quinoa e molho cremoso de iogurte e limão. Leve e reconfortante.",
+        "preco": 6000,
+        "tags": ["Vegetariana", "Leve"],
+        "foto": "assets/img/couveflor.jpg"
+      },
+      {
+        "nome": "Creme de abóbora com gengibre e cúrcuma",
+        "descricao": "Creme aveludado de abóbora com gengibre e cúrcuma, sementes tostadas e tomilho. Anti-inflamatório e que reduz o inchaço.",
+        "preco": 4500,
+        "tags": ["Anti-inflamatória", "Reduz inchaço"],
+        "foto": "assets/img/creme-abobora.jpg"
+      },
+      {
+        "nome": "Sopa cremosa de tomate e manjericão",
+        "descricao": "Tomate assado lentamente com alho e manjericão fresco. A comida que abraça, quentinha e leve.",
+        "preco": 4500,
+        "tags": ["Conforto", "Anti-inflamatória"],
+        "foto": "assets/img/sopa-tomate.jpg"
+      }
+    ]
+  }
+}

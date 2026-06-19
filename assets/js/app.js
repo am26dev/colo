@@ -28,7 +28,7 @@
     return isNaN(v) ? null : v;
   }
   function pedidosAbertos() {
-    if (MENU.estado === "fechado") return false;
+    if (MENU.estado === "fechado" || MENU.estado === "oculto") return false;
     var v = vagasRestantes();
     if (v !== null && v <= 0) return false;
     return true;
@@ -152,6 +152,10 @@
   function renderMenu() {
     var grid = $("[data-menu-grid]");
     if (!grid) return;
+    if (MENU.estado === "oculto") {
+      grid.innerHTML = "<p class=\"menu-empty\">O menu está a ser preparado. Volta em breve. 💛</p>";
+      return;
+    }
     var pratos = MENU.pratos || [];
     if (!pratos.length) {
       grid.innerHTML = "<p class=\"menu-empty\">O menu desta semana está a ser preparado. Volta em breve. 💛</p>";
@@ -409,7 +413,7 @@
   }
 
   /* ---------- arranque ---------- */
-  document.addEventListener('DOMContentLoaded', function () {
+  function init() {
     preencherSemana();
     preencherChip();
     preencherBanner();
@@ -420,5 +424,28 @@
     preencherLinks();
     ligarFormulario();
     ligarPartilha();
-  });
+  }
+
+  // Tenta os dados geridos no painel (api.php); se falhar, usa os
+  // dados estáticos de data/config.js e data/menu.js (recurso).
+  function boot() {
+    if (!window.fetch) { init(); return; }
+    var done = false;
+    var finish = function () { if (done) return; done = true; init(); };
+    var timer = setTimeout(finish, 2500);
+    fetch('api.php?t=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        clearTimeout(timer);
+        if (data && (data.config || data.menu)) {
+          if (data.config) CFG = data.config;
+          if (data.menu) MENU = data.menu;
+          moeda = (CFG && CFG.moeda) || "Kz";
+        }
+        finish();
+      })
+      .catch(function () { clearTimeout(timer); finish(); });
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
 })();
