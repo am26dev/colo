@@ -33,3 +33,17 @@ export function pedidosAbertos(week: Week): boolean {
   if (v !== null && v <= 0) return false;
   return true;
 }
+
+/**
+ * Só deixa passar http(s) — evita que um link editável no painel (ex.: Instagram
+ * em config.instagram) vire um href "javascript:" executado no browser da visitante.
+ */
+export function safeExternalUrl(url: string | null | undefined, fallback = "#"): string {
+  if (!url) return fallback;
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? url : fallback;
+  } catch {
+    return fallback;
+  }
+}

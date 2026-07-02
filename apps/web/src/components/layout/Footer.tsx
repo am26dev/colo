@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { footerStrip, site } from "../../data/data";
 import type { SiteConfig } from "../../types";
+import { safeExternalUrl } from "../../utils/format";
 import { whatsappLink } from "../../utils/whatsapp";
 
 export function Footer({ config }: { config: SiteConfig }) {
@@ -32,7 +33,7 @@ export function Footer({ config }: { config: SiteConfig }) {
           <img src="/assets/img/logo-footer.webp" alt={brandLabel} className="footer-logo" />
         </div>
         <div className="footer-links">
-          <a href={config.instagram || "#"} target="_blank" rel="noopener">
+          <a href={safeExternalUrl(config.instagram)} target="_blank" rel="noopener">
             Instagram
           </a>
           <a href={whatsappLink(config.whatsapp)} target="_blank" rel="noopener">
