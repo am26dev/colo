@@ -9,5 +9,11 @@ dist
 /src/generated/prisma
 
 # SQLite: ficheiro de dados local, não versionado
+# (cobre ambos os locais possíveis consoante a resolução do path relativo)
+dev.db
+dev.db-journal
 prisma/dev.db
 prisma/dev.db-journal
+
+# Uploads de imagens enviados pelo painel (gerados, não versionados)
+uploads/
