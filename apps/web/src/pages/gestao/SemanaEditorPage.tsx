@@ -3,6 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../lib/api";
 import { diasSemanaLabels, refeicaoLabels, refeicaoOrdem } from "../../data/data";
 import type { Day, MenuEstado, Refeicao, TipoRefeicao, Week } from "../../types";
+import { Card, CardContent } from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
+import { Select } from "../../components/ui/select";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../components/ui/accordion";
+import { Separator } from "../../components/ui/separator";
+import { ImageUploadField } from "../../components/gestao/ImageUploadField";
 
 interface RefeicaoForm {
   nome: string;
@@ -135,124 +144,144 @@ export default function SemanaEditorPage() {
   }
 
   if (carregando) {
-    return <p>A carregar…</p>;
+    return (
+      <div className="space-y-4">
+        <div className="h-8 w-48 rounded bg-[var(--primary)]/10 animate-pulse" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="h-24 rounded-xl bg-[var(--primary)]/5 animate-pulse" />
+        ))}
+      </div>
+    );
   }
 
   return (
     <div>
-      <h1>{editando ? "Editar semana" : "Nova semana"}</h1>
-      <p className="sub">Define o intervalo de datas, o preço e as refeições dos 5 dias.</p>
+      <h1 className="text-2xl font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>
+        {editando ? "Editar semana" : "Nova semana"}
+      </h1>
+      <p className="text-sm text-[var(--muted-foreground)] mb-6">
+        Define o intervalo de datas, o preço e as refeições dos 5 dias.
+      </p>
 
-      {erro && <div className="flash erro">{erro}</div>}
+      {erro && (
+        <div className="rounded-lg bg-[var(--destructive)]/10 border border-[var(--destructive)]/30 px-4 py-2 text-sm text-[var(--destructive)] mb-4">
+          {erro}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <div className="card">
-          <div className="row">
-            <div>
-              <label>Data de início</label>
-              <input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} required />
-            </div>
-            <div>
-              <label>Data de fim</label>
-              <input type="date" value={dataFim} onChange={(e) => setDataFim(e.target.value)} required />
-            </div>
-          </div>
-          <div className="row">
-            <div>
-              <label>Preço da semana (Kz)</label>
-              <input
-                type="number"
-                min={0}
-                value={precoSemanal}
-                onChange={(e) => setPrecoSemanal(Number(e.target.value))}
-              />
-            </div>
-            <div>
-              <label>Estado</label>
-              <select value={estado} onChange={(e) => setEstado(e.target.value as MenuEstado)}>
-                <option value="aberto">Aberto — aceita reservas</option>
-                <option value="fechado">Encerrado — visível, sem reservas</option>
-                <option value="oculto">Oculto — esconder do site</option>
-              </select>
-            </div>
-          </div>
-          <div className="row">
-            <div>
-              <label>Vagas totais</label>
-              <input type="number" min={0} value={vagasTotais} onChange={(e) => setVagasTotais(Number(e.target.value))} />
-            </div>
-            <div>
-              <label>Vagas restantes</label>
-              <input
-                type="number"
-                min={0}
-                value={vagasRestantes}
-                onChange={(e) => setVagasRestantes(Number(e.target.value))}
-              />
-            </div>
-          </div>
-        </div>
-
-        {dias.map((dia) => (
-          <div className="card dia-editor" key={dia.diaSemana}>
-            <h2>{diasSemanaLabels[dia.diaSemana]}</h2>
-            <div className="row">
-              <div>
-                <label>Tema do dia</label>
-                <input
-                  type="text"
-                  value={dia.tema}
-                  onChange={(e) => updateDia(dia.diaSemana, { tema: e.target.value })}
-                  placeholder="ex.: Leveza & Frescura"
-                />
+        <Card className="mb-4">
+          <CardContent className="p-4 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Data de início</Label>
+                <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} required />
               </div>
-              <div>
-                <label>Ícone (emoji)</label>
-                <input
-                  type="text"
-                  value={dia.icone}
-                  onChange={(e) => updateDia(dia.diaSemana, { icone: e.target.value })}
-                  placeholder="🌿"
-                />
+              <div className="space-y-2">
+                <Label>Data de fim</Label>
+                <Input type="date" value={dataFim} onChange={(e) => setDataFim(e.target.value)} required />
               </div>
             </div>
-            <label>Frase do dia</label>
-            <input
-              type="text"
-              value={dia.frase}
-              onChange={(e) => updateDia(dia.diaSemana, { frase: e.target.value })}
-              placeholder="Uma frase de carinho para este dia"
-            />
-
-            {refeicaoOrdem.map((tipo) => (
-              <div className="refeicao-editor" key={tipo}>
-                <strong className="muted">{refeicaoLabels[tipo]}</strong>
-                <input
-                  type="text"
-                  value={dia.refeicoes[tipo].nome}
-                  onChange={(e) => updateRefeicao(dia.diaSemana, tipo, { nome: e.target.value })}
-                  placeholder="Nome do prato"
-                />
-                <textarea
-                  value={dia.refeicoes[tipo].descricao}
-                  onChange={(e) => updateRefeicao(dia.diaSemana, tipo, { descricao: e.target.value })}
-                  placeholder="Descrição breve"
-                />
-                <input
-                  type="text"
-                  value={dia.refeicoes[tipo].foto}
-                  onChange={(e) => updateRefeicao(dia.diaSemana, tipo, { foto: e.target.value })}
-                  placeholder="/assets/img/foto.jpg (opcional)"
-                />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Preço da semana (Kz)</Label>
+                <Input type="number" min={0} value={precoSemanal} onChange={(e) => setPrecoSemanal(Number(e.target.value))} />
               </div>
-            ))}
-          </div>
-        ))}
+              <div className="space-y-2">
+                <Label>Estado</Label>
+                <Select value={estado} onChange={(e) => setEstado(e.target.value as MenuEstado)}>
+                  <option value="aberto">Aberto — aceita reservas</option>
+                  <option value="fechado">Encerrado — visível, sem reservas</option>
+                  <option value="oculto">Oculto — esconder do site</option>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Vagas totais</Label>
+                <Input type="number" min={0} value={vagasTotais} onChange={(e) => setVagasTotais(Number(e.target.value))} />
+              </div>
+              <div className="space-y-2">
+                <Label>Vagas restantes</Label>
+                <Input type="number" min={0} value={vagasRestantes} onChange={(e) => setVagasRestantes(Number(e.target.value))} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-        <div className="actions">
-          <button className="btn" type="submit" disabled={salvando}>
+        <Accordion defaultValue="1">
+          {dias.map((dia) => {
+            const key = String(dia.diaSemana);
+            return (
+              <AccordionItem value={key} key={key}>
+                <AccordionTrigger value={key} className="px-4 py-3">
+                  <span className="font-medium">{diasSemanaLabels[dia.diaSemana]}</span>
+                </AccordionTrigger>
+                <AccordionContent value={key}>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Tema do dia</Label>
+                        <Input
+                          value={dia.tema}
+                          onChange={(e) => updateDia(dia.diaSemana, { tema: e.target.value })}
+                          placeholder="ex.: Leveza & Frescura"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Ícone (emoji)</Label>
+                        <Input
+                          value={dia.icone}
+                          onChange={(e) => updateDia(dia.diaSemana, { icone: e.target.value })}
+                          placeholder="🌿"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Frase do dia</Label>
+                      <Input
+                        value={dia.frase}
+                        onChange={(e) => updateDia(dia.diaSemana, { frase: e.target.value })}
+                        placeholder="Uma frase de carinho para este dia"
+                      />
+                    </div>
+
+                    <Separator />
+
+                    {refeicaoOrdem.map((tipo) => (
+                      <div key={tipo} className="rounded-lg border border-[var(--border)] p-3 space-y-2 bg-[var(--secondary)]/30">
+                        <strong className="text-xs text-[var(--muted-foreground)] uppercase tracking-wider">
+                          {refeicaoLabels[tipo]}
+                        </strong>
+                        <div className="space-y-2">
+                          <Input
+                            value={dia.refeicoes[tipo].nome}
+                            onChange={(e) => updateRefeicao(dia.diaSemana, tipo, { nome: e.target.value })}
+                            placeholder="Nome do prato"
+                          />
+                          <Textarea
+                            value={dia.refeicoes[tipo].descricao}
+                            onChange={(e) => updateRefeicao(dia.diaSemana, tipo, { descricao: e.target.value })}
+                            placeholder="Descrição breve"
+                          />
+                          <ImageUploadField
+                            value={dia.refeicoes[tipo].foto}
+                            onChange={(url) => updateRefeicao(dia.diaSemana, tipo, { foto: url })}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+
+        <div className="mt-6">
+          <Button type="submit" disabled={salvando}>
             {salvando ? "A guardar…" : "Guardar semana"}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

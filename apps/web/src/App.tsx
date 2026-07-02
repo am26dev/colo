@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { PainelLayout } from "./components/gestao/PainelLayout";
 import { AuthProvider } from "./context/AuthContext";
+import { Toaster } from "./components/ui/sonner";
 import Home from "./pages/Home";
 import ContaPage from "./pages/gestao/ContaPage";
 import DashboardPage from "./pages/gestao/DashboardPage";
@@ -14,6 +15,7 @@ import SemanasPage from "./pages/gestao/SemanasPage";
 function App() {
   return (
     <AuthProvider>
+      <Toaster />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/gestao/login" element={<Login />} />

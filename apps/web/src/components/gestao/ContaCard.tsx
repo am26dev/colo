@@ -1,5 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../../lib/api";
+import { Card, CardContent } from "../ui/card";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 interface Props {
   onSaved: (msg: string) => void;
@@ -33,32 +37,29 @@ export function ContaCard({ onSaved, onError }: Props) {
   }
 
   return (
-    <div className="card">
-      <h2>A minha conta</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div>
-            <label>Palavra-passe atual</label>
-            <input type="password" autoComplete="current-password" value={atual} onChange={(e) => setAtual(e.target.value)} />
+    <Card>
+      <CardContent className="p-4">
+        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>A minha conta</h2>
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <div className="space-y-2">
+            <Label>Palavra-passe atual</Label>
+            <Input type="password" autoComplete="current-password" value={atual} onChange={(e) => setAtual(e.target.value)} />
           </div>
-          <div></div>
-        </div>
-        <div className="row">
-          <div>
-            <label>Nova palavra-passe</label>
-            <input type="password" autoComplete="new-password" value={nova} onChange={(e) => setNova(e.target.value)} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Nova palavra-passe</Label>
+              <Input type="password" autoComplete="new-password" value={nova} onChange={(e) => setNova(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Repetir nova</Label>
+              <Input type="password" autoComplete="new-password" value={nova2} onChange={(e) => setNova2(e.target.value)} />
+            </div>
           </div>
-          <div>
-            <label>Repetir nova</label>
-            <input type="password" autoComplete="new-password" value={nova2} onChange={(e) => setNova2(e.target.value)} />
-          </div>
-        </div>
-        <div className="actions">
-          <button className="btn ghost" type="submit" disabled={salvando}>
+          <Button variant="outline" type="submit" disabled={salvando}>
             Alterar palavra-passe
-          </button>
-        </div>
-      </form>
-    </div>
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

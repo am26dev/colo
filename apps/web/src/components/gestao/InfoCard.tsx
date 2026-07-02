@@ -1,6 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../../lib/api";
 import type { PagamentoItem, SiteConfig } from "../../types";
+import { Card, CardContent } from "../ui/card";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 
 interface Props {
   config: SiteConfig;
@@ -42,7 +47,6 @@ export function InfoCard({ config, onSaved, onError }: Props) {
           moeda,
           mensagemDaSemana: mensagem,
           pagamento: pagamento.filter((p) => p.etiqueta.trim() || p.valor.trim()),
-          // não editável aqui (ver página Semanas) — reenviado tal como veio para não ser reposto ao default
           modoAutomaticoSemanas: config.modoAutomaticoSemanas ?? true,
         }),
       });
@@ -55,71 +59,68 @@ export function InfoCard({ config, onSaved, onError }: Props) {
   }
 
   return (
-    <div className="card">
-      <h2>Informações do site</h2>
-      <p className="sub">Contactos, pagamento e a mensagem da semana.</p>
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <div>
-            <label>WhatsApp (com 244, só dígitos)</label>
-            <input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="244924644918" />
-          </div>
-          <div>
-            <label>Instagram (link)</label>
-            <input
-              type="text"
-              value={instagram}
-              onChange={(e) => setInstagram(e.target.value)}
-              placeholder="https://instagram.com/..."
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div>
-            <label>Domínio (rodapé)</label>
-            <input type="text" value={dominio} onChange={(e) => setDominio(e.target.value)} />
-          </div>
-          <div>
-            <label>Moeda</label>
-            <input type="text" value={moeda} onChange={(e) => setMoeda(e.target.value)} />
-          </div>
-        </div>
-
-        <label>Pagamento (Multicaixa Express / IBAN / Titular)</label>
-        <div>
-          {pagamento.map((p, i) => (
-            <div className="pag-row" key={i}>
-              <input
-                type="text"
-                value={p.etiqueta}
-                onChange={(e) => updatePag(i, { etiqueta: e.target.value })}
-                placeholder="Multicaixa Express"
-              />
-              <input
-                type="text"
-                value={p.valor}
-                onChange={(e) => updatePag(i, { valor: e.target.value })}
-                placeholder="923 000 000"
-              />
-              <button type="button" className="del" onClick={() => removePag(i)}>
-                ✕
-              </button>
+    <Card>
+      <CardContent className="p-4">
+        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>Informações do site</h2>
+        <p className="text-sm text-[var(--muted-foreground)] mb-4">Contactos, pagamento e a mensagem da semana.</p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>WhatsApp (com 244, só dígitos)</Label>
+              <Input type="text" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="244924644918" />
             </div>
-          ))}
-        </div>
-        <button type="button" className="btn ghost sm" onClick={addPag}>
-          + Linha de pagamento
-        </button>
+            <div className="space-y-2">
+              <Label>Instagram (link)</Label>
+              <Input type="text" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Domínio (rodapé)</Label>
+              <Input type="text" value={dominio} onChange={(e) => setDominio(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Moeda</Label>
+              <Input type="text" value={moeda} onChange={(e) => setMoeda(e.target.value)} />
+            </div>
+          </div>
 
-        <label style={{ marginTop: 16 }}>Mensagem da semana (deixa vazio para esconder)</label>
-        <textarea value={mensagem} onChange={(e) => setMensagem(e.target.value)} placeholder="Uma mensagem carinhosa..." />
+          <div className="space-y-2">
+            <Label>Pagamento (Multicaixa Express / IBAN / Titular)</Label>
+            <div className="space-y-2">
+              {pagamento.map((p, i) => (
+                <div className="flex gap-2 items-start" key={i}>
+                  <Input
+                    value={p.etiqueta}
+                    onChange={(e) => updatePag(i, { etiqueta: e.target.value })}
+                    placeholder="Multicaixa Express"
+                  />
+                  <Input
+                    value={p.valor}
+                    onChange={(e) => updatePag(i, { valor: e.target.value })}
+                    placeholder="923 000 000"
+                  />
+                  <Button type="button" variant="ghost" size="sm" className="mt-0 shrink-0 text-[var(--destructive)]" onClick={() => removePag(i)}>
+                    ✕
+                  </Button>
+                </div>
+              ))}
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={addPag}>
+              + Linha de pagamento
+            </Button>
+          </div>
 
-        <div className="actions">
-          <button className="btn" type="submit" disabled={salvando}>
+          <div className="space-y-2">
+            <Label>Mensagem da semana (deixa vazio para esconder)</Label>
+            <Textarea value={mensagem} onChange={(e) => setMensagem(e.target.value)} placeholder="Uma mensagem carinhosa..." />
+          </div>
+
+          <Button type="submit" disabled={salvando}>
             Guardar informações
-          </button>
-        </div>
-      </form>
-    </div>
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { ContaCard } from "../../components/gestao/ContaCard";
+import { toast } from "../../components/ui/sonner";
 
 export default function ContaPage() {
-  const [flash, setFlash] = useState<{ msg: string; tipo: "ok" | "erro" } | null>(null);
-
   return (
     <div>
-      {flash && <div className={`flash ${flash.tipo}`}>{flash.msg}</div>}
-      <ContaCard onSaved={(msg) => setFlash({ msg, tipo: "ok" })} onError={(msg) => setFlash({ msg, tipo: "erro" })} />
+      <ContaCard
+        onSaved={(msg) => toast(msg, "ok")}
+        onError={(msg) => toast(msg, "erro")}
+      />
     </div>
   );
 }

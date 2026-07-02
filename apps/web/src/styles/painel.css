@@ -1,3 +1,10 @@
+@import "tailwindcss";
+
+@source "../components/gestao/";
+@source "../components/ui/";
+@source "../pages/gestao/";
+@source "../lib/";
+
 /* =========================================================
    Painel de gestão — estilos scoped sob .painel
    Reaproveita as variáveis de marca de styles.css (--brown,
@@ -373,4 +380,55 @@
 .refeicao-editor input,
 .refeicao-editor textarea {
   margin: 0;
+}
+
+/* =========================================================
+   Neutralizar preflight do Tailwind para estilos do site público
+   (styles.css é importado primeiro; preflight vem via painel.css,
+    por isso estas regras restauram o que preflight sobrescreve)
+   ========================================================= */
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.72;
+  color: var(--ink);
+  background: var(--cream);
+  margin: 0;
+}
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--brown-dark);
+  line-height: 1.1;
+  margin: 0 0 0.45em;
+}
+h1 { font-size: clamp(2.6rem, 5.5vw, 4rem); }
+h2 { font-size: clamp(2rem, 4vw, 3rem); }
+h3 { font-size: 1.22rem; }
+p { margin: 0 0 1.1rem; }
+
+/* =========================================================
+   Tema shadcn/ui mapeado para a paleta Colo
+   ========================================================= */
+:root {
+  --background: #f7ede3;
+  --foreground: #3e2a18;
+  --card: #ffffff;
+  --card-foreground: #3e2a18;
+  --popover: #ffffff;
+  --popover-foreground: #3e2a18;
+  --primary: #6b3f1f;
+  --primary-foreground: #faf5ef;
+  --secondary: #eedfd0;
+  --secondary-foreground: #4e2e13;
+  --muted-p: #8a7060;
+  --muted-foreground: #8a7060;
+  --accent: #eedfd0;
+  --accent-foreground: #4e2e13;
+  --destructive: #b87268;
+  --destructive-foreground: #faf5ef;
+  --border: rgba(107, 74, 46, 0.2);
+  --input: rgba(107, 74, 46, 0.22);
+  --ring: #b87268;
+  --radius: 0.625rem;
 }
