@@ -15,7 +15,18 @@ export function createApp() {
   app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? "*" }));
   app.use(express.json());
 
-  app.use("/uploads", express.static(path.resolve("uploads")));
+  app.use(
+    "/uploads",
+    express.static(path.resolve("uploads"), {
+      // Defesa em profundidade: mesmo que um ficheiro não-imagem passe pela
+      // validação do upload, estes cabeçalhos impedem que o browser o
+      // interprete como HTML/JS ao servi-lo.
+      setHeaders: (res) => {
+        res.setHeader("Content-Security-Policy", "default-src 'none'; img-src 'self'");
+        res.setHeader("X-Content-Type-Options", "nosniff");
+      },
+    })
+  );
   app.get("/api/health", (_req, res) => res.json({ ok: true }));
   app.use("/api/site", siteRouter);
   app.use("/api/auth", authRouter);
