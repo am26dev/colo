@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// SQLite: ficheiro único, sem servidor de BD para gerir na VPS.
+// Suficiente para este projecto (site institucional + painel de 1 utilizadora).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// SQLite não suporta enums nativos no Prisma: validado como string na
+// camada da API (zod). Estados usados: "aberto" | "fechado" | "oculto".
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteConfig {
+  id                    Int      @id @default(1)
+  whatsapp              String   @default("")
+  instagram             String   @default("")
+  dominio               String   @default("")
+  moeda                 String   @default("Kz")
+  mensagemDaSemana      String   @default("")
+  pagamento             Json     @default("[]")
+  // true = a semana activa é escolhida pelo intervalo de datas (dataInicio/dataFim);
+  // false = a dona escolhe explicitamente qual Week fica activa (Week.ativaManual).
+  modoAutomaticoSemanas Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
+}
+
+// Uma semana = o pacote semanal completo vendido pela Colo (preço único,
+// 5 dias, cada dia com 4 refeições). Substitui o antigo MenuState+Dish
+// (pratos avulsos com preço individual).
+model Week {
+  id             String   @id @default(cuid())
+  dataInicio     DateTime
+  dataFim        DateTime
+  precoSemanal   Int      @default(100000)
+  estado         String   @default("aberto")
+  vagasTotais    Int      @default(0)
+  vagasRestantes Int      @default(0)
+  // só relevante quando SiteConfig.modoAutomaticoSemanas = false
+  ativaManual    Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  dias           Day[]
+  pedidos        Order[]
+}
+
+model Day {
+  id        String @id @default(cuid())
+  weekId    String
+  week      Week   @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  diaSemana Int // 1=Segunda … 5=Sexta
+  tema      String @default("") // ex.: "Leveza & Frescura"
+  icone     String @default("") // emoji do dia
+  frase     String @default("") // frase de carinho do dia
+  // [{ tipo: "pequeno-almoco"|"almoco"|"lanche"|"jantar", nome, descricao, foto }]
+  // Json em vez de 12 colunas planas — mesmo padrão já usado em SiteConfig.pagamento
+  refeicoes Json   @default("[]")
+
+  @@unique([weekId, diaSemana])
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  weekId    String?
+  week      Week?    @relation(fields: [weekId], references: [id], onDelete: SetNull)
+  tipo      String   @default("semana") // "semana" | "especial"
+  nome      String
+  contacto  String
+  ciclo     String   @default("")
+  notas     String   @default("") // pedido especial: descrição livre do que a cliente quer
+  estado    String   @default("novo") // novo | confirmado | cancelado
+  createdAt DateTime @default(now())
+}

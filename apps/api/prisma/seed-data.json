@@ -1,0 +1,83 @@
+{
+  "config": {
+    "dominio": "colo.ao",
+    "whatsapp": "244924644918",
+    "instagram": "https://instagram.com/coloangola",
+    "pagamento": [
+      { "etiqueta": "Multicaixa Express", "valor": "923 000 000" },
+      { "etiqueta": "IBAN", "valor": "AO06 0000 0000 0000 0000 0000 0" },
+      { "etiqueta": "Titular", "valor": "Nome da Titular" }
+    ],
+    "mensagemDaSemana": "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
+    "moeda": "Kz",
+    "modoAutomaticoSemanas": true
+  },
+  "week": {
+    "precoSemanal": 100000,
+    "estado": "aberto",
+    "vagasTotais": 6,
+    "vagasRestantes": 6,
+    "dias": [
+      {
+        "diaSemana": 1,
+        "tema": "Leveza & Frescura",
+        "icone": "🌿",
+        "frase": "Começar a semana com carinho é também uma forma de cuidar de ti.",
+        "refeicoes": [
+          { "tipo": "pequeno-almoco", "nome": "Papas de aveia com fruta", "descricao": "Aveia cozida com leite vegetal, canela e fruta fresca da época.", "foto": "" },
+          { "tipo": "almoco", "nome": "Febras com ananás, bacon e cuscuz", "descricao": "Febras grelhadas com ananás e bacon, servidas com cuscuz temperado.", "foto": "" },
+          { "tipo": "lanche", "nome": "Iogurte com granola", "descricao": "Iogurte natural com granola caseira e mel.", "foto": "" },
+          { "tipo": "jantar", "nome": "Panna cotta de coco com compota de frutos vermelhos", "descricao": "Sobremesa cremosa de coco com compota caseira de frutos vermelhos.", "foto": "" }
+        ]
+      },
+      {
+        "diaSemana": 2,
+        "tema": "Energia & Estrutura",
+        "icone": "🔥",
+        "frase": "Que encontres nesta refeição um momento de pausa no meio da correria.",
+        "refeicoes": [
+          { "tipo": "pequeno-almoco", "nome": "Torrada integral com abacate", "descricao": "Pão integral tostado com abacate amassado e sementes.", "foto": "" },
+          { "tipo": "almoco", "nome": "Salmão com molho de laranja", "descricao": "Salmão grelhado com um molho cítrico de laranja e ervas.", "foto": "" },
+          { "tipo": "lanche", "nome": "Fruta da época", "descricao": "Seleção de fruta fresca da época.", "foto": "" },
+          { "tipo": "jantar", "nome": "Bolo gelado de Nido", "descricao": "Sobremesa gelada e cremosa à base de leite Nido.", "foto": "" }
+        ]
+      },
+      {
+        "diaSemana": 3,
+        "tema": "Nutrição Vegetal",
+        "icone": "🌸",
+        "frase": "Há dias em que o maior gesto de amor é sentarmo-nos à mesa e respirar.",
+        "refeicoes": [
+          { "tipo": "pequeno-almoco", "nome": "Smoothie verde", "descricao": "Batido de espinafres, banana, maçã e gengibre.", "foto": "" },
+          { "tipo": "almoco", "nome": "Charuto de repolho recheado com carne moída", "descricao": "Folhas de repolho recheadas com carne moída temperada.", "foto": "" },
+          { "tipo": "lanche", "nome": "Bolachas de aveia", "descricao": "Bolachas caseiras de aveia e mel.", "foto": "" },
+          { "tipo": "jantar", "nome": "Mousse de frutos vermelhos", "descricao": "Mousse leve de frutos vermelhos frescos.", "foto": "" }
+        ]
+      },
+      {
+        "diaSemana": 4,
+        "tema": "Conforto & Presença",
+        "icone": "🕯️",
+        "frase": "Acreditamos que cuidar de ti também pode começar à mesa.",
+        "refeicoes": [
+          { "tipo": "pequeno-almoco", "nome": "Ovos mexidos com legumes", "descricao": "Ovos mexidos com tomate, espinafres e ervas frescas.", "foto": "" },
+          { "tipo": "almoco", "nome": "Peixe \"frito\" com banana-pão na manteiga e vinagrete de feijão", "descricao": "Peixe assado com banana-pão salteada e vinagrete de feijão.", "foto": "" },
+          { "tipo": "lanche", "nome": "Mix de frutos secos", "descricao": "Mistura de castanhas, amêndoas e passas.", "foto": "" },
+          { "tipo": "jantar", "nome": "Bolinho de tâmaras", "descricao": "Bolinhos energéticos de tâmaras e coco.", "foto": "" }
+        ]
+      },
+      {
+        "diaSemana": 5,
+        "tema": "Equilíbrio & Encerramento",
+        "icone": "🌙",
+        "frase": "Termina a semana com leveza. O teu corpo agradece e a tua mente também.",
+        "refeicoes": [
+          { "tipo": "pequeno-almoco", "nome": "Panquecas de banana", "descricao": "Panquecas leves de banana e aveia.", "foto": "" },
+          { "tipo": "almoco", "nome": "Frango com puré de cenoura", "descricao": "Frango assado com puré cremoso de cenoura e ervas.", "foto": "" },
+          { "tipo": "lanche", "nome": "Chá e fruta seca", "descricao": "Chá de ervas com uma seleção de fruta seca.", "foto": "" },
+          { "tipo": "jantar", "nome": "Quinoa doce", "descricao": "Quinoa cozida com leite de coco, canela e fruta.", "foto": "" }
+        ]
+      }
+    ]
+  }
+}
