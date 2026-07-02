@@ -6,7 +6,7 @@ e — o mais importante — **abrir ou encerrar os pedidos** da semana.
 ## Onde entrar
 👉 **https://colo.ao/gestao**
 
-Na **primeira vez**, crias o teu utilizador e palavra-passe. Depois é só entrar.
+Na **primeira vez**, crias o teu email e palavra-passe. Depois é só entrar.
 
 ---
 
@@ -27,7 +27,7 @@ Tens ainda:
 
 ### 2. Menu — pratos
 Adiciona, edita ou remove pratos (nome, descrição, preço em Kz, etiquetas e foto).
-Na **foto** podes pôr o nome de um ficheiro (ex.: `assets/img/salmao.jpg`) ou
+Na **foto** podes pôr o nome de um ficheiro (ex.: `/assets/img/salmao.jpg`) ou
 **colar um link** de uma imagem.
 
 ### 3. Informações do site
@@ -40,8 +40,7 @@ Muda a tua palavra-passe quando quiseres.
 ---
 
 ## Notas
-- As alterações ficam **guardadas no servidor** e aparecem no site em segundos.
-- Os dados ficam numa pasta privada e **não se perdem** quando o site é atualizado.
+- As alterações ficam **guardadas na base de dados** e aparecem no site em segundos.
 - Se esqueceres a palavra-passe, fala comigo (Muds) que reponho o acesso.
 
 Feito com carinho para a Colo. 💛

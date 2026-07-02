@@ -1,9 +1,7 @@
 # Colo — *Comida que cuida de ti* 🤍
 
-> 🌐 **No ar:** https://am26dev.github.io/colo/
-
-Micro-site (landing page) da marca **Colo**: comida pensada na mulher — saudável,
-anti-inflamatória e personalizada conforme o ciclo menstrual. Mercado: **Angola**.
+Site da marca **Colo**: comida pensada na mulher — saudável, anti-inflamatória
+e personalizada conforme o ciclo menstrual. Mercado: **Angola**.
 
 > Marca angolana · domínio **.ao** · conteúdo em **português de Portugal** · moeda **Kwanza (Kz)**.
 
@@ -11,78 +9,79 @@ anti-inflamatória e personalizada conforme o ciclo menstrual. Mercado: **Angola
 
 ## ✨ O que faz
 
-- **Página única** e responsiva (telemóvel e computador) com a identidade da Colo.
-- **Menu da semana** carregado a partir de um ficheiro simples (`data/menu.js`),
-  atualizado **todas as quintas-feiras** para a semana seguinte.
-- **Vagas limitadas por semana**: quando enchem (ou quando fechas manualmente),
-  o site mostra *“pedidos encerrados”* mas mantém o menu visível.
-- **Pedido pelo WhatsApp**: o cliente preenche um formulário e o pedido chega-te
-  já escrito ao WhatsApp — é assim que **recebes o “alerta”** de cada interessada.
-- **Pagamento por Multicaixa Express** / transferência (dados em `data/config.js`).
+- **Página única** e responsiva com a identidade da Colo.
+- **Menu da semana**, atualizado normalmente às quintas-feiras.
+- **Vagas limitadas por semana**: quando enchem (ou a dona encerra manualmente),
+  o site mostra *"pedidos encerrados"* mas mantém o menu visível.
+- **Pedido pelo WhatsApp**: a cliente preenche um formulário e o pedido chega já
+  escrito ao WhatsApp da Colo.
+- **Pagamento por Multicaixa Express** / transferência.
 - **Personalização por ciclo**: a cliente indica a fase do ciclo no pedido.
-- **Mensagem da Colo** (semanal/diária) editável no fundo do site.
-- **Partilha** fácil para **Instagram** e **WhatsApp**.
+- **Mensagem da Colo** (semanal/diária) editável.
+- **Painel de gestão** (`/gestao`): a dona edita menu, vagas/estado, contactos e
+  a mensagem da semana **sem mexer em código**.
 
 ---
 
-## 🗂️ Estrutura
+## 🗂️ Estrutura (monorepo)
 
 ```
 colo/
-├── index.html               ← a página
-├── data/
-│   ├── config.js            ← WhatsApp, Instagram, pagamento, mensagem, domínio
-│   └── menu.js              ← MENU DA SEMANA (atualizas todas as quintas)
-├── assets/
-│   ├── css/styles.css       ← visual da marca
-│   ├── js/app.js            ← lógica (menu, vagas, pedido WhatsApp)
-│   └── img/                 ← fotos e favicon
-├── GUIA-ATUALIZAR-MENU.md   ← passo a passo para a dona (sem programar)
+├── apps/
+│   ├── web/          ← frontend (Vite + React + TypeScript)
+│   │   ├── src/
+│   │   │   ├── data/data.ts     ← conteúdo estático institucional + fallback
+│   │   │   ├── components/      ← layout, secções, menu, pedido, painel
+│   │   │   ├── pages/            ← Home, gestao/{Login,Painel}
+│   │   │   ├── hooks/            ← useSiteContent (com fallback), etc.
+│   │   │   └── styles.css        ← visual da marca
+│   │   └── public/assets/img/    ← fotos e favicon
+│   └── api/           ← backend (Express + Prisma + SQLite)
+│       ├── prisma/schema.prisma  ← Admin, SiteConfig, MenuState, Dish
+│       ├── prisma/seed.ts        ← dados iniciais
+│       └── src/routes/           ← auth, site, menu, dishes, config
+├── GUIA-PAINEL.md     ← guia de uso do painel /gestao para a dona
 └── README.md
 ```
 
-## 🔧 Antes de publicar — preenche os teus dados
-
-Em **`data/config.js`**:
-- `whatsapp` — número com indicativo `244`, só dígitos (ex.: `"244923000000"`).
-- `instagram` — link do perfil.
-- `pagamento` — Multicaixa Express / IBAN / titular reais.
-- `dominio` — o teu domínio `.ao`.
-- `mensagemDaSemana` — a tua mensagem.
-
-Em **`data/menu.js`** — o menu da semana (ver **GUIA-ATUALIZAR-MENU.md**).
-
-Fotos opcionais em **`assets/img/`** (ver o README lá dentro).
+A base de dados é **SQLite** (ficheiro único, sem servidor de BD para gerir) —
+suficiente para este site (uma única administradora, baixo tráfego).
 
 ---
 
-## ▶️ Ver localmente
+## ▶️ Correr localmente
 
-Como o site é estático, basta abrir o `index.html` no navegador.
-Para um ambiente mais fiel, podes correr um servidor simples:
+Backend (API):
 
 ```bash
-# com Python instalado
-python -m http.server 8000
-# depois abre  http://localhost:8000
+cd apps/api
+npm install
+cp .env.example .env          # ajusta se necessário
+npx prisma migrate deploy
+npm run seed                  # dados iniciais (config + menu + pratos)
+npm run dev                   # http://localhost:4000
 ```
 
-## 🚀 Publicar
+Frontend:
 
-Qualquer alojamento estático serve: **Netlify**, **Vercel**, **Cloudflare Pages**
-ou **GitHub Pages**. Não precisa de servidor nem base de dados.
+```bash
+cd apps/web
+npm install
+cp .env.example .env          # VITE_API_URL aponta para a API acima
+npm run dev                   # http://localhost:5173
+```
 
-O site já está publicado em **GitHub Pages**: https://am26dev.github.io/colo/
-(branch `main`, atualiza sozinho a cada `git push`).
+Na primeira visita a `/gestao`, cria o teu email e palavra-passe (ver
+[GUIA-PAINEL.md](GUIA-PAINEL.md)).
 
-### Domínio `.ao`
-1. Regista o domínio (ex.: `colo.ao`) junto de um registador angolano.
-2. Em **Settings → Pages → Custom domain** do repositório, escreve `colo.ao`
-   (isto cria um ficheiro `CNAME` no repo).
-3. No teu DNS, aponta o domínio para o GitHub Pages:
-   - `A` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - (ou `CNAME` de `www` → `am26dev.github.io`)
-4. Atualiza `dominio` em `data/config.js`.
+---
+
+## 🚀 Publicar (VPS Hostinger)
+
+- **API**: `npm run build && npm start` (ou gerida por PM2/systemd), com
+  `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN` definidos em produção.
+- **Frontend**: `npm run build` gera `apps/web/dist/`, servido por nginx com
+  `try_files $uri /index.html` (SPA) e proxy de `/api` para a API Node.
 
 ---
 

@@ -8,12 +8,11 @@ desktop.ini
 .idea/
 *.swp
 
-# Dependências / build (caso venham a existir)
+# Dependências / build
 node_modules/
 dist/
 .cache/
 
-# Dados do painel (gerados no servidor, nunca versionados)
-colo_data/
-data/site.json
-data/admin.json
+# Variáveis de ambiente (ver .env.example em apps/web e apps/api)
+.env
+!.env.example
