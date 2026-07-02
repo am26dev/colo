@@ -1,0 +1,376 @@
+/* =========================================================
+   Painel de gestão — estilos scoped sob .painel
+   Reaproveita as variáveis de marca de styles.css (--brown,
+   --rose-deep, --sage, --ink, --muted, ...) e adiciona só as
+   que faltam para este ecrã.
+   ========================================================= */
+.painel {
+  --painel-radius: 16px;
+  --painel-shadow: 0 14px 40px -18px rgba(78, 46, 19, 0.35);
+  --cream-3: #faf5ef;
+
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+  min-height: 100vh;
+}
+.painel * {
+  box-sizing: border-box;
+}
+.painel a {
+  color: var(--rose-deep);
+}
+.painel .logo {
+  font-family: Georgia, serif;
+  font-size: 1.7rem;
+  color: var(--brown);
+  font-weight: 700;
+}
+.painel .logo small {
+  display: block;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+}
+.painel .logo-img {
+  height: 52px;
+  width: auto;
+  display: block;
+  margin-bottom: 4px;
+}
+.painel h1 {
+  font-family: Georgia, serif;
+  color: var(--brown-dark);
+  font-size: 1.5rem;
+  margin: 0.2em 0;
+}
+.painel h2 {
+  font-family: Georgia, serif;
+  color: var(--brown-dark);
+  font-size: 1.2rem;
+  margin: 0 0 4px;
+}
+.painel .card {
+  background: #fff;
+  border: 1px solid rgba(107, 74, 46, 0.1);
+  border-radius: var(--painel-radius);
+  padding: 22px;
+  margin: 18px 0;
+  box-shadow: var(--painel-shadow);
+}
+.painel .card .sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+.painel label {
+  display: block;
+  font-weight: 600;
+  color: var(--brown-dark);
+  font-size: 0.85rem;
+  margin: 14px 0 6px;
+}
+.painel input[type="text"],
+.painel input[type="password"],
+.painel input[type="number"],
+.painel input[type="email"],
+.painel input[type="url"],
+.painel textarea,
+.painel select {
+  width: 100%;
+  font: inherit;
+  padding: 10px 12px;
+  border: 1.5px solid rgba(107, 74, 46, 0.22);
+  border-radius: 10px;
+  background: var(--cream-3);
+  color: var(--ink);
+}
+.painel input:focus,
+.painel textarea:focus,
+.painel select:focus {
+  outline: none;
+  border-color: var(--rose-deep);
+  box-shadow: 0 0 0 3px rgba(201, 139, 130, 0.18);
+}
+.painel textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+.painel .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 24px;
+  background: var(--brown);
+  color: var(--cream-3);
+  text-decoration: none;
+  transition: 0.15s;
+}
+.painel .btn:hover {
+  background: var(--brown-dark);
+}
+.painel .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.painel .btn.ghost {
+  background: transparent;
+  border: 1.5px solid rgba(107, 74, 46, 0.3);
+  color: var(--brown-dark);
+}
+.painel .btn.ghost:hover {
+  background: rgba(107, 74, 46, 0.06);
+}
+.painel .btn.rose {
+  background: var(--rose-deep);
+}
+.painel .btn.rose:hover {
+  background: var(--rose);
+}
+.painel .btn.sage {
+  background: var(--sage);
+}
+.painel .btn.sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+.painel .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.painel .flash {
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin: 14px 0;
+  font-weight: 500;
+}
+.painel .flash.ok {
+  background: rgba(125, 145, 120, 0.16);
+  color: #41603a;
+  border: 1px solid rgba(125, 145, 120, 0.5);
+}
+.painel .flash.erro {
+  background: rgba(184, 114, 104, 0.14);
+  color: #8a3a2e;
+  border: 1px solid rgba(184, 114, 104, 0.5);
+}
+.painel .estado-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.painel .estado-pill {
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+}
+.painel .estado-pill.aberto {
+  background: rgba(125, 145, 120, 0.18);
+  color: #41603a;
+}
+.painel .estado-pill.fechado {
+  background: rgba(184, 114, 104, 0.16);
+  color: #8a3a2e;
+}
+.painel .del {
+  background: none;
+  border: 0;
+  color: var(--rose-deep);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.painel .muted {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.painel .actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.painel .pag-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.painel .center {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.painel .login-card {
+  max-width: 380px;
+  width: 100%;
+}
+@media (max-width: 600px) {
+  .painel .row,
+  .painel .pag-row {
+    grid-template-columns: 1fr;
+  }
+  .painel .pag-row .del {
+    justify-self: end;
+  }
+}
+
+/* ----------------------- navegação (PainelLayout) ----------------------- */
+.painel-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.painel-sidebar {
+  padding: 24px 20px;
+  border-right: 1px solid rgba(107, 74, 46, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.painel-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.painel-nav a {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: var(--brown-dark);
+  font-weight: 500;
+  font-size: 0.92rem;
+}
+.painel-nav a:hover {
+  background: rgba(107, 74, 46, 0.06);
+}
+.painel-nav a.activo {
+  background: var(--brown);
+  color: var(--cream-3);
+}
+.painel-sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.painel-main {
+  padding: 24px 28px 80px;
+  min-width: 0;
+}
+@media (max-width: 780px) {
+  .painel-shell {
+    grid-template-columns: 1fr;
+  }
+  .painel-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid rgba(107, 74, 46, 0.1);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .painel-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .painel-sidebar-footer {
+    margin-top: 0;
+    flex-direction: row;
+  }
+}
+
+/* ----------------------- dashboard ----------------------- */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+.dashboard-card-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.dashboard-card-valor {
+  font-family: Georgia, serif;
+  font-size: 1.6rem;
+  color: var(--brown-dark);
+}
+
+/* ----------------------- pedidos ----------------------- */
+.pedidos-lista,
+.semanas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pedido-item,
+.semana-item {
+  margin: 0;
+}
+.pedido-item-head,
+.semana-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.tipo-pill {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.tipo-pill.tipo-semana {
+  background: rgba(125, 145, 120, 0.18);
+  color: #41603a;
+}
+.tipo-pill.tipo-especial {
+  background: rgba(201, 139, 130, 0.18);
+  color: var(--rose-deep);
+}
+
+/* ----------------------- editor de semana ----------------------- */
+.dia-editor {
+  margin-top: 18px;
+}
+.refeicao-editor {
+  border: 1px solid rgba(107, 74, 46, 0.14);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+  background: var(--cream-3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.refeicao-editor input,
+.refeicao-editor textarea {
+  margin: 0;
+}
