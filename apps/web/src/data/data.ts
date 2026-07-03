@@ -150,7 +150,6 @@ export const defaultWeek: Week = {
     {
       diaSemana: 1,
       tema: "Leveza & Frescura",
-      icone: "🌿",
       frase: "Que esta refeição te lembre que cuidar de ti também passa pelos pequenos momentos.",
       refeicoes: [
         { tipo: "almoco", nome: "Beringela recheada com linguiça e salada verde", descricao: "Beringela assada recheada com linguiça e servida com salada verde fresca.", foto: "" },
@@ -160,7 +159,6 @@ export const defaultWeek: Week = {
     {
       diaSemana: 2,
       tema: "Energia & Estrutura",
-      icone: "🔥",
       frase: "Às vezes, tudo o que precisamos é de uma pausa à mesa.",
       refeicoes: [
         { tipo: "almoco", nome: "Ganso ao molho de vinho tinto e alecrim com cuscuz", descricao: "Ganso cozinhado lentamente em vinho tinto e alecrim, servido com cuscuz.", foto: "" },
@@ -170,7 +168,6 @@ export const defaultWeek: Week = {
     {
       diaSemana: 3,
       tema: "Nutrição Vegetal",
-      icone: "🌸",
       frase: "O conforto também pode nascer dos ingredientes mais simples.",
       refeicoes: [
         { tipo: "almoco", nome: "Cannelloni de curgete recheado com ricota e cogumelos", descricao: "Fatias de curgete enroladas com ricota e cogumelos, gratinadas.", foto: "" },
@@ -180,7 +177,6 @@ export const defaultWeek: Week = {
     {
       diaSemana: 4,
       tema: "Conforto & Presença",
-      icone: "🕯️",
       frase: "Porque cada refeição pode ser um gesto de carinho contigo.",
       refeicoes: [
         { tipo: "almoco", nome: "Estrogonofe de frango com bulgur", descricao: "Frango ao molho cremoso servido com bulgur.", foto: "" },
@@ -190,7 +186,6 @@ export const defaultWeek: Week = {
     {
       diaSemana: 5,
       tema: "Equilíbrio & Encerramento",
-      icone: "🌙",
       frase: "Termina a semana com o cuidado que mereces.",
       refeicoes: [
         { tipo: "almoco", nome: "Cestinhos de banana-pão com atum e legumes grelhados", descricao: "Cestinhos de banana-pão recheados com atum e legumes grelhados.", foto: "" },
