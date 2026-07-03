@@ -17,5 +17,4 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          fingerprint: "SHA256:sIxpOfQWjfahhEP2aH8u0srCb6pP5POnme/92E/recI"
           script: echo "deploy" # comando forçado no servidor ignora isto e corre sempre /usr/local/bin/deploy-colo
