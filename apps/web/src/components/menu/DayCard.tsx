@@ -13,7 +13,7 @@ export function DayCard({ dia, delay }: DayCardProps) {
   return (
     <Reveal as="article" delay={delay} className="day-card">
       <div className="day-card-head">
-        <span className="day-card-icon">{dia.icone || "🍽️"}</span>
+        {/* <span className="day-card-icon">{dia.icone || "🍽️"}</span> */}
         <div>
           <h3>{diasSemanaLabels[dia.diaSemana] ?? `Dia ${dia.diaSemana}`}</h3>
           {dia.tema && <p className="day-card-tema">{dia.tema}</p>}

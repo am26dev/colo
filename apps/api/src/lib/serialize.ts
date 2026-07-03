@@ -31,7 +31,7 @@ export async function buildSitePayload() {
           dias: week.dias.map((d) => ({
             diaSemana: d.diaSemana,
             tema: d.tema,
-            icone: d.icone,
+            // icone: d.icone,
             frase: d.frase,
             refeicoes: d.refeicoes as { tipo: string; nome: string; descricao: string; foto: string }[],
           })),

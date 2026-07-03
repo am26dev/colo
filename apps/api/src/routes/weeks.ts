@@ -7,7 +7,7 @@ export const weeksRouter = Router();
 weeksRouter.use(requireAuth);
 
 const refeicaoSchema = z.object({
-  tipo: z.enum(["pequeno-almoco", "almoco", "lanche", "jantar"]),
+  tipo: z.enum(["almoco", "sobremesa"]),
   nome: z.string().trim().default(""),
   descricao: z.string().trim().default(""),
   foto: z.string().trim().default(""),
@@ -18,7 +18,7 @@ const diaSchema = z.object({
   tema: z.string().trim().default(""),
   icone: z.string().trim().default(""),
   frase: z.string().trim().default(""),
-  refeicoes: z.array(refeicaoSchema).length(4),
+  refeicoes: z.array(refeicaoSchema),
 });
 
 const weekSchema = z.object({

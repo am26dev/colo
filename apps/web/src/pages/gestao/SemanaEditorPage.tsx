@@ -22,7 +22,6 @@ interface RefeicaoForm {
 interface DiaForm {
   diaSemana: number;
   tema: string;
-  icone: string;
   frase: string;
   refeicoes: Record<TipoRefeicao, RefeicaoForm>;
 }
@@ -35,13 +34,10 @@ function diaVazio(diaSemana: number): DiaForm {
   return {
     diaSemana,
     tema: "",
-    icone: "",
     frase: "",
     refeicoes: {
-      "pequeno-almoco": refeicaoVazia(),
       almoco: refeicaoVazia(),
-      lanche: refeicaoVazia(),
-      jantar: refeicaoVazia(),
+      sobremesa: refeicaoVazia(),
     },
   };
 }
@@ -49,7 +45,6 @@ function diaVazio(diaSemana: number): DiaForm {
 function toDiaForm(d: Day): DiaForm {
   const form = diaVazio(d.diaSemana);
   form.tema = d.tema;
-  form.icone = d.icone;
   form.frase = d.frase;
   for (const r of d.refeicoes) {
     form.refeicoes[r.tipo] = { nome: r.nome, descricao: r.descricao, foto: r.foto };
@@ -124,7 +119,7 @@ export default function SemanaEditorPage() {
       dias: dias.map((d) => ({
         diaSemana: d.diaSemana,
         tema: d.tema,
-        icone: d.icone,
+        // icone: d.icone,
         frase: d.frase,
         refeicoes: refeicaoOrdem.map((tipo) => ({ tipo, ...d.refeicoes[tipo] })) as Refeicao[],
       })),
@@ -219,23 +214,13 @@ export default function SemanaEditorPage() {
                 </AccordionTrigger>
                 <AccordionContent value={key}>
                   <div className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label>Tema do dia</Label>
-                        <Input
-                          value={dia.tema}
-                          onChange={(e) => updateDia(dia.diaSemana, { tema: e.target.value })}
-                          placeholder="ex.: Leveza & Frescura"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Ícone (emoji)</Label>
-                        <Input
-                          value={dia.icone}
-                          onChange={(e) => updateDia(dia.diaSemana, { icone: e.target.value })}
-                          placeholder="🌿"
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label>Tema do dia</Label>
+                      <Input
+                        value={dia.tema}
+                        onChange={(e) => updateDia(dia.diaSemana, { tema: e.target.value })}
+                        placeholder="ex.: Leveza & Frescura"
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Frase do dia</Label>

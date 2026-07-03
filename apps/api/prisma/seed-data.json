@@ -8,76 +8,120 @@
       { "etiqueta": "IBAN", "valor": "AO06 0000 0000 0000 0000 0000 0" },
       { "etiqueta": "Titular", "valor": "Nome da Titular" }
     ],
-    "mensagemDaSemana": "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
+    "mensagemDaSemana": "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e curcuma, para acalmar o corpo e reduzir o inchaco. Come devagar, sem pressa. A Colo cuida de ti — comeca pelo prato. 💛",
     "moeda": "Kz",
     "modoAutomaticoSemanas": true
   },
-  "week": {
-    "precoSemanal": 100000,
-    "estado": "aberto",
-    "vagasTotais": 6,
-    "vagasRestantes": 6,
-    "dias": [
-      {
-        "diaSemana": 1,
-        "tema": "Leveza & Frescura",
-        "icone": "🌿",
-        "frase": "Começar a semana com carinho é também uma forma de cuidar de ti.",
-        "refeicoes": [
-          { "tipo": "pequeno-almoco", "nome": "Papas de aveia com fruta", "descricao": "Aveia cozida com leite vegetal, canela e fruta fresca da época.", "foto": "" },
-          { "tipo": "almoco", "nome": "Febras com ananás, bacon e cuscuz", "descricao": "Febras grelhadas com ananás e bacon, servidas com cuscuz temperado.", "foto": "" },
-          { "tipo": "lanche", "nome": "Iogurte com granola", "descricao": "Iogurte natural com granola caseira e mel.", "foto": "" },
-          { "tipo": "jantar", "nome": "Panna cotta de coco com compota de frutos vermelhos", "descricao": "Sobremesa cremosa de coco com compota caseira de frutos vermelhos.", "foto": "" }
-        ]
-      },
-      {
-        "diaSemana": 2,
-        "tema": "Energia & Estrutura",
-        "icone": "🔥",
-        "frase": "Que encontres nesta refeição um momento de pausa no meio da correria.",
-        "refeicoes": [
-          { "tipo": "pequeno-almoco", "nome": "Torrada integral com abacate", "descricao": "Pão integral tostado com abacate amassado e sementes.", "foto": "" },
-          { "tipo": "almoco", "nome": "Salmão com molho de laranja", "descricao": "Salmão grelhado com um molho cítrico de laranja e ervas.", "foto": "" },
-          { "tipo": "lanche", "nome": "Fruta da época", "descricao": "Seleção de fruta fresca da época.", "foto": "" },
-          { "tipo": "jantar", "nome": "Bolo gelado de Nido", "descricao": "Sobremesa gelada e cremosa à base de leite Nido.", "foto": "" }
-        ]
-      },
-      {
-        "diaSemana": 3,
-        "tema": "Nutrição Vegetal",
-        "icone": "🌸",
-        "frase": "Há dias em que o maior gesto de amor é sentarmo-nos à mesa e respirar.",
-        "refeicoes": [
-          { "tipo": "pequeno-almoco", "nome": "Smoothie verde", "descricao": "Batido de espinafres, banana, maçã e gengibre.", "foto": "" },
-          { "tipo": "almoco", "nome": "Charuto de repolho recheado com carne moída", "descricao": "Folhas de repolho recheadas com carne moída temperada.", "foto": "" },
-          { "tipo": "lanche", "nome": "Bolachas de aveia", "descricao": "Bolachas caseiras de aveia e mel.", "foto": "" },
-          { "tipo": "jantar", "nome": "Mousse de frutos vermelhos", "descricao": "Mousse leve de frutos vermelhos frescos.", "foto": "" }
-        ]
-      },
-      {
-        "diaSemana": 4,
-        "tema": "Conforto & Presença",
-        "icone": "🕯️",
-        "frase": "Acreditamos que cuidar de ti também pode começar à mesa.",
-        "refeicoes": [
-          { "tipo": "pequeno-almoco", "nome": "Ovos mexidos com legumes", "descricao": "Ovos mexidos com tomate, espinafres e ervas frescas.", "foto": "" },
-          { "tipo": "almoco", "nome": "Peixe \"frito\" com banana-pão na manteiga e vinagrete de feijão", "descricao": "Peixe assado com banana-pão salteada e vinagrete de feijão.", "foto": "" },
-          { "tipo": "lanche", "nome": "Mix de frutos secos", "descricao": "Mistura de castanhas, amêndoas e passas.", "foto": "" },
-          { "tipo": "jantar", "nome": "Bolinho de tâmaras", "descricao": "Bolinhos energéticos de tâmaras e coco.", "foto": "" }
-        ]
-      },
-      {
-        "diaSemana": 5,
-        "tema": "Equilíbrio & Encerramento",
-        "icone": "🌙",
-        "frase": "Termina a semana com leveza. O teu corpo agradece e a tua mente também.",
-        "refeicoes": [
-          { "tipo": "pequeno-almoco", "nome": "Panquecas de banana", "descricao": "Panquecas leves de banana e aveia.", "foto": "" },
-          { "tipo": "almoco", "nome": "Frango com puré de cenoura", "descricao": "Frango assado com puré cremoso de cenoura e ervas.", "foto": "" },
-          { "tipo": "lanche", "nome": "Chá e fruta seca", "descricao": "Chá de ervas com uma seleção de fruta seca.", "foto": "" },
-          { "tipo": "jantar", "nome": "Quinoa doce", "descricao": "Quinoa cozida com leite de coco, canela e fruta.", "foto": "" }
-        ]
-      }
-    ]
-  }
+  "weeks": [
+    {
+      "dataInicio": "2026-07-06",
+      "dataFim": "2026-07-10",
+      "precoSemanal": 100000,
+      "estado": "aberto",
+      "vagasTotais": 6,
+      "vagasRestantes": 6,
+      "dias": [
+        {
+          "diaSemana": 1,
+          "tema": "Leveza & Frescura",
+          "frase": "Que esta refeicao te lembre que cuidar de ti tambem passa pelos pequenos momentos.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Beringela recheada com linguica e salada verde", "descricao": "Beringela assada recheada com linguica e servida com salada verde fresca.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Overnight oats", "descricao": "Aveia hidratada durante a noite com iogurte e fruta.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 2,
+          "tema": "Energia & Estrutura",
+          "frase": "As vezes, tudo o que precisamos e de uma pausa a mesa.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Ganso ao molho de vinho tinto e alecrim com cuscuz", "descricao": "Ganso cozinhado lentamente em vinho tinto e alecrim, servido com cuscuz.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Mousse de abacate", "descricao": "Mousse cremosa de abacate com cacau.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 3,
+          "tema": "Nutricao Vegetal",
+          "frase": "O conforto tambem pode nascer dos ingredientes mais simples.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Cannelloni de curgete recheado com ricota e cogumelos", "descricao": "Fatias de curgete enroladas com ricota e cogumelos, gratinadas.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Bolinho Banoffee", "descricao": "Bolinho de banana, caramelo e natas.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 4,
+          "tema": "Conforto & Presenca",
+          "frase": "Porque cada refeicao pode ser um gesto de carinho contigo.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Estrogonofe de frango com bulgur", "descricao": "Frango ao molho cremoso servido com bulgur.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Bolo de amendoa", "descricao": "Bolo humido de amendoa.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 5,
+          "tema": "Equilibrio & Encerramento",
+          "frase": "Termina a semana com o cuidado que mereces.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Cestinhos de banana-pao com atum e legumes grelhados", "descricao": "Cestinhos de banana-pao recheados com atum e legumes grelhados.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Cocada cremosa", "descricao": "Cocada cremosa de coco.", "foto": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "dataInicio": "2026-07-13",
+      "dataFim": "2026-07-17",
+      "precoSemanal": 100000,
+      "estado": "aberto",
+      "vagasTotais": 6,
+      "vagasRestantes": 6,
+      "dias": [
+        {
+          "diaSemana": 1,
+          "tema": "Renovacao & Leveza",
+          "frase": "Comeca a semana a cuidar de ti, uma garfada de cada vez.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Quinoa com camarao e lulas", "descricao": "Quinoa salteada com camarao e lulas temperadas.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Sobremesa cremosa de frutos vermelhos", "descricao": "Creme suave de frutos vermelhos.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 2,
+          "tema": "Equilibrio & Sabor",
+          "frase": "Que encontres nesta refeicao um momento so teu.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Bowl de iscas de frango com molho de iogurte", "descricao": "Iscas de frango temperadas servidas em bowl com molho de iogurte.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Mousse de pitaya", "descricao": "Mousse leve de pitaya.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 3,
+          "tema": "Nutricao & Conforto",
+          "frase": "Os pequenos gestos de cuidado fazem toda a diferenca.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Rocambole de cenoura, ricota e espinafres", "descricao": "Rocambole de cenoura recheado com ricota e espinafres.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Fudge de chocolate", "descricao": "Fudge cremoso de chocolate.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 4,
+          "tema": "Tranquilidade & Presenca",
+          "frase": "Porque cuidar do corpo tambem e alimentar a tranquilidade.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Peixe no forno com ameijoas e legumes", "descricao": "Peixe assado no forno com ameijoas e legumes frescos.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Mousse de limao", "descricao": "Mousse refrescante de limao.", "foto": "" }
+          ]
+        },
+        {
+          "diaSemana": 5,
+          "tema": "Fecho & Leveza",
+          "frase": "Fecha a semana com leveza. Nos tratamos desta parte, para que possas cuidar de ti.",
+          "refeicoes": [
+            { "tipo": "almoco", "nome": "Bowl de carne, legumes e massa de arroz", "descricao": "Bowl completo com carne, legumes salteados e massa de arroz.", "foto": "" },
+            { "tipo": "sobremesa", "nome": "Panna cotta de coco com compota de frutos vermelhos", "descricao": "Panna cotta cremosa de coco com compota caseira de frutos vermelhos.", "foto": "" }
+          ]
+        }
+      ]
+    }
+  ]
 }

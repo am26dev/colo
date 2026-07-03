@@ -64,7 +64,7 @@ model Day {
   tema      String @default("") // ex.: "Leveza & Frescura"
   icone     String @default("") // emoji do dia
   frase     String @default("") // frase de carinho do dia
-  // [{ tipo: "pequeno-almoco"|"almoco"|"lanche"|"jantar", nome, descricao, foto }]
+  // [{ tipo: "almoco"|"sobremesa", nome, descricao, foto }]
   // Json em vez de 12 colunas planas — mesmo padrão já usado em SiteConfig.pagamento
   refeicoes Json   @default("[]")
 

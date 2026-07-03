@@ -1,5 +1,5 @@
 export type MenuEstado = "aberto" | "fechado" | "oculto";
-export type TipoRefeicao = "pequeno-almoco" | "almoco" | "lanche" | "jantar";
+export type TipoRefeicao = "almoco" | "sobremesa";
 export type OrderTipo = "semana" | "especial";
 export type OrderEstado = "novo" | "confirmado" | "cancelado";
 
@@ -13,7 +13,7 @@ export interface Refeicao {
 export interface Day {
   diaSemana: number; // 1=Segunda … 5=Sexta
   tema: string;
-  icone: string;
+  // icone: string;
   frase: string;
   refeicoes: Refeicao[];
 }
