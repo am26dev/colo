@@ -21,8 +21,8 @@ export function Sobre() {
         </Reveal>
 
         <Reveal as="figure" delay={1} className="sobre-photo">
-          <img src="/assets/img/cenario.jpg" alt={sobre.fotoAlt} loading="lazy" />
-          <figcaption>Comida que abraça.</figcaption>
+          <img src="/assets/img/comida1.jpeg" alt={sobre.fotoAlt} loading="lazy" />
+        
         </Reveal>
 
         <div className="pillars">

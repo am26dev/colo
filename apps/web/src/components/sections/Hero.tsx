@@ -60,7 +60,7 @@ export function Hero({ week, whatsapp }: HeroProps) {
 
         <Reveal delay={2} className="hero-card">
           <div className="hero-photo">
-            <img src="/assets/img/hero.jpg" alt={hero.fotoAlt} loading="eager" />
+            <img src="/assets/img/3.png" alt={hero.fotoAlt} loading="eager" />
           </div>
           <div className="hero-seal">
             <p>
