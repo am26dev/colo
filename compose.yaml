@@ -1,0 +1,29 @@
+# Colo — containerizado em 2026-07-05 (antes: PM2 nu + estático servido pelo
+# nginx do host). Sem portas publicadas: o Caddy do edge alcança ambos os
+# serviços por nome na rede `edge`.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: colo_api
+    restart: unless-stopped
+    env_file: apps/api/.env
+    volumes:
+      - ./apps/api/prisma:/app/prisma
+      - ./apps/api/uploads:/app/uploads
+    networks:
+      - edge
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    container_name: colo_web
+    restart: unless-stopped
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true
