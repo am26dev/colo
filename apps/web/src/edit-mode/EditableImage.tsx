@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useEditMode } from "./EditModeProvider";
-import { api, getToken } from "../lib/api";
+import { getToken } from "../lib/api";
 
 type EditableImageProps = {
   contentKey: string;

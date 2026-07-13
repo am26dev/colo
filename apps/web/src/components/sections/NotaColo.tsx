@@ -1,4 +1,3 @@
-import { EditableText } from "../../edit-mode/EditableText";
 import { Reveal } from "../ui/Reveal";
 import { site } from "../../data/data";
 

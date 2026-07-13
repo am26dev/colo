@@ -1,4 +1,4 @@
-import { useRef, type ElementType } from "react";
+import type { ElementType } from "react";
 import { useEditMode } from "./EditModeProvider";
 
 type EditableTextProps = {

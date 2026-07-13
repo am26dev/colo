@@ -1,17 +1,17 @@
 import { EditableText } from "../../edit-mode/EditableText";
+import { useEditMode } from "../../edit-mode/EditModeProvider";
 import { Reveal } from "../ui/Reveal";
 
 const TESTEMUNHO_INDEXES = [0, 1, 2, 3, 4];
 
-const testemunhosData = [
-  { nome: "Maria S.", iniciais: "MS", texto: "Finalmente deixei de pensar no almoço. Sinto que alguém cuida de mim durante a semana." },
-  { nome: "Isabel N.", iniciais: "IN", texto: "A comida chega bonita, cheira a casa. Parece feita pela minha mãe, mas com mais leveza." },
-  { nome: "Tânia P.", iniciais: "TP", texto: "Trabalho até tarde e a Colo devolveu-me as noites. Já não como take-away há dois meses." },
-  { nome: "Célia M.", iniciais: "CM", texto: "É saudável sem ser aborrecido. Adoro que tenha sempre uma sobremesa reconfortante." },
-  { nome: "Ana F.", iniciais: "AF", texto: "Recomendo às minhas amigas. O cuidado nota-se em tudo, desde a embalagem ao sabor." },
-];
+function iniciaisDe(nome: string): string {
+  const partes = nome.trim().split(/\s+/).filter(Boolean);
+  const letras = [partes[0]?.[0], partes[partes.length - 1]?.[0]].filter(Boolean);
+  return letras.join("").toUpperCase() || "?";
+}
 
 export function Testemunhos() {
+  const { get } = useEditMode();
   return (
     <section className="section" style={{ background: "var(--cream-3)" }}>
       <div className="container">
@@ -28,13 +28,13 @@ export function Testemunhos() {
           {TESTEMUNHO_INDEXES.map((i) => (
             <Reveal key={i} delay={((i % 3) + 1) as 1 | 2 | 3}>
               <figure className="soft-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", height: "100%" }}>
-                <div style={{ display: "flex", gap: "0.25rem", color: "var(--rose-dark)" }}>
+                <div style={{ display: "flex", gap: "0.25rem", color: "var(--rose-deep)" }}>
                   {Array.from({ length: 5 }).map((_, j) => (
                     <span key={j}>★</span>
                   ))}
                 </div>
                 <blockquote style={{ fontFamily: "var(--serif)", fontSize: "1.125rem", lineHeight: 1.4, color: "var(--ink)" }}>
-                  “{testemunhosData[i].texto}”
+                  “<EditableText contentKey={`testemunhos.${i}.texto`} multiline />”
                 </blockquote>
                 <figcaption style={{ marginTop: "auto", display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "0.5rem" }}>
                   <div style={{
@@ -48,10 +48,10 @@ export function Testemunhos() {
                     fontSize: "0.875rem",
                     color: "var(--brown)",
                   }}>
-                    {testemunhosData[i].iniciais}
+                    {iniciaisDe(get(`testemunhos.${i}.nome`))}
                   </div>
                   <div style={{ fontSize: "0.9375rem", color: "var(--muted)" }}>
-                    {testemunhosData[i].nome}
+                    <EditableText contentKey={`testemunhos.${i}.nome`} />
                   </div>
                 </figcaption>
               </figure>

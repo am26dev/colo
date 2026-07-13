@@ -1,7 +1,6 @@
 import { EditableText } from "../../edit-mode/EditableText";
 import { EditableImage } from "../../edit-mode/EditableImage";
 import { Reveal } from "../ui/Reveal";
-import { site } from "../../data/data";
 import { pedidosAbertos, vagasRestantes } from "../../utils/format";
 import { montarMensagemHero, whatsappLink } from "../../utils/whatsapp";
 import type { Week } from "../../types";
