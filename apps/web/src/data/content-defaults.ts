@@ -71,7 +71,7 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "menu.title.em": "Segunda a Sexta",
   "menu.title.post": ".",
   "menu.preco.label": "Semana completa",
-  "menu.preco.valor": "35.000 Kz",
+  "menu.preco.valor": "100.000 Kz",
 
   "como.eyebrow": "Como funciona",
   "como.title.pre": "Quatro passos, uma semana ",
