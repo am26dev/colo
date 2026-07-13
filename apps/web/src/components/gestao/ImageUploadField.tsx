@@ -1,6 +1,7 @@
 import { useState, useRef, type ChangeEvent } from "react";
 import { toast } from "../ui/sonner";
 import { getToken } from "../../lib/api";
+import { compressImage } from "../../lib/image";
 
 interface Props {
   value: string;
@@ -27,8 +28,9 @@ export function ImageUploadField({ value, onChange, placeholder = "Clique para e
 
     setUploading(true);
     try {
+      const smaller = await compressImage(file);
       const form = new FormData();
-      form.append("foto", file);
+      form.append("foto", smaller);
       const token = getToken();
       const res = await fetch("/api/uploads", {
         method: "POST",

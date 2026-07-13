@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useEditMode } from "./EditModeProvider";
 import { getToken } from "../lib/api";
+import { compressImage } from "../lib/image";
 
 type EditableImageProps = {
   contentKey: string;
@@ -32,8 +33,9 @@ export function EditableImage({
     try {
       const token = getToken();
       if (!token) throw new Error("Sessão expirada");
+      const smaller = await compressImage(file);
       const form = new FormData();
-      form.append("foto", file);
+      form.append("foto", smaller);
       const res = await fetch(`/api/edit-content/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
