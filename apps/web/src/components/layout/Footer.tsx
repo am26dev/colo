@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { footerStrip, site } from "../../data/data";
 import type { SiteConfig } from "../../types";
+import { EditableText } from "../../edit-mode/EditableText";
 import { safeExternalUrl } from "../../utils/format";
 import { whatsappLink } from "../../utils/whatsapp";
 
@@ -32,6 +33,9 @@ export function Footer({ config }: { config: SiteConfig }) {
         <div className="footer-brand">
           <img src="/assets/img/logo-footer.webp" alt={brandLabel} className="footer-logo" />
         </div>
+        <p style={{ color: "var(--rose-soft)", margin: "0.5rem 0 1.5rem", fontSize: "1.05rem" }}>
+          <EditableText contentKey="footer.tagline" />
+        </p>
         <div className="footer-links">
           <a href={safeExternalUrl(config.instagram)} target="_blank" rel="noopener">
             Instagram

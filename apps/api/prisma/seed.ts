@@ -51,6 +51,33 @@ async function main() {
     }
   }
 
+  const jaExisteContent = await prisma.siteContent.count();
+  if (jaExisteContent === 0) {
+    const defaults = {
+      "hero.title.pre": "Comida ",
+      "hero.title.em": "que cuida",
+      "hero.title.post": " de ti, semana após semana.",
+      "hero.subtitle": "Refeições saudáveis, cozinhadas no próprio dia e entregues em tua casa.",
+      "hero.cta.primary": "Fazer pedido",
+      "hero.cta.secondary": "Ver menu da semana",
+      "hero.stamp": "Feito em Luanda · com colo",
+      "hero.image": "/assets/img/3.png",
+      "hero.image.alt": "Prato colorido da Colo",
+      "menu.eyebrow": "As refeições desta semana",
+      "menu.preco.label": "Semana completa",
+      "como.eyebrow": "Como funciona",
+      "footer.tagline": "Menos pressa. Mais cuidado. Mais tempo para ti.",
+      "citacao.texto": "A semana começa antes de segunda-feira. Quando escolhes a Colo, não estás apenas a encomendar refeições — estás a oferecer a ti própria uma semana com menos decisões, menos pressa e mais tempo para o que realmente importa.",
+    };
+    for (const [key, value] of Object.entries(defaults)) {
+      await prisma.siteContent.upsert({
+        where: { key },
+        update: { value },
+        create: { key, value },
+      });
+    }
+  }
+
   console.log("Seed concluido.");
 }
 

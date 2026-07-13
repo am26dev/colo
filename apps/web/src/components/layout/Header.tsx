@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { nav, site } from "../../data/data";
+import { site } from "../../data/data";
+import { EditableText } from "../../edit-mode/EditableText";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -36,16 +37,18 @@ export function Header() {
         </a>
 
         <nav className="nav" aria-label="Navegação principal">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={item.cta ? "nav-cta" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </a>
-          ))}
+          <a href="#sobre" onClick={() => setOpen(false)}>
+            <EditableText contentKey="header.nav.sobre" />
+          </a>
+          <a href="#menu" onClick={() => setOpen(false)}>
+            <EditableText contentKey="header.nav.menu" />
+          </a>
+          <a href="#como-funciona" onClick={() => setOpen(false)}>
+            <EditableText contentKey="header.nav.como" />
+          </a>
+          <a href="#pedido" className="nav-cta" onClick={() => setOpen(false)}>
+            <EditableText contentKey="header.nav.pedido" />
+          </a>
         </nav>
 
         <button

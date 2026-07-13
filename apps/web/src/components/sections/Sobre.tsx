@@ -1,41 +1,39 @@
-import { sobre } from "../../data/data";
+import { EditableText } from "../../edit-mode/EditableText";
 import { Reveal } from "../ui/Reveal";
 
 const CORES = ["rose", "sage", "terra"] as const;
+
+const BENEFICIO_INDEXES = [0, 1, 2, 3, 4];
 
 export function Sobre() {
   return (
     <section className="section sobre" id="sobre">
       <div className="container">
         <Reveal as="p" className="eyebrow center">
-          {sobre.eyebrow}
+          <EditableText contentKey="sobre.eyebrow" />
         </Reveal>
         <Reveal as="h2" delay={1} className="center">
-          {sobre.titulo}
+          <EditableText contentKey="sobre.title.pre" />
+          <span className="accent"><EditableText contentKey="sobre.title.em" /></span>
+          <EditableText contentKey="sobre.title.post" />
         </Reveal>
         <Reveal as="p" delay={2} className="section-lead center">
-          {sobre.lead}
-        </Reveal>
-        <Reveal as="p" delay={3} className="conceito-frase center">
-          {sobre.frase}
-        </Reveal>
-
-        <Reveal as="figure" delay={1} className="sobre-photo">
-          <img src="/assets/img/comida1.jpeg" alt={sobre.fotoAlt} loading="lazy" />
-        
+          <EditableText contentKey="sobre.subtitle" multiline />
         </Reveal>
 
         <div className="pillars">
-          {sobre.pilares.map((p, i) => (
+          {BENEFICIO_INDEXES.map((i) => (
             <Reveal
               as="article"
-              key={p.titulo}
-              delay={(i + 1) as 1 | 2 | 3}
-              className={`pillar pillar-${CORES[i]}`}
+              key={i}
+              delay={((i % 3) + 1) as 1 | 2 | 3}
+              className={`pillar pillar-${CORES[i % 3]}`}
             >
-              <span className="pillar-icon">{p.icon}</span>
-              <h3>{p.titulo}</h3>
-              <p>{p.texto}</p>
+              <span className="pillar-icon">
+                {["🤍", "🌙", "🌿", "🍳", "📍"][i]}
+              </span>
+              <h3><EditableText contentKey={`beneficios.${i}.titulo`} /></h3>
+              <p><EditableText contentKey={`beneficios.${i}.texto`} multiline /></p>
             </Reveal>
           ))}
         </div>

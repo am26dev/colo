@@ -8,6 +8,7 @@ import { ordersRouter } from "./routes/orders.js";
 import { siteRouter } from "./routes/site.js";
 import { uploadRouter } from "./routes/upload.js";
 import { weeksRouter } from "./routes/weeks.js";
+import { contentRouter } from "./routes/content.js";
 
 export function createApp() {
   const app = express();
@@ -35,6 +36,7 @@ export function createApp() {
   app.use("/api/orders", ordersRouter);
   app.use("/api/dashboard", dashboardRouter);
   app.use("/api/uploads", uploadRouter);
+  app.use("/api/edit-content", contentRouter);
 
   return app;
 }

@@ -1,5 +1,7 @@
-import { hero } from "../../data/data";
+import { EditableText } from "../../edit-mode/EditableText";
+import { EditableImage } from "../../edit-mode/EditableImage";
 import { Reveal } from "../ui/Reveal";
+import { site } from "../../data/data";
 import { pedidosAbertos, vagasRestantes } from "../../utils/format";
 import { montarMensagemHero, whatsappLink } from "../../utils/whatsapp";
 import type { Week } from "../../types";
@@ -17,8 +19,7 @@ export function Hero({ week, whatsapp }: HeroProps) {
     : !aberto
       ? "Pedidos encerrados esta semana"
       : v !== null
-        ? ` ${v === 1 ?
-          "vaga disponível" : "vagas disponíveis"} esta semana`
+        ? ` ${v === 1 ? "vaga disponível" : "vagas disponíveis"} esta semana`
         : "Pedidos abertos esta semana";
 
   return (
@@ -28,12 +29,12 @@ export function Hero({ week, whatsapp }: HeroProps) {
       <div className="container hero-inner">
         <div className="hero-copy">
           <Reveal as="h1" delay={1}>
-            {hero.titulo}
-            <span className="accent">{hero.tituloDestaque}</span>
-            {hero.tituloFim}
+            <EditableText contentKey="hero.title.pre" />
+            <span className="accent"><EditableText contentKey="hero.title.em" /></span>
+            <EditableText contentKey="hero.title.post" />
           </Reveal>
           <Reveal as="p" delay={2} className="lead">
-            {hero.lead}
+            <EditableText contentKey="hero.subtitle" multiline />
           </Reveal>
 
           <Reveal delay={3} className={`hero-status${aberto ? "" : " is-closed"}`}>
@@ -43,7 +44,7 @@ export function Hero({ week, whatsapp }: HeroProps) {
 
           <Reveal delay={4} className="hero-actions">
             <a href="#menu" className="btn btn-primary">
-              {hero.cta1}
+              <EditableText contentKey="hero.cta.primary" />
             </a>
             <a
               href="#pedido"
@@ -53,22 +54,18 @@ export function Hero({ week, whatsapp }: HeroProps) {
                 window.open(whatsappLink(whatsapp, montarMensagemHero(week)), "_blank");
               }}
             >
-              {hero.cta2}
+              <EditableText contentKey="hero.cta.secondary" />
             </a>
           </Reveal>
         </div>
 
         <Reveal delay={2} className="hero-card">
           <div className="hero-photo">
-            <img src="/assets/img/3.png" alt={hero.fotoAlt} loading="eager" />
+            <EditableImage contentKey="hero.image" altKey="hero.image.alt" className="h-full w-full object-cover" loading="eager" />
           </div>
           <div className="hero-seal">
             <p>
-              {hero.selo.linha1}
-              <br />
-              {hero.selo.linha2}
-              <br />
-              {hero.selo.linha3}
+              <EditableText contentKey="hero.stamp" />
             </p>
           </div>
         </Reveal>

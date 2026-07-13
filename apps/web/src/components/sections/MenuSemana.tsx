@@ -1,4 +1,4 @@
-import { menuSecao } from "../../data/data";
+import { EditableText } from "../../edit-mode/EditableText";
 import { Reveal } from "../ui/Reveal";
 import { DayCard } from "../menu/DayCard";
 import { MenuBanner } from "../menu/MenuBanner";
@@ -17,13 +17,12 @@ export function MenuSemana({ week, moeda }: MenuSemanaProps) {
     <section className="section menu" id="menu">
       <div className="container">
         <Reveal as="p" className="eyebrow center">
-          {menuSecao.eyebrow}
+          <EditableText contentKey="menu.eyebrow" />
         </Reveal>
         <Reveal as="h2" delay={1} className="center">
-          {menuSecao.titulo}
-        </Reveal>
-        <Reveal as="p" delay={2} className="section-lead center">
-          {menuSecao.subtitulo}
+          <EditableText contentKey="menu.title.pre" />
+          <span className="accent"><EditableText contentKey="menu.title.em" /></span>
+          <EditableText contentKey="menu.title.post" />
         </Reveal>
 
         {vazio ? (
@@ -31,9 +30,8 @@ export function MenuSemana({ week, moeda }: MenuSemanaProps) {
         ) : (
           <>
             <Reveal delay={2} className="menu-preco">
-              <span className="menu-preco-label">{menuSecao.precoLabel}</span>
+              <span className="menu-preco-label"><EditableText contentKey="menu.preco.label" /></span>
               <span className="menu-preco-valor">{fmtPreco(week.precoSemanal, moeda)}</span>
-              <span className="menu-preco-nota">{menuSecao.precoNota}</span>
             </Reveal>
 
             <MenuBanner week={week} />
@@ -45,10 +43,6 @@ export function MenuSemana({ week, moeda }: MenuSemanaProps) {
             </div>
           </>
         )}
-
-        <Reveal as="p" className="menu-note center">
-          {menuSecao.nota}
-        </Reveal>
       </div>
     </section>
   );

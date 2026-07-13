@@ -1,6 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import { PainelLayout } from "./components/gestao/PainelLayout";
 import { AuthProvider } from "./context/AuthContext";
+import { EditModeProvider } from "./edit-mode/EditModeProvider";
+import { EditToolbar } from "./edit-mode/EditToolbar";
+import { AdminFab } from "./edit-mode/AdminFab";
 import { Toaster } from "./components/ui/sonner";
 import Home from "./pages/Home";
 import ContaPage from "./pages/gestao/ContaPage";
@@ -15,27 +18,31 @@ import SemanasPage from "./pages/gestao/SemanasPage";
 function App() {
   return (
     <AuthProvider>
-      <Toaster />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/gestao/login" element={<Login />} />
-        <Route
-          path="/gestao"
-          element={
-            <RequireAuth>
-              <PainelLayout />
-            </RequireAuth>
-          }
-        >
-          <Route index element={<DashboardPage />} />
-          <Route path="pedidos" element={<PedidosPage />} />
-          <Route path="semanas" element={<SemanasPage />} />
-          <Route path="semanas/nova" element={<SemanaEditorPage />} />
-          <Route path="semanas/:id" element={<SemanaEditorPage />} />
-          <Route path="informacoes" element={<InformacoesPage />} />
-          <Route path="conta" element={<ContaPage />} />
-        </Route>
-      </Routes>
+      <EditModeProvider>
+        <Toaster />
+        <EditToolbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/gestao/login" element={<Login />} />
+          <Route
+            path="/gestao"
+            element={
+              <RequireAuth>
+                <PainelLayout />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<DashboardPage />} />
+            <Route path="pedidos" element={<PedidosPage />} />
+            <Route path="semanas" element={<SemanasPage />} />
+            <Route path="semanas/nova" element={<SemanaEditorPage />} />
+            <Route path="semanas/:id" element={<SemanaEditorPage />} />
+            <Route path="informacoes" element={<InformacoesPage />} />
+            <Route path="conta" element={<ContaPage />} />
+          </Route>
+        </Routes>
+        <AdminFab />
+      </EditModeProvider>
     </AuthProvider>
   );
 }

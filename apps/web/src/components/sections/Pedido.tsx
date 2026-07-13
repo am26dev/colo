@@ -1,4 +1,4 @@
-import { pedidoSecao } from "../../data/data";
+import { EditableText } from "../../edit-mode/EditableText";
 import { Reveal } from "../ui/Reveal";
 import { PagamentoBox } from "../pedido/PagamentoBox";
 import { OrderForm } from "../pedido/OrderForm";
@@ -19,9 +19,9 @@ export function Pedido({ week, config }: PedidoProps) {
       <span className="blob blob-3" aria-hidden="true"></span>
       <div className="container pedido-inner">
         <Reveal className="pedido-copy">
-          <p className="eyebrow">{pedidoSecao.eyebrow}</p>
-          <h2>{pedidoSecao.titulo}</h2>
-          <p>{pedidoSecao.texto}</p>
+          <p className="eyebrow"><EditableText contentKey="form.eyebrow" /></p>
+          <h2><EditableText contentKey="form.title" /></h2>
+          <p><EditableText contentKey="form.subtitle" multiline /></p>
           <PagamentoBox pagamento={config.pagamento} />
         </Reveal>
 

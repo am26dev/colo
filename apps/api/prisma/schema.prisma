@@ -83,3 +83,12 @@ model Order {
   estado    String   @default("novo") // novo | confirmado | cancelado
   createdAt DateTime @default(now())
 }
+
+// Key-value store para o modo edição no local.
+// Cada chave é um identificador único (ex.: "hero.title.pre", "footer.tagline")
+// e o valor é armazenado como JSON string.
+model SiteContent {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}

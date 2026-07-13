@@ -1,0 +1,10 @@
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
+async function check() {
+  const orders = await prisma.order.findMany();
+  console.log(JSON.stringify(orders, null, 2));
+  await prisma.$disconnect();
+}
+
+check();

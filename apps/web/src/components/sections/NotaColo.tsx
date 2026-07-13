@@ -1,3 +1,4 @@
+import { EditableText } from "../../edit-mode/EditableText";
 import { Reveal } from "../ui/Reveal";
 import { site } from "../../data/data";
 
@@ -10,7 +11,7 @@ export function NotaColo({ mensagem }: { mensagem: string }) {
           <blockquote>“{mensagem}”</blockquote>
           <figcaption>
             Com carinho,{" "}
-            <span className="brand-word sm">
+            <span className="brand-word sm" style={{ fontFamily: "var(--script)" }}>
               {site.nome}
               <span className="brand-dot"></span>
             </span>
