@@ -26,7 +26,7 @@ export default function Home() {
         <Galeria />
         <Sobre />
         <Fundadora />
-        <MenuSemana week={week} moeda={config.moeda} />
+        <MenuSemana week={week} />
         <ComoFunciona />
         <Incluido />
         <Testemunhos />

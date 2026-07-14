@@ -1,12 +1,9 @@
 import { EditableText } from "../../edit-mode/EditableText";
 import { EditableImage } from "../../edit-mode/EditableImage";
-import { Reveal } from "../ui/Reveal";
-import { Galeria } from "./Galeria";
 import type { Week } from "../../types";
 
 interface MenuSemanaProps {
   week: Week | null;
-  moeda: string;
 }
 
 const MENU_INDEXES = [0, 1, 2, 3, 4];
@@ -40,7 +37,7 @@ function EstadoVazioMenu() {
   );
 }
 
-export function MenuSemana({ week, moeda }: MenuSemanaProps) {
+export function MenuSemana({ week }: MenuSemanaProps) {
   const vazio = !week || week.estado === "oculto";
 
   return (

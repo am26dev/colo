@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { site } from "../../data/data";
 import type { SiteConfig } from "../../types";
 import { EditableText } from "../../edit-mode/EditableText";
 import { useEditMode } from "../../edit-mode/EditModeProvider";
@@ -8,19 +6,6 @@ import { whatsappLink } from "../../utils/whatsapp";
 
 export function Footer({ config }: { config: SiteConfig }) {
   const { get } = useEditMode();
-  const [copied, setCopied] = useState(false);
-  const brandLabel = `${site.nome} — ${site.slogan}`;
-
-  async function handleCopy() {
-    const url = window.location.href;
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } else if (navigator.share) {
-      navigator.share({ title: brandLabel, url });
-    }
-  }
 
   return (
     <footer style={{ background: "var(--cream-2)", color: "var(--brown-dark)" }}>
