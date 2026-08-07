@@ -15,8 +15,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "hero.cta.primary": "Fazer pedido",
   "hero.cta.secondary": "Ver menu da semana",
   "hero.stamp": "Feito em Luanda · com colo",
-  "hero.image": "/assets/img/3.png",
-  "hero.image.alt": "Prato colorido da Colo",
+  "hero.image": "/assets/img/prato-salada.jpg",
+  "hero.image.alt": "Prato de salada da Colo",
   "hero.floater.title": "A tua semana começa aqui.",
   "hero.floater.subtitle": "5 almoços + 5 sobremesas",
 

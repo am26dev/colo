@@ -364,8 +364,8 @@ p { margin: 0 0 1.1rem; }
 
 .hero-card { position: relative; }
 .hero-photo {
-  aspect-ratio: 4 / 5;
-  border-radius: 220px 220px 28px 28px;
+  aspect-ratio: 1 / 1;
+  border-radius: 28px 28px 28px 28px;
   background:
     linear-gradient(160deg, var(--cream-2), var(--rose-soft));
   background-size: cover;
@@ -384,23 +384,53 @@ p { margin: 0 0 1.1rem; }
 
 .hero-seal {
   position: absolute;
-  right: -12px;
-  bottom: 28px;
-  width: 152px; height: 152px;
+  border: 1px solid rgba(107, 74, 46, .12);
+  left: -20px;
+  top: -20px;
+  width: 118px; height: 118px;
   border-radius: 50%;
-  background: var(--rose);
-  color: var(--cream-3);
+  background: var(--cream-3);
+  color: var(--brown-dark);
   display: grid;
   place-items: center;
   text-align: center;
-  font-family: var(--script);
-  font-size: 1.1rem;
-  line-height: 1.28;
-  box-shadow: var(--shadow);
+  font-family: var(--sans);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  box-shadow: var(--shadow-sm);
   padding: 12px;
   animation: float-seal 5s ease-in-out infinite;
 }
-.hero-seal strong { font-weight: 400; }
+.hero-seal strong { font-weight: 600; }
+
+.hero-floater {
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 16px 24px;
+  max-width: 240px;
+  white-space: nowrap;
+}
+.hero-floater p {
+  margin: 0;
+  font-family: var(--serif);
+  color: var(--brown-dark);
+  font-size: .95rem;
+  line-height: 1.35;
+}
+.hero-floater span {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--sans);
+  color: var(--brown-dark);
+  font-size: .82rem;
+}
 
 @keyframes float-seal {
   0%, 100% { transform: translateY(0); }
@@ -1063,7 +1093,8 @@ p { margin: 0 0 1.1rem; }
 @media (max-width: 480px) {
   .steps { grid-template-columns: 1fr; gap: 32px; }
   .pedido-form { padding: 28px 22px; }
-  .hero-seal { width: 124px; height: 124px; font-size: .95rem; right: 0; }
+  .hero-seal { width: 100px; height: 100px; font-size: .56rem; left: 0; }
+  .hero-floater { right: 0; padding: 12px 16px; max-width: 180px; white-space: normal; }
   .note-card { padding: 32px 22px; }
   .note-card::before { display: none; }
   .container { padding: 0 20px; }

@@ -17,6 +17,7 @@ bonito; **substitui por fotos reais dos pratos da Colo** quando tiveres.
 | `couveflor.jpg`      | prato — couve-flor assada     | pexels.com/photo/6465974 |
 | `creme-abobora.jpg`  | prato — creme de abóbora      | pexels.com/photo/5419032 |
 | `sopa-tomate.jpg`    | prato — sopa de tomate        | pexels.com/photo/17302314 |
+| `prato-salada.jpg`   | hero (imagem principal do topo) | fornecida pela dona      |
 | `favicon.svg`        | ícone do separador            | (criado para a marca) |
 
 ## Como trocar a foto de um prato

@@ -36,10 +36,10 @@ export function Hero({ week, whatsapp }: HeroProps) {
             <EditableText contentKey="hero.subtitle" multiline />
           </Reveal>
 
-          <Reveal delay={3} className={`hero-status${aberto ? "" : " is-closed"}`}>
+     {/*      <Reveal delay={3} className={`hero-status${aberto ? "" : " is-closed"}`}>
             <span className="dot"></span>
             <span>{statusText}</span>
-          </Reveal>
+          </Reveal> */}
 
           <Reveal delay={4} className="hero-actions">
             <a href="#menu" className="btn btn-primary">
@@ -66,6 +66,10 @@ export function Hero({ week, whatsapp }: HeroProps) {
             <p>
               <EditableText contentKey="hero.stamp" />
             </p>
+          </div>
+          <div className="hero-floater">
+            <p><EditableText contentKey="hero.floater.title" /></p>
+            <span><EditableText contentKey="hero.floater.subtitle" /></span>
           </div>
         </Reveal>
       </div>
