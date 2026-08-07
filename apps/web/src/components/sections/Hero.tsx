@@ -1,7 +1,6 @@
 import { EditableText } from "../../edit-mode/EditableText";
 import { EditableImage } from "../../edit-mode/EditableImage";
 import { Reveal } from "../ui/Reveal";
-import { pedidosAbertos, vagasRestantes } from "../../utils/format";
 import { montarMensagemHero, whatsappLink } from "../../utils/whatsapp";
 import type { Week } from "../../types";
 
@@ -11,16 +10,6 @@ interface HeroProps {
 }
 
 export function Hero({ week, whatsapp }: HeroProps) {
-  const aberto = week ? pedidosAbertos(week) : false;
-  const v = week ? vagasRestantes(week) : null;
-  const statusText = !week
-    ? "Menu a ser preparado"
-    : !aberto
-      ? "Pedidos encerrados esta semana"
-      : v !== null
-        ? ` ${v === 1 ? "vaga disponível" : "vagas disponíveis"} esta semana`
-        : "Pedidos abertos esta semana";
-
   return (
     <section className="hero">
       <span className="blob blob-1" aria-hidden="true"></span>
@@ -36,12 +25,7 @@ export function Hero({ week, whatsapp }: HeroProps) {
             <EditableText contentKey="hero.subtitle" multiline />
           </Reveal>
 
-     {/*      <Reveal delay={3} className={`hero-status${aberto ? "" : " is-closed"}`}>
-            <span className="dot"></span>
-            <span>{statusText}</span>
-          </Reveal> */}
-
-          <Reveal delay={4} className="hero-actions">
+     <Reveal delay={4} className="hero-actions">
             <a href="#menu" className="btn btn-primary">
               <EditableText contentKey="hero.cta.primary" />
             </a>
