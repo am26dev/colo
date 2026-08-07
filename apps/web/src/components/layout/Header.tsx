@@ -33,7 +33,7 @@ export function Header() {
     >
       <div className="container header-inner">
         <a href="#topo" className="brand" aria-label={brandLabel}>
-          <img src="/assets/img/logo-header.webp" alt={brandLabel} className="brand-logo" />
+          <img src="/assets/img/COLO.png" alt={brandLabel} className="brand-logo" />
         </a>
 
         <nav className="nav" aria-label="Navegação principal">

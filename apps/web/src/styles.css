@@ -217,7 +217,8 @@ p { margin: 0 0 1.1rem; }
 .brand { display: flex; align-items: center; line-height: 1; }
 .brand-logo {
   height: auto;
-  width: 160px;
+  width: 135px;
+  padding: 2px;
 
   display: block;
   object-fit: contain;
