@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
-import { api, clearToken, getToken, setToken } from "../lib/api";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { api, AUTH_CHANGED_EVENT, clearToken, getToken, setToken } from "../lib/api";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -12,6 +12,16 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setTokenState] = useState<string | null>(getToken());
+
+  useEffect(() => {
+    const syncToken = () => setTokenState(getToken());
+    window.addEventListener("storage", syncToken);
+    window.addEventListener(AUTH_CHANGED_EVENT, syncToken);
+    return () => {
+      window.removeEventListener("storage", syncToken);
+      window.removeEventListener(AUTH_CHANGED_EVENT, syncToken);
+    };
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     const data = await api<{ token: string }>("/api/auth/login", {

@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { api } from "../lib/api";
-import { getToken } from "../lib/api";
+import { api, AUTH_CHANGED_EVENT, getToken } from "../lib/api";
 import { DEFAULT_CONTENT } from "../data/content-defaults";
 
 type PendingChanges = Record<string, string>;
@@ -59,7 +58,11 @@ export function EditModeProvider({ children }: { children: ReactNode }) {
     })();
     const check = () => setHasToken(!!getToken());
     window.addEventListener("storage", check);
-    return () => window.removeEventListener("storage", check);
+    window.addEventListener(AUTH_CHANGED_EVENT, check);
+    return () => {
+      window.removeEventListener("storage", check);
+      window.removeEventListener(AUTH_CHANGED_EVENT, check);
+    };
   }, [refresh]);
 
   const setPending = useCallback((key: string, value: string) => {

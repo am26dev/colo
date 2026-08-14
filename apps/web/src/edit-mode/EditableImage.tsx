@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useEditMode } from "./EditModeProvider";
-import { getToken } from "../lib/api";
+import { apiUrl, getToken } from "../lib/api";
 import { compressImage } from "../lib/image";
 
 type EditableImageProps = {
@@ -36,7 +36,7 @@ export function EditableImage({
       const smaller = await compressImage(file);
       const form = new FormData();
       form.append("foto", smaller);
-      const res = await fetch(`/api/edit-content/upload`, {
+      const res = await fetch(apiUrl("/api/edit-content/upload"), {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: form,

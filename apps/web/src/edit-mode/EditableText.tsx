@@ -39,11 +39,14 @@ export function EditableText({
       contentEditable
       suppressContentEditableWarning
       data-editable-key={contentKey}
-      onBlur={(e: React.FocusEvent<HTMLElement>) => {
+      onInput={(e: React.FormEvent<HTMLElement>) => {
         const next = multiline
           ? (e.currentTarget.innerText ?? "")
           : (e.currentTarget.textContent ?? "");
-        if (next !== value) setPending(contentKey, next);
+        // Mantém o marcador sincronizado para o ref não reescrever o conteúdo
+        // e deslocar o cursor durante a digitação.
+        e.currentTarget.setAttribute("data-init", next);
+        setPending(contentKey, next);
       }}
       ref={(node: HTMLElement | null) => {
         if (node && node.getAttribute("data-init") !== value) {

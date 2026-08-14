@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEditMode } from "./EditModeProvider";
+import { getToken } from "../lib/api";
 
 export function EditToolbar() {
   const { isEditing, isAdmin, hasPending, pending, save, exitEdit } = useEditMode();
@@ -21,6 +22,9 @@ export function EditToolbar() {
       alert("Alterações guardadas.");
     } else {
       alert(`Erro: ${r.error ?? "Não foi possível guardar"}`);
+      if (!getToken()) {
+        window.location.assign("/gestao/login");
+      }
     }
   };
 

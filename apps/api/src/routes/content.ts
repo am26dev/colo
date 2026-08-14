@@ -35,13 +35,13 @@ contentRouter.put("/", requireAuth, async (req, res) => {
     res.json({ ok: true });
     return;
   }
-  for (const key of keys) {
-    await prisma.siteContent.upsert({
+  await prisma.$transaction(keys.map((key) =>
+    prisma.siteContent.upsert({
       where: { key },
       update: { value: changes[key] },
       create: { key, value: changes[key] },
-    });
-  }
+    })
+  ));
   res.json({ ok: true });
 });
 
