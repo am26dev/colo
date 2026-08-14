@@ -22,7 +22,7 @@ export default function Home() {
     <div className={isEditing ? "pt-14" : ""}>
       <Header />
       <main>
-        <Hero week={week} whatsapp={config.whatsapp} />
+        <Hero />
         <Galeria />
         <Sobre />
         <Fundadora />

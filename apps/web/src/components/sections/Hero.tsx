@@ -1,15 +1,8 @@
 import { EditableText } from "../../edit-mode/EditableText";
 import { EditableImage } from "../../edit-mode/EditableImage";
 import { Reveal } from "../ui/Reveal";
-import { montarMensagemHero, whatsappLink } from "../../utils/whatsapp";
-import type { Week } from "../../types";
 
-interface HeroProps {
-  week: Week | null;
-  whatsapp: string;
-}
-
-export function Hero({ week, whatsapp }: HeroProps) {
+export function Hero() {
   return (
     <section className="hero">
       <span className="blob blob-1" aria-hidden="true"></span>
@@ -26,17 +19,10 @@ export function Hero({ week, whatsapp }: HeroProps) {
           </Reveal>
 
      <Reveal delay={4} className="hero-actions">
-            <a href="#menu" className="btn btn-primary">
+            <a href="#pedido" className="btn btn-primary">
               <EditableText contentKey="hero.cta.primary" />
             </a>
-            <a
-              href="#pedido"
-              className="btn btn-ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(whatsappLink(whatsapp, montarMensagemHero(week)), "_blank");
-              }}
-            >
+            <a href="#menu" className="btn btn-ghost">
               <EditableText contentKey="hero.cta.secondary" />
             </a>
           </Reveal>
