@@ -38,9 +38,6 @@ export function Incluido() {
 
           <Reveal delay={2}>
             <div className="soft-card p-8 text-center md:p-10">
-              <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.22em", color: "var(--muted)" }}>
-                <EditableText contentKey="incluido.card.eyebrow" />
-              </div>
               <div style={{ marginTop: "0.75rem", fontFamily: "var(--serif)", fontSize: "3.5rem", color: "var(--brown-dark)" }}>
                 {get("menu.preco.valor")}
               </div>

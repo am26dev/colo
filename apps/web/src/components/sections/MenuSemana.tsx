@@ -45,12 +45,12 @@ export function MenuSemana({ week }: MenuSemanaProps) {
       <div className="container" style={{ padding: "clamp(72px, 10vw, 120px) 28px" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: "1.5rem" }} className="md:flex-row md:items-end">
           <div>
-            <p className="eyebrow"><EditableText contentKey="menu.eyebrow" /></p>
             <h2>
               <EditableText contentKey="menu.title.pre" />
-              <em className="accent"><EditableText contentKey="menu.title.em" /></em>
+              <em style={{ color: "var(--brown-dark)" }}><EditableText contentKey="menu.title.em" /></em>
               <EditableText contentKey="menu.title.post" />
             </h2>
+            <p className="eyebrow" style={{ marginTop: "0.9rem" }}><EditableText contentKey="menu.eyebrow" /></p>
           </div>
           <div style={{ borderRadius: "1rem", background: "var(--brown)", padding: "1rem 1.5rem", color: "var(--cream-3)" }}>
             <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.2em", opacity: 0.8 }}>
