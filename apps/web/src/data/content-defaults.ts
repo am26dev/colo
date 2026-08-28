@@ -22,7 +22,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
 
   "galeria.eyebrow": "A nossa cozinha",
   "galeria.title": "Assim chega a tua semana.",
-  "galeria.subtitle": "Cada prato é montado com calma, em porções generosas e apresentado como se fosse para receber alguém especial. Porque és tu.",
+  "galeria.subtitle":
+    "Cada prato é montado com calma, em porções generosas e apresentado como se fosse para receber alguém especial. Porque és tu.",
   "galeria.0.image": "/assets/img/comida1.jpeg",
   "galeria.0.label": "Salada com ovo e cogumelos",
   "galeria.1.image": "/assets/img/comida2.jpeg",
@@ -42,15 +43,20 @@ export const DEFAULT_CONTENT: Record<string, string> = {
     "A Colo nasce da vontade de cozinhar para outras mulheres com o mesmo cuidado com que cozinhamos para quem amamos. Comida real, feita à mão, entregue quando dá jeito.",
 
   "beneficios.0.titulo": "Pensado para mulheres",
-  "beneficios.0.texto": "Refeições que respeitam o ritmo, a energia e o corpo de cada semana.",
+  "beneficios.0.texto":
+    "Refeições que respeitam o ritmo, a energia e o corpo de cada semana.",
   "beneficios.1.titulo": "Ingredientes naturais",
-  "beneficios.1.texto": "Produtos frescos, escolhidos com cuidado. Sem processados escondidos.",
+  "beneficios.1.texto":
+    "Produtos frescos, escolhidos com cuidado. Sem processados escondidos.",
   "beneficios.2.titulo": "Cozinhado no próprio dia",
-  "beneficios.2.texto": "Preparado com calma, em pequenas quantidades, como se fosse para casa.",
+  "beneficios.2.texto":
+    "Preparado com calma, em pequenas quantidades, como se fosse para casa.",
   "beneficios.3.titulo": "Entrega semanal",
-  "beneficios.3.texto": "Chega a tua semana toda de uma vez, pronta a aquecer e servir.",
+  "beneficios.3.texto":
+    "Chega a tua semana toda de uma vez, pronta a aquecer e servir.",
   "beneficios.4.titulo": "Em Luanda (centro)",
-  "beneficios.4.texto": "Entregamos no centro de Luanda e zonas próximas. Fala connosco.",
+  "beneficios.4.texto":
+    "Entregamos no centro de Luanda e zonas próximas. Fala connosco.",
 
   "fundadora.image": "/assets/img/buddha.jpg",
   "fundadora.image.alt": "Winnie, fundadora da Colo",
@@ -74,7 +80,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "menu.preco.valor": "100.000 Kz",
   "menu.0.dia": "Segunda",
   "menu.0.tema": "Leve",
-  "menu.0.almoco": "Salada de quinoa com frango grelhado, abacate e molho de iogurte",
+  "menu.0.almoco":
+    "Salada de quinoa com frango grelhado, abacate e molho de iogurte",
   "menu.0.sobremesa": "Mousse de maracujá",
   "menu.0.foto": "/assets/img/comida1.jpeg",
   "menu.1.dia": "Terça",
@@ -84,7 +91,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "menu.1.foto": "/assets/img/comida2.jpeg",
   "menu.2.dia": "Quarta",
   "menu.2.tema": "Leve",
-  "menu.2.almoco": "Salada de quinoa com frango grelhado, abacate e molho de iogurte",
+  "menu.2.almoco":
+    "Salada de quinoa com frango grelhado, abacate e molho de iogurte",
   "menu.2.sobremesa": "Mousse de maracujá",
   "menu.2.foto": "/assets/img/comida3.jpeg",
   "menu.3.dia": "Quinta",
@@ -104,7 +112,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "como.title.post": ".",
   "passos.0.numero": "01",
   "passos.0.titulo": "Ver o menu da semana",
-  "passos.0.texto": "Publicamos o menu todas as quintas-feiras. Vês o que vais comer.",
+  "passos.0.texto":
+    "Publicamos o menu todas as quintas-feiras. Vês o que vais comer.",
   "passos.1.numero": "02",
   "passos.1.titulo": "Escolher e confirmar",
   "passos.1.texto": "Preenches o formulário com a tua morada e observações.",
@@ -113,7 +122,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "passos.2.texto": "Enviamos-te os dados por WhatsApp e confirmamos o pedido.",
   "passos.3.numero": "04",
   "passos.3.titulo": "Receber em casa",
-  "passos.3.texto": "Entrega semanal, num único dia, prontinho para a tua semana.",
+  "passos.3.texto":
+    "Entrega semanal, num único dia, prontinho para a tua semana.",
 
   "incluido.eyebrow": "O que está incluído",
   "incluido.title": "Uma assinatura, tudo tratado.",
@@ -133,19 +143,25 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "testemunhos.title.em": "respiram melhor",
   "testemunhos.title.post": " à semana.",
   "testemunhos.0.nome": "Maria S.",
-  "testemunhos.0.texto": "Finalmente deixei de pensar no almoço. Sinto que alguém cuida de mim durante a semana.",
+  "testemunhos.0.texto":
+    "Finalmente deixei de pensar no almoço. Sinto que alguém cuida de mim durante a semana.",
   "testemunhos.1.nome": "Isabel N.",
-  "testemunhos.1.texto": "A comida chega bonita, cheira a casa. Parece feita pela minha mãe, mas com mais leveza.",
+  "testemunhos.1.texto":
+    "A comida chega bonita, cheira a casa. Parece feita pela minha mãe, mas com mais leveza.",
   "testemunhos.2.nome": "Tânia P.",
-  "testemunhos.2.texto": "Trabalho até tarde e a Colo devolveu-me as noites. Já não como take-away há dois meses.",
+  "testemunhos.2.texto":
+    "Trabalho até tarde e a Colo devolveu-me as noites. Já não como take-away há dois meses.",
   "testemunhos.3.nome": "Célia M.",
-  "testemunhos.3.texto": "É saudável sem ser aborrecido. Adoro que tenha sempre uma sobremesa reconfortante.",
+  "testemunhos.3.texto":
+    "É saudável sem ser aborrecido. Adoro que tenha sempre uma sobremesa reconfortante.",
   "testemunhos.4.nome": "Ana F.",
-  "testemunhos.4.texto": "Recomendo às minhas amigas. O cuidado nota-se em tudo, desde a embalagem ao sabor.",
+  "testemunhos.4.texto":
+    "Recomendo às minhas amigas. O cuidado nota-se em tudo, desde a embalagem ao sabor.",
 
   "form.eyebrow": "Fazer pedido",
   "form.title": "Reserva a tua semana.",
-  "form.subtitle": "Preenche os teus dados. Recebes uma confirmação e os dados de pagamento por WhatsApp em poucas horas.",
+  "form.subtitle":
+    "Preenche os teus dados. Recebes uma confirmação e os dados de pagamento por WhatsApp em poucas horas.",
   "form.field.nome": "Nome",
   "form.field.telefone": "Telefone (WhatsApp)",
   "form.field.morada": "Morada de entrega",
@@ -157,19 +173,24 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "form.placeholder.observacoes": "Alergias, preferências, zona de entrega…",
   "form.submit": "Confirmar pedido",
   "form.submit.closed": "Avisem-me na próxima semana",
-  "form.submitHint": "Abre o WhatsApp com o teu pedido já escrito. É só enviares. 💛",
-  "form.closed": "Os pedidos desta semana estão encerrados. Deixa a tua mensagem que avisamos-te quando abrir a próxima semana.",
+  "form.submitHint":
+    "Abre o WhatsApp com o teu pedido já escrito. É só enviares. 💛",
+  "form.closed":
+    "Os pedidos desta semana estão encerrados. Deixa a tua mensagem que avisamos-te quando abrir a próxima semana.",
   "form.comprovativo.question": "Já fizeste o pagamento?",
   "form.comprovativo.label": "📤 Enviar comprovativo pelo WhatsApp",
-  "form.comprovativo.hint": "Abre o WhatsApp da Colo para enviares a imagem do comprovativo.",
+  "form.comprovativo.hint":
+    "Abre o WhatsApp da Colo para enviares a imagem do comprovativo.",
   "form.especial.eyebrow": "Pedido especial",
   "form.especial.title": "Precisas de algo fora do menu?",
-  "form.especial.texto": "Conta-nos o que precisas — alergias, preferências especiais ou um pedido só teu. Respondemos pelo WhatsApp.",
+  "form.especial.texto":
+    "Conta-nos o que precisas — alergias, preferências especiais ou um pedido só teu. Respondemos pelo WhatsApp.",
   "form.especial.field": "O que precisas?",
   "form.especial.placeholder": "Descreve o que precisas…",
   "form.especial.submit": "Enviar pedido especial",
   "form.success.title": "Pedido recebido. Obrigada.",
-  "form.success.subtitle": "Entramos em contacto pelo teu número em breve para confirmar tudo.",
+  "form.success.subtitle":
+    "Entramos em contacto pelo teu número em breve para confirmar tudo.",
 
   "citacao.brand": "Colo",
   "citacao.texto":
@@ -178,7 +199,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "footer.tagline": "Menos pressa. Mais cuidado. Mais tempo para ti.",
   "footer.agradecimento": "Obrigada por confiares na Colo.",
   "footer.brand": "Colo",
-  "footer.descricao": "Comida que cuida de ti. Refeições semanais saudáveis, entregues em casa.",
+  "footer.descricao":
+    "Comida que cuida de ti. Refeições semanais saudáveis, entregues em casa.",
   "footer.contactos.label": "Contactos",
   "footer.contactos.whatsapp.url": "https://wa.me/244924644918",
   "footer.contactos.whatsapp.label": "WhatsApp",

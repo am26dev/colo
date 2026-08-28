@@ -1,6 +1,9 @@
 import { useState, type FormEvent } from "react";
 import { api } from "../../lib/api";
-import { montarMensagemPedidoEspecial, whatsappLink } from "../../utils/whatsapp";
+import {
+  montarMensagemPedidoEspecial,
+  whatsappLink,
+} from "../../utils/whatsapp";
 import type { Order, SiteConfig } from "../../types";
 import { EditableText } from "../../edit-mode/EditableText";
 import { useEditMode } from "../../edit-mode/EditModeProvider";
@@ -27,10 +30,20 @@ export function PedidoEspecial({ config }: { config: SiteConfig }) {
         method: "POST",
         body: JSON.stringify({ tipo: "especial", nome, contacto, notas }),
       });
-      window.open(whatsappLink(config.whatsapp, montarMensagemPedidoEspecial(nome, contacto, notas)), "_blank");
+      window.open(
+        whatsappLink(
+          config.whatsapp,
+          montarMensagemPedidoEspecial(nome, contacto, notas),
+        ),
+        "_blank",
+      );
       setEnviado(true);
     } catch (err) {
-      setErro(err instanceof Error ? err.message : "Não foi possível enviar. Tenta novamente.");
+      setErro(
+        err instanceof Error
+          ? err.message
+          : "Não foi possível enviar. Tenta novamente.",
+      );
     } finally {
       setEnviando(false);
     }
@@ -39,8 +52,20 @@ export function PedidoEspecial({ config }: { config: SiteConfig }) {
   if (enviado) {
     return (
       <div className="pedido-especial pedido-especial-enviado">
-        <p>Recebemos o teu pedido especial. Vamos responder-te pelo WhatsApp em breve. 💛</p>
-        <button type="button" className="btn btn-ghost sm" onClick={() => { setEnviado(false); setNome(""); setContacto(""); setNotas(""); }}>
+        <p>
+          Recebemos o teu pedido especial. Vamos responder-te pelo WhatsApp em
+          breve. 💛
+        </p>
+        <button
+          type="button"
+          className="btn btn-ghost sm"
+          onClick={() => {
+            setEnviado(false);
+            setNome("");
+            setContacto("");
+            setNotas("");
+          }}
+        >
           Fazer outro pedido
         </button>
       </div>
@@ -49,22 +74,44 @@ export function PedidoEspecial({ config }: { config: SiteConfig }) {
 
   return (
     <form className="pedido-especial" onSubmit={handleSubmit} noValidate>
-      <p className="eyebrow"><EditableText contentKey="form.especial.eyebrow" /></p>
-      <h3><EditableText contentKey="form.especial.title" /></h3>
-      <p className="pedido-especial-texto"><EditableText contentKey="form.especial.texto" multiline /></p>
+      <p className="eyebrow">
+        <EditableText contentKey="form.especial.eyebrow" />
+      </p>
+      <h3>
+        <EditableText contentKey="form.especial.title" />
+      </h3>
+      <p className="pedido-especial-texto">
+        <EditableText contentKey="form.especial.texto" multiline />
+      </p>
 
       {erro && <div className="form-closed">{erro}</div>}
 
       <div className="field">
-        <label htmlFor="especial-nome"><EditableText contentKey="form.field.nome" /></label>
-        <input id="especial-nome" type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+        <label htmlFor="especial-nome">
+          <EditableText contentKey="form.field.nome" />
+        </label>
+        <input
+          id="especial-nome"
+          type="text"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+        />
       </div>
       <div className="field">
-        <label htmlFor="especial-contacto"><EditableText contentKey="form.field.telefone" /></label>
-        <input id="especial-contacto" type="tel" value={contacto} onChange={(e) => setContacto(e.target.value)} />
+        <label htmlFor="especial-contacto">
+          <EditableText contentKey="form.field.telefone" />
+        </label>
+        <input
+          id="especial-contacto"
+          type="tel"
+          value={contacto}
+          onChange={(e) => setContacto(e.target.value)}
+        />
       </div>
       <div className="field">
-        <label htmlFor="especial-notas"><EditableText contentKey="form.especial.field" /></label>
+        <label htmlFor="especial-notas">
+          <EditableText contentKey="form.especial.field" />
+        </label>
         <textarea
           id="especial-notas"
           rows={3}
@@ -74,8 +121,16 @@ export function PedidoEspecial({ config }: { config: SiteConfig }) {
         />
       </div>
 
-      <button type="submit" className="btn btn-ghost btn-block" disabled={enviando}>
-        {enviando ? "A enviar…" : <EditableText contentKey="form.especial.submit" />}
+      <button
+        type="submit"
+        className="btn btn-ghost btn-block"
+        disabled={enviando}
+      >
+        {enviando ? (
+          "A enviar…"
+        ) : (
+          <EditableText contentKey="form.especial.submit" />
+        )}
       </button>
     </form>
   );

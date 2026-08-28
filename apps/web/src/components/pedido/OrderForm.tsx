@@ -2,7 +2,11 @@ import { useState, type FormEvent } from "react";
 import { cicloOpcoes, pedidoSecao } from "../../data/data";
 import { Reveal } from "../ui/Reveal";
 import { api } from "../../lib/api";
-import { montarMensagemComprovativo, montarMensagemPedido, whatsappLink } from "../../utils/whatsapp";
+import {
+  montarMensagemComprovativo,
+  montarMensagemPedido,
+  whatsappLink,
+} from "../../utils/whatsapp";
 import type { Order, SiteConfig, Week } from "../../types";
 import { EditableText } from "../../edit-mode/EditableText";
 import { useEditMode } from "../../edit-mode/EditModeProvider";
@@ -58,9 +62,9 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
       window.open(
         whatsappLink(
           config.whatsapp,
-          `Olá Colo! 💛 Quero ser avisada quando abrirem os pedidos da próxima semana.\nNome: ${nome}\nContacto: ${contacto}`
+          `Olá Colo! 💛 Quero ser avisada quando abrirem os pedidos da próxima semana.\nNome: ${nome}\nContacto: ${contacto}`,
         ),
-        "_blank"
+        "_blank",
       );
       setEnviando(false);
       setConfirmado(true);
@@ -73,19 +77,32 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
         body: JSON.stringify({ tipo: "semana", nome, contacto, ciclo, notas }),
       });
       window.open(
-        whatsappLink(config.whatsapp, montarMensagemPedido({ semana: week, nome, contacto, ciclo, notas }, config.moeda)),
-        "_blank"
+        whatsappLink(
+          config.whatsapp,
+          montarMensagemPedido(
+            { semana: week, nome, contacto, ciclo, notas },
+            config.moeda,
+          ),
+        ),
+        "_blank",
       );
       setConfirmado(true);
     } catch (err) {
-      setErro(err instanceof Error ? err.message : "Não foi possível enviar o pedido. Tenta novamente.");
+      setErro(
+        err instanceof Error
+          ? err.message
+          : "Não foi possível enviar o pedido. Tenta novamente.",
+      );
     } finally {
       setEnviando(false);
     }
   }
 
   function handleComprovativo() {
-    window.open(whatsappLink(config.whatsapp, montarMensagemComprovativo(nome, week)), "_blank");
+    window.open(
+      whatsappLink(config.whatsapp, montarMensagemComprovativo(nome, week)),
+      "_blank",
+    );
   }
 
   if (confirmado) {
@@ -93,7 +110,11 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
       <Reveal as="div" delay={2} className="pedido-form pedido-confirmado">
         <h3>{pedidoSecao.confirmacao.titulo}</h3>
         <p>{pedidoSecao.confirmacao.texto}</p>
-        <button type="button" className="btn btn-ghost" onClick={limparFormulario}>
+        <button
+          type="button"
+          className="btn btn-ghost"
+          onClick={limparFormulario}
+        >
           {pedidoSecao.confirmacao.cta}
         </button>
       </Reveal>
@@ -101,7 +122,13 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
   }
 
   return (
-    <Reveal as="form" delay={2} className="pedido-form" noValidate onSubmit={handleSubmit}>
+    <Reveal
+      as="form"
+      delay={2}
+      className="pedido-form"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       {!aberto && (
         <div className="form-closed">
           <EditableText contentKey="form.closed" />
@@ -110,7 +137,9 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
       {erro && <div className="form-closed">{erro}</div>}
 
       <div className="field">
-        <label htmlFor="nome"><EditableText contentKey="form.field.nome" /></label>
+        <label htmlFor="nome">
+          <EditableText contentKey="form.field.nome" />
+        </label>
         <input
           type="text"
           id="nome"
@@ -129,7 +158,9 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
       </div>
 
       <div className="field">
-        <label htmlFor="contacto"><EditableText contentKey="form.field.telefone" /></label>
+        <label htmlFor="contacto">
+          <EditableText contentKey="form.field.telefone" />
+        </label>
         <input
           type="tel"
           id="contacto"
@@ -149,9 +180,17 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
 
       <div className="field">
         <label htmlFor="ciclo">
-          <EditableText contentKey="form.field.ciclo" /> <span className="opt"><EditableText contentKey="form.optional" /></span>
+          <EditableText contentKey="form.field.ciclo" />{" "}
+          <span className="opt">
+            <EditableText contentKey="form.optional" />
+          </span>
         </label>
-        <select id="ciclo" name="ciclo" value={ciclo} onChange={(e) => setCiclo(e.target.value)}>
+        <select
+          id="ciclo"
+          name="ciclo"
+          value={ciclo}
+          onChange={(e) => setCiclo(e.target.value)}
+        >
           {cicloOpcoes.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
@@ -162,7 +201,10 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
 
       <div className="field">
         <label htmlFor="notas">
-          <EditableText contentKey="form.field.observacoes" /> <span className="opt"><EditableText contentKey="form.optional" /></span>
+          <EditableText contentKey="form.field.observacoes" />{" "}
+          <span className="opt">
+            <EditableText contentKey="form.optional" />
+          </span>
         </label>
         <textarea
           id="notas"
@@ -174,19 +216,39 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
         />
       </div>
 
-      <button type="submit" className="btn btn-primary btn-block" disabled={enviando}>
-        {enviando ? "A enviar…" : aberto ? <EditableText contentKey="form.submit" /> : <EditableText contentKey="form.submit.closed" />}
+      <button
+        type="submit"
+        className="btn btn-primary btn-block"
+        disabled={enviando}
+      >
+        {enviando ? (
+          "A enviar…"
+        ) : aberto ? (
+          <EditableText contentKey="form.submit" />
+        ) : (
+          <EditableText contentKey="form.submit.closed" />
+        )}
       </button>
-      <p className="form-hint"><EditableText contentKey="form.submitHint" /></p>
+      <p className="form-hint">
+        <EditableText contentKey="form.submitHint" />
+      </p>
 
       <div className="comprovativo-section">
         <div className="comprovativo-divider">
-          <span><EditableText contentKey="form.comprovativo.question" /></span>
+          <span>
+            <EditableText contentKey="form.comprovativo.question" />
+          </span>
         </div>
-        <button type="button" className="btn btn-ghost btn-block btn-comprovativo" onClick={handleComprovativo}>
+        <button
+          type="button"
+          className="btn btn-ghost btn-block btn-comprovativo"
+          onClick={handleComprovativo}
+        >
           <EditableText contentKey="form.comprovativo.label" />
         </button>
-        <p className="form-hint"><EditableText contentKey="form.comprovativo.hint" /></p>
+        <p className="form-hint">
+          <EditableText contentKey="form.comprovativo.hint" />
+        </p>
       </div>
     </Reveal>
   );
