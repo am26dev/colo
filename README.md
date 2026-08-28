@@ -1,4 +1,4 @@
-# Colo — *Comida que cuida de ti* 🤍
+# Colo — *Comida que cuida de ti*
 
 Site da marca **Colo**: comida pensada na mulher — saudável, anti-inflamatória
 e personalizada conforme o ciclo menstrual. Mercado: **Angola**.
@@ -10,7 +10,7 @@ e personalizada conforme o ciclo menstrual. Mercado: **Angola**.
 ## ✨ O que faz
 
 - **Página única** e responsiva com a identidade da Colo.
-- **Menu da semana**, atualizado normalmente às quintas-feiras.
+- **Menu da semana**, atualizado normalmente às quintas-feiras, com 5 dias de almoço + momento doce.
 - **Vagas limitadas por semana**: quando enchem (ou a dona encerra manualmente),
   o site mostra *"pedidos encerrados"* mas mantém o menu visível.
 - **Pedido pelo WhatsApp**: a cliente preenche um formulário e o pedido chega já
@@ -37,9 +37,9 @@ colo/
 │   │   │   └── styles.css        ← visual da marca
 │   │   └── public/assets/img/    ← fotos e favicon
 │   └── api/           ← backend (Express + Prisma + SQLite)
-│       ├── prisma/schema.prisma  ← Admin, SiteConfig, MenuState, Dish
+│       ├── prisma/schema.prisma  ← Admin, SiteConfig, Week, Day, Order, SiteContent
 │       ├── prisma/seed.ts        ← dados iniciais
-│       └── src/routes/           ← auth, site, menu, dishes, config
+│       └── src/routes/           ← auth, site, weeks, orders, dashboard, content, config
 ├── GUIA-PAINEL.md     ← guia de uso do painel /gestao para a dona
 └── README.md
 ```
@@ -58,7 +58,7 @@ cd apps/api
 npm install
 cp .env.example .env          # ajusta se necessário
 npx prisma migrate deploy
-npm run seed                  # dados iniciais (config + menu + pratos)
+  npm run seed                  # dados iniciais (config + semanas + conteúdo)
 npm run dev                   # http://localhost:4000
 ```
 
@@ -71,8 +71,11 @@ cp .env.example .env          # VITE_API_URL aponta para a API acima
 npm run dev                   # http://localhost:5173
 ```
 
-Na primeira visita a `/gestao`, cria o teu email e palavra-passe (ver
-[GUIA-PAINEL.md](GUIA-PAINEL.md)).
+Para criar ou atualizar o administrador através do seed, define `ADMIN_EMAIL` e
+`ADMIN_PASSWORD` no `.env` antes de executar `npm run seed`. Alternativamente,
+usa o fluxo inicial de `/gestao` enquanto ainda não existir administrador.
+
+Nunca versionar `.env`, passwords, tokens ou a base `dev.db`.
 
 ---
 
@@ -85,4 +88,4 @@ Na primeira visita a `/gestao`, cria o teu email e palavra-passe (ver
 
 ---
 
-Feito com carinho para a Colo. 💛
+Feito com carinho para a Colo.

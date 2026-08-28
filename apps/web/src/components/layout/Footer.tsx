@@ -23,8 +23,8 @@ export function Footer({ config }: { config: SiteConfig }) {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "2.5rem" }} className="md:grid-cols-4">
           <div className="md:col-span-2">
-            <div style={{ fontFamily: "var(--script)", fontSize: "2.25rem", color: "var(--brown-dark)" }}>
-              <EditableText contentKey="footer.brand" />
+            <div>
+              <img src="/assets/img/logo-header.webp" alt={get("footer.brand")} style={{ width: "135px", height: "auto" }} />
             </div>
             <p style={{ marginTop: "0.75rem", maxWidth: "24rem", fontSize: "0.9375rem", color: "var(--muted)" }}>
               <EditableText contentKey="footer.descricao" multiline />
@@ -75,8 +75,8 @@ export function Footer({ config }: { config: SiteConfig }) {
               <EditableText contentKey="footer.links.label" />
             </div>
             <ul style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem", listStyle: "none", padding: 0, fontSize: "0.9375rem" }}>
-              <li><a href="#sobre" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">Sobre</a></li>
-              <li><a href="#menu" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">Menu</a></li>
+              <li><a href="#sobre" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">Sobre a Colo</a></li>
+              <li><a href="#menu" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">Menu da semana</a></li>
               <li><a href="#como-funciona" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">Como funciona</a></li>
               <li><a href="#pedido" style={{ color: "inherit", textDecoration: "none" }} className="hover:text-[var(--rose-deep)]">FAQ</a></li>
             </ul>

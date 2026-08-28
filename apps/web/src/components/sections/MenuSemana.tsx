@@ -1,12 +1,12 @@
 import { EditableText } from "../../edit-mode/EditableText";
 import { EditableImage } from "../../edit-mode/EditableImage";
 import type { Week } from "../../types";
+import { apiUrl } from "../../lib/api";
 
 interface MenuSemanaProps {
   week: Week | null;
 }
 
-const MENU_INDEXES = [0, 1, 2, 3, 4];
 const GALERIA_INDEXES = [0, 1, 2, 3, 4];
 
 function EstadoVazioMenu() {
@@ -56,8 +56,11 @@ export function MenuSemana({ week }: MenuSemanaProps) {
             <div style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.2em", opacity: 0.8 }}>
               <EditableText contentKey="menu.preco.label" />
             </div>
-            <div style={{ fontFamily: "var(--serif)", fontSize: "1.75rem" }}>
+            <div style={{ fontFamily: "var(--sans)", fontSize: "1.75rem", fontWeight: 600 }}>
               <EditableText contentKey="menu.preco.valor" />
+            </div>
+            <div style={{ marginTop: "0.25rem", fontSize: "0.6875rem", letterSpacing: "0.04em", opacity: 0.72 }}>
+              5 dias • almoço + momento doce • entregas diárias
             </div>
           </div>
         </div>
@@ -66,24 +69,29 @@ export function MenuSemana({ week }: MenuSemanaProps) {
           <EstadoVazioMenu />
         ) : (
           <div style={{ marginTop: "3rem", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.25rem" }}>
-            {MENU_INDEXES.map((i) => (
-              <article key={i} className="soft-card" style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
+            {week.dias.map((dia) => {
+              const almoco = dia.refeicoes.find((refeicao) => refeicao.tipo === "almoco");
+              const momentoDoce = dia.refeicoes.find((refeicao) => refeicao.tipo === "sobremesa");
+              return (
+              <article key={dia.diaSemana} className="soft-card" style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}>
                 <div style={{ overflow: "hidden" }}>
-                  <EditableImage
-                    contentKey={`menu.${i}.foto`}
-                    altKey={`menu.${i}.almoco`}
-                    width={1024}
-                    height={1024}
-                    className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
-                  />
+                  {almoco?.foto ? (
+                    <img
+                      src={apiUrl(almoco.foto)}
+                      alt={almoco.nome}
+                      width={1024}
+                      height={1024}
+                      className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
+                    />
+                  ) : <div className="aspect-square w-full" style={{ background: "var(--cream-2)" }} />}
                 </div>
                 <div style={{ display: "flex", flex: 1, flexDirection: "column", padding: "1.25rem" }}>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                     <div style={{ fontFamily: "var(--serif)", fontSize: "1.25rem", color: "var(--brown-dark)" }}>
-                      <EditableText contentKey={`menu.${i}.dia`} />
+                      {dia.diaSemana === 1 ? "Segunda-feira" : dia.diaSemana === 2 ? "Terça-feira" : dia.diaSemana === 3 ? "Quarta-feira" : dia.diaSemana === 4 ? "Quinta-feira" : "Sexta-feira"}
                     </div>
                     <div style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.18em", color: "var(--rose-deep)" }}>
-                      <EditableText contentKey={`menu.${i}.tema`} />
+                      {dia.tema}
                     </div>
                   </div>
                   <div style={{ marginTop: "1rem", borderTop: "1px solid rgba(238, 223, 208, 0.7)", paddingTop: "1rem", fontSize: "0.9375rem" }}>
@@ -91,20 +99,21 @@ export function MenuSemana({ week }: MenuSemanaProps) {
                       Almoço
                     </div>
                     <p style={{ marginTop: "0.25rem", lineHeight: 1.4, color: "var(--ink)" }}>
-                      <EditableText contentKey={`menu.${i}.almoco`} multiline />
+                      {almoco?.nome}
                     </p>
                   </div>
                   <div style={{ marginTop: "0.75rem", fontSize: "0.9375rem" }}>
                     <div style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--muted)" }}>
-                      Sobremesa
+                      Momento Doce
                     </div>
                     <p style={{ marginTop: "0.25rem", lineHeight: 1.4, color: "var(--ink)" }}>
-                      <EditableText contentKey={`menu.${i}.sobremesa`} multiline />
+                      {momentoDoce?.nome}
                     </p>
                   </div>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

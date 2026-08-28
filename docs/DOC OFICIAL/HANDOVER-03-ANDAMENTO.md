@@ -5,18 +5,19 @@
 
 ---
 
-## 1. Resumo executivo (2026-08-18)
+## 1. Resumo executivo (2026-08-28)
 
 | Indicador | Valor |
 |---|---|
 | Fase do projecto | **Em produção** — `colo.ao` ao vivo desde 2026-07-02, containerizado desde 2026-07-05 |
 | Estado da produção (verificado hoje) | `https://colo.ao` → **200** · `/api/site` → 200 · `/api/health` → 200 |
-| Código em produção | Commit `625b249` (2026-08-14) — sincronizado com o GitHub (origin/main) |
-| Suíte de testes | **Inexistente** (0 ficheiros de teste no repo) — qualidade garantida pelo build TypeScript strict + Vite no `deploy-colo` |
+| Código em produção | Commit `625b249` (2026-08-14); alterações desta sessão ainda não publicadas |
+| Suíte de testes | **Inexistente** (0 ficheiros de teste no repo); checks HTTP de segurança locais executados em 2026-08-28 |
 | Endpoints API | 23 (22 rotas + `/api/health`) |
 | Modelos Prisma | 6 (Admin, SiteConfig, Week, Day, Order, SiteContent) |
 | Rotas frontend | 9 (site + 8 do painel) |
 | CI/CD | Deploy automático em push a `main` (GitHub Actions → VPS) |
+| Dependências web | `npm audit --omit=dev`: 0 vulnerabilidades após actualização compatível |
 | Pendências de negócio | Validação visual em browser real · trocar password de demonstração · fotos reais das refeições · dados de pagamento reais |
 
 ---
@@ -32,6 +33,7 @@
 | **Containerização** | PM2/nginx-host aposentados → `colo_api` + `colo_web` na rede `edge` do Caddy, zero portas publicadas; `compose.yaml`+`docker/` versionados (commit `3b1295d`, 07-07) | ✅ 2026-07-05 |
 | **Simplificação do menu** | 4 refeições → 2 momentos (almoço+sobremesa); ícone por dia removido da gestão; correcção de `icone:` residual que quebrava `tsc -b` | ✅ 2026-07-03 (correcção de build no mesmo dia) |
 | **Modo edição do site** | `AdminFab`/`EditToolbar`/`EditableText`/`EditableImage` + `SiteContent` (key-value) + uploads com compressão no browser; testemunhos e rodapé ligados ao modo edição | ✅ 2026-07-13/14 |
+| **Actualizações de conteúdo e segurança** | Menu publicado usa `Week/Day` e fotos da API; logo no rodapé/citação; formulários editáveis; estrelas removidas; assinatura pessoal; checks de autorização, upload e traversal executados | ✅ 2026-08-28, por publicar |
 | **Estabilização do build** | Falha de deploy 2026-08-07 (`TS6133: 'statusText' não usado` em `Hero.tsx` — `noUnusedLocals`); correcção commitada 2026-08-14 (`625b249`, inclui também fix de URLs de upload de imagens e eventos de auth) | ✅ corrigido e **deployado** 2026-08-14 |
 
 ---
@@ -101,7 +103,7 @@
 | Containers | ✅ up | `colo_api` (3004/tcp) e `colo_web` (80/tcp); criados 14-08, restarted 16-08 |
 | Código em produção | ✅ `625b249` | Igual ao `origin/main` — a correcção do build de 07-08 está **em produção** |
 | Backups da BD | ⚠️ por verificar | BD vive em `apps/api/prisma/dev.db` (volume bind mount) — não há rotina de backup conhecida/verificada |
-| Password de demonstração | ⚠️ pendente | Conta `colo@teste.com`/`segredo123` herdada do dev — a dona deve trocar |
+| Credenciais de produção | ⚠️ por confirmar | Não documentar valores; confirmar que o `JWT_SECRET` e a password real foram trocados |
 | Validação visual | 🔶 pendente | Infra confirmada por curl; falta confirmação da dona em browser real (fluxo de pedido, painel, mobile) |
 
 **Leitura correcta do estado:** o código está estável e em produção; o que falta é **operação de negócio** (validação visual, credenciais da dona, fotos e dados reais) — não trabalho de desenvolvimento funcional.
@@ -112,7 +114,7 @@
 
 ### Externos / de negócio
 1. **Validação visual em browser real** pela dona (fluxo de pedido ponta a ponta, painel `/gestao`, responsividade mobile) — a infraestrutura está confirmada, o ecrã não.
-2. **Trocar a password de demonstração** (`colo@teste.com`/`segredo123` é conhecida internamente) ou criar conta nova — via painel → Conta.
+2. **Confirmar as credenciais da administradora** via painel → Conta, sem partilhar ou registar a password.
 3. **Fotos reais das refeições**: no seed a `foto` fica vazia (a dona preenche no editor de semana, com upload real de imagem).
 4. **Dados de pagamento reais**: o seed traz valores de exemplo ("923 000 000", "Nome da Titular", IBAN fictício) — a dona deve confirmar os dados exibidos no site via painel → Informações.
 5. **Taglines de marca**: confirmar com a dona os textos incorporados no hero/sobre (`data.ts`) ou preferir versões mais curtas.
@@ -122,11 +124,13 @@
 7. **Sem suite de testes** — considerar testes mínimos (ex.: fluxo de pedido/vagas com vitest/supertest) antes de o site ganhar tráfego real.
 8. **Backups da BD** — SQLite é um ficheiro único e frágil a perdas; definir rotina (o volume está no disco da VPS).
 9. **`deploy-colo` não versionado** — vive só em `/usr/local/bin/deploy-colo` na VPS (seguir o padrão do MeSafa-Shop: template no repo, cópia instalada na VPS).
+10. **Dependências API** — `npm audit --omit=dev` ainda reporta 3 vulnerabilidades `high` transitivas em `deepmerge-ts` via Prisma; não aplicar `npm audit fix --force` sem validar o impacto no Prisma.
 
 ---
 
 ## 7. Próxima acção concreta
 
-1. **Apresentar o pack à dona (via Jairo)** e validar em browser real: fazer um pedido de teste no site, confirmar que chega ao WhatsApp e ao painel, e ver o painel `/gestao` em mobile.
-2. **Actualizar o `README.md`** (e, se a dona aprovar, o GUIA-PAINEL) para o modelo actual — hoje quem chega ao repo lê um produto que já não existe.
-3. **Decidir com o Jairo** sobre: password de demonstração, rotina de backup da BD e se vale a pena uma suite de testes mínima antes de crescer o tráfego.
+1. **Fazer commit e deploy controlado** das alterações de 2026-08-28; não fazer push sem autorização porque `main` dispara deploy automático.
+2. **Validar em browser real**: fluxo de pedido, painel `/gestao`, edição dos formulários, menu com fotos e responsividade mobile.
+3. **Confirmar credenciais de produção** sem as registar em documentação e definir rotina de backup da BD SQLite.
+4. **Criar uma suite mínima** de testes de API para pedidos/vagas e autorização antes de aumentar o tráfego.

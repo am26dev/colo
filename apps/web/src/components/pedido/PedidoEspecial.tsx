@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { pedidoEspecialSecao } from "../../data/data";
 import { api } from "../../lib/api";
 import { montarMensagemPedidoEspecial, whatsappLink } from "../../utils/whatsapp";
 import type { Order, SiteConfig } from "../../types";
+import { EditableText } from "../../edit-mode/EditableText";
+import { useEditMode } from "../../edit-mode/EditModeProvider";
 
 export function PedidoEspecial({ config }: { config: SiteConfig }) {
+  const { get } = useEditMode();
   const [nome, setNome] = useState("");
   const [contacto, setContacto] = useState("");
   const [notas, setNotas] = useState("");
@@ -47,33 +49,33 @@ export function PedidoEspecial({ config }: { config: SiteConfig }) {
 
   return (
     <form className="pedido-especial" onSubmit={handleSubmit} noValidate>
-      <p className="eyebrow">{pedidoEspecialSecao.eyebrow}</p>
-      <h3>{pedidoEspecialSecao.titulo}</h3>
-      <p className="pedido-especial-texto">{pedidoEspecialSecao.texto}</p>
+      <p className="eyebrow"><EditableText contentKey="form.especial.eyebrow" /></p>
+      <h3><EditableText contentKey="form.especial.title" /></h3>
+      <p className="pedido-especial-texto"><EditableText contentKey="form.especial.texto" multiline /></p>
 
       {erro && <div className="form-closed">{erro}</div>}
 
       <div className="field">
-        <label htmlFor="especial-nome">O teu nome</label>
+        <label htmlFor="especial-nome"><EditableText contentKey="form.field.nome" /></label>
         <input id="especial-nome" type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
       </div>
       <div className="field">
-        <label htmlFor="especial-contacto">WhatsApp / Telemóvel</label>
+        <label htmlFor="especial-contacto"><EditableText contentKey="form.field.telefone" /></label>
         <input id="especial-contacto" type="tel" value={contacto} onChange={(e) => setContacto(e.target.value)} />
       </div>
       <div className="field">
-        <label htmlFor="especial-notas">O que precisas?</label>
+        <label htmlFor="especial-notas"><EditableText contentKey="form.especial.field" /></label>
         <textarea
           id="especial-notas"
           rows={3}
-          placeholder={pedidoEspecialSecao.placeholderNotas}
+          placeholder={get("form.especial.placeholder")}
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
         />
       </div>
 
       <button type="submit" className="btn btn-ghost btn-block" disabled={enviando}>
-        {enviando ? "A enviar…" : pedidoEspecialSecao.submitLabel}
+        {enviando ? "A enviar…" : <EditableText contentKey="form.especial.submit" />}
       </button>
     </form>
   );

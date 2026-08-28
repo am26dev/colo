@@ -1,10 +1,29 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import defaults from "./seed-data.json" with { type: "json" };
 
 const prisma = new PrismaClient();
 
 async function main() {
   const { config, weeks } = defaults;
+
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (adminEmail || adminPassword) {
+    if (!adminEmail || !adminPassword) {
+      throw new Error("ADMIN_EMAIL e ADMIN_PASSWORD têm de ser definidos em conjunto.");
+    }
+    if (adminPassword.length < 6) {
+      throw new Error("ADMIN_PASSWORD precisa de pelo menos 6 caracteres.");
+    }
+    const passwordHash = await bcrypt.hash(adminPassword, 10);
+    await prisma.admin.upsert({
+      where: { email: adminEmail },
+      update: { passwordHash },
+      create: { email: adminEmail, passwordHash },
+    });
+  }
 
   await prisma.siteConfig.upsert({
     where: { id: 1 },

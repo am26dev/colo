@@ -4,6 +4,8 @@ import { Reveal } from "../ui/Reveal";
 import { api } from "../../lib/api";
 import { montarMensagemComprovativo, montarMensagemPedido, whatsappLink } from "../../utils/whatsapp";
 import type { Order, SiteConfig, Week } from "../../types";
+import { EditableText } from "../../edit-mode/EditableText";
+import { useEditMode } from "../../edit-mode/EditModeProvider";
 
 interface OrderFormProps {
   week: Week | null;
@@ -12,6 +14,7 @@ interface OrderFormProps {
 }
 
 export function OrderForm({ week, config, aberto }: OrderFormProps) {
+  const { get } = useEditMode();
   const [nome, setNome] = useState("");
   const [contacto, setContacto] = useState("");
   const [ciclo, setCiclo] = useState("");
@@ -101,19 +104,18 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
     <Reveal as="form" delay={2} className="pedido-form" noValidate onSubmit={handleSubmit}>
       {!aberto && (
         <div className="form-closed">
-          Os pedidos desta semana estão <strong>encerrados</strong>. Deixa a tua mensagem que avisamos-te quando
-          abrir a próxima semana.
+          <EditableText contentKey="form.closed" />
         </div>
       )}
       {erro && <div className="form-closed">{erro}</div>}
 
       <div className="field">
-        <label htmlFor="nome">O teu nome</label>
+        <label htmlFor="nome"><EditableText contentKey="form.field.nome" /></label>
         <input
           type="text"
           id="nome"
           name="nome"
-          placeholder="Como te chamas?"
+          placeholder={get("form.placeholder.nome")}
           required
           autoComplete="given-name"
           value={nome}
@@ -127,12 +129,12 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
       </div>
 
       <div className="field">
-        <label htmlFor="contacto">WhatsApp / Telemóvel</label>
+        <label htmlFor="contacto"><EditableText contentKey="form.field.telefone" /></label>
         <input
           type="tel"
           id="contacto"
           name="contacto"
-          placeholder="9XX XXX XXX"
+          placeholder={get("form.placeholder.telefone")}
           required
           autoComplete="tel"
           value={contacto}
@@ -147,7 +149,7 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
 
       <div className="field">
         <label htmlFor="ciclo">
-          Fase do teu ciclo <span className="opt">(opcional)</span>
+          <EditableText contentKey="form.field.ciclo" /> <span className="opt"><EditableText contentKey="form.optional" /></span>
         </label>
         <select id="ciclo" name="ciclo" value={ciclo} onChange={(e) => setCiclo(e.target.value)}>
           {cicloOpcoes.map((o) => (
@@ -160,31 +162,31 @@ export function OrderForm({ week, config, aberto }: OrderFormProps) {
 
       <div className="field">
         <label htmlFor="notas">
-          Notas <span className="opt">(opcional)</span>
+          <EditableText contentKey="form.field.observacoes" /> <span className="opt"><EditableText contentKey="form.optional" /></span>
         </label>
         <textarea
           id="notas"
           name="notas"
           rows={2}
-          placeholder="Alergias, preferências, zona de entrega…"
+          placeholder={get("form.placeholder.observacoes")}
           value={notas}
           onChange={(e) => setNotas(e.target.value)}
         />
       </div>
 
       <button type="submit" className="btn btn-primary btn-block" disabled={enviando}>
-        {enviando ? "A enviar…" : aberto ? pedidoSecao.submitLabel : "Avisem-me na próxima semana"}
+        {enviando ? "A enviar…" : aberto ? <EditableText contentKey="form.submit" /> : <EditableText contentKey="form.submit.closed" />}
       </button>
-      <p className="form-hint">{pedidoSecao.submitHint}</p>
+      <p className="form-hint"><EditableText contentKey="form.submitHint" /></p>
 
       <div className="comprovativo-section">
         <div className="comprovativo-divider">
-          <span>Já fizeste o pagamento?</span>
+          <span><EditableText contentKey="form.comprovativo.question" /></span>
         </div>
         <button type="button" className="btn btn-ghost btn-block btn-comprovativo" onClick={handleComprovativo}>
-          {pedidoSecao.comprovativoLabel}
+          <EditableText contentKey="form.comprovativo.label" />
         </button>
-        <p className="form-hint">{pedidoSecao.comprovativoHint}</p>
+        <p className="form-hint"><EditableText contentKey="form.comprovativo.hint" /></p>
       </div>
     </Reveal>
   );

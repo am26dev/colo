@@ -2,7 +2,7 @@
 
 > **Para:** novo programador da equipa.
 > **De:** equipa de desenvolvimento (docs geradas a partir do estado real do repositório).
-> **Data:** 2026-08-18 · **Veredicto actual:** 🟢 **EM PRODUÇÃO** — `colo.ao` responde 200; código sincronizado com o GitHub (último deploy 2026-08-14).
+> **Data:** 2026-08-28 · **Veredicto actual:** 🟢 **EM PRODUÇÃO** — `colo.ao` responde 200; alterações desta sessão ainda aguardam commit/deploy.
 
 Este é o ponto de entrada das pastas do projecto. Os documentos com prefixo `HANDOVER-` foram criados para te dar o contexto completo de forma autónoma, sem depender de nenhum outro programador. O projecto não tem `docs/` canónicos próprios — o estado vivo vive no wiki (`CEREBRO DO CLAUDE/wiki/projetos/colo/`) e este pack é o resumo consolidado.
 
@@ -17,7 +17,7 @@ Este é o ponto de entrada das pastas do projecto. Os documentos com prefixo `HA
 ├── .github/workflows/deploy.yml  → CI/CD: deploy automático em push a `main`
 ├── compose.yaml    → Orquestração de produção (2 serviços, rede `edge`, zero portas publicadas)
 ├── GUIA-PAINEL.md  → Guia de uso do painel /gestao (para a dona, linguagem de negócio)
-├── README.md       → Arranque rápido (⚠️ desactualizado face ao pivot de negócio de 2026-07-02)
+├── README.md       → Arranque rápido actualizado
 └── AGENTS.md       → ⚠️ NÃO EXISTE ainda neste projecto (ver regras de ouro)
 ```
 
@@ -39,7 +39,7 @@ Este é o ponto de entrada das pastas do projecto. Os documentos com prefixo `HA
 | `apps/web/src/data/data.ts` | Conteúdo institucional + fallback offline | Antes de mexer na copy do site |
 | Wiki `CEREBRO DO CLAUDE/wiki/projetos/colo/{overview,arquitetura,pendencias}.md` | Porquês, gotchas e pendências (em português, no cérebro do Jairo) | Para decisões e histórico |
 
-> ⚠️ **O `README.md` está desactualizado**: descreve o modelo antigo de "pratos avulsos" (`MenuState`, `Dish`) e uma estrutura de pastas que já não existe. O negócio real é o **pacote semanal** (ver HANDOVER-01) — usa o README só para os comandos.
+> O `README.md` foi actualizado em 2026-08-28 para reflectir o pacote semanal e a estrutura actual.
 
 ## Regras de ouro antes de tocar em código
 
@@ -49,4 +49,4 @@ Este é o ponto de entrada das pastas do projecto. Os documentos com prefixo `HA
 4. **`PUT /api/config` faz upsert do payload COMPLETO** — páginas que gravam config têm de reenviar `modoAutomaticoSemanas` para não o repor ao default `true`.
 5. **Uploads**: whitelist fechada de extensões + validação de magic bytes + CSP no `express.static` — não relaxar (foi fix contra XSS por ficheiro disfarçado).
 6. **Não fazer `push` sem o Jairo pedir** — cada push a `main` dispara deploy automático em produção.
-7. **Dados sensíveis**: `JWT_SECRET` e a conta de demonstração `colo@teste.com`/`segredo123` são conhecidos internamente — a dona deve trocar a password (pendência registada).
+7. **Dados sensíveis**: nunca versionar `.env`, passwords, tokens ou a base SQLite. Em produção, confirmar que o `JWT_SECRET` e a conta administradora foram definidos fora do repositório.

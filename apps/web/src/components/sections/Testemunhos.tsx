@@ -28,11 +28,6 @@ export function Testemunhos() {
           {TESTEMUNHO_INDEXES.map((i) => (
             <Reveal key={i} delay={((i % 3) + 1) as 1 | 2 | 3}>
               <figure className="soft-card" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", height: "100%" }}>
-                <div style={{ display: "flex", gap: "0.25rem", color: "var(--rose-deep)" }}>
-                  {Array.from({ length: 5 }).map((_, j) => (
-                    <span key={j}>★</span>
-                  ))}
-                </div>
                 <blockquote style={{ fontFamily: "var(--serif)", fontSize: "1.125rem", lineHeight: 1.4, color: "var(--ink)" }}>
                   “<EditableText contentKey={`testemunhos.${i}.texto`} multiline />”
                 </blockquote>

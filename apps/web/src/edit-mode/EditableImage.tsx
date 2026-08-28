@@ -23,7 +23,8 @@ export function EditableImage({
   wrapperClassName,
 }: EditableImageProps) {
   const { get, setPending, isEditing, isAdmin } = useEditMode();
-  const src = get(contentKey);
+  const rawSrc = get(contentKey);
+  const src = rawSrc.startsWith("/uploads/") ? apiUrl(rawSrc) : rawSrc;
   const alt = altKey ? get(altKey) : "";
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);

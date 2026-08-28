@@ -25,7 +25,7 @@
 |---|---|---|
 | Vite | ^8.1.1 (8.1.2 instalado) | SPA; build = `tsc -b && vite build` |
 | React | ^19.2.7 (19.2.7 instalado) | — |
-| react-router-dom | ^7.18.1 | Rotas: site + `/gestao/*` |
+| react-router-dom | ^7.18.3 | Rotas: site + `/gestao/*` |
 | Tailwind CSS | v4 (^4.3.2 + `@tailwindcss/vite`) | Escopado ao painel via `@source` (o site público usa `styles.css` próprio) |
 | UI do painel | Componentes **caseiros** em `components/ui/` (shadcn-style, sem radix; `sonner.tsx` é um toaster leve sem dependências) | clsx + tailwind-merge |
 | Lint | oxlint ^1.71.0 | `npm run lint` |
@@ -145,7 +145,7 @@ npm run lint                # oxlint
 ### Primeiro admin
 Na primeira visita a `/gestao`, o site detecta que não há admin (`/api/auth/setup-needed`) e pede email + palavra-passe (`POST /api/auth/setup`).
 
-> Conta de demonstração conhecida (produção, a trocar pela dona — pendência): `colo@teste.com` / `segredo123`.
+Também é possível definir `ADMIN_EMAIL` e `ADMIN_PASSWORD` no `apps/api/.env` e executar `npm run seed`; o seed faz upsert idempotente do administrador. Nunca colocar valores reais no repositório ou na documentação.
 
 ---
 

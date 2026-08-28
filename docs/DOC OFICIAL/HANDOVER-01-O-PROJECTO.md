@@ -12,7 +12,7 @@
 Marca angolana, desenvolvida por **Muds** (crédito no rodapé), com domínio **`colo.ao`**, conteúdo em **português de Portugal** e moeda **Kwanza (Kz)**.
 
 **O Colo não vende pratos avulsos** — vende um **pacote semanal único**:
-- **5 dias úteis** (Segunda a Sexta), cada dia com **2 momentos**: Almoço e Sobremesa
+- **5 dias úteis** (Segunda a Sexta), cada dia com **2 momentos**: Almoço e Momento Doce
 - Cada dia tem um **tema poético** (ex.: "Leveza & Frescura") e uma **frase de carinho**
 - **Um preço único para a semana toda** (100 000 Kz no seed) — a cliente escolhe "o menu", não um prato
 - **Vagas limitadas** (6 por semana no seed) que descontam a cada pedido e fecham a semana sozinhas ao chegar a 0
@@ -69,7 +69,7 @@ Pedidos **especiais** (alergias, pedido fora do menu) são uma secção à parte
 |---|---|---|
 | Site público (`/`) | Público, sem login | Home com 11 secções (hero, galeria, sobre, fundadora, menu da semana, como funciona, incluído, testemunhos, pedido, citação, nota da Colo) |
 | Painel de gestão (`/gestao`) | Login com email + palavra-passe (JWT 7 dias) | Dashboard, Pedidos, Semanas (lista/nova/editor), Informações, Conta |
-| Modo edição do site público | Activável no próprio site (AdminFab) | Edição inline de textos e imagens da home, gravada via `/api/edit-content` — ferramenta para a dona ajustar a copy sem código |
+| Modo edição do site público | Activável no próprio site (AdminFab) | Edição inline de textos e imagens da home, incluindo a área dos formulários, gravada via `/api/edit-content` — ferramenta para a dona ajustar a copy sem código |
 
 Primeira utilização: o painel cria o primeiro administrador no `POST /api/auth/setup` (só funciona enquanto não houver admin — ver `GET /api/auth/setup-needed`).
 
