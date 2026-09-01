@@ -1,28 +1,26 @@
 import { EditableText } from "../../edit-mode/EditableText";
-import { EditableImage } from "../../edit-mode/EditableImage";
 import type { Week } from "../../types";
 import { apiUrl } from "../../lib/api";
+import { defaultWeek } from "../../data/data";
 
 interface MenuSemanaProps {
   week: Week | null;
 }
 
-const GALERIA_INDEXES = [0, 1, 2, 3, 4];
+const DIAS_LABELS: Record<number, string> = {
+  1: "Segunda-feira",
+  2: "Terça-feira",
+  3: "Quarta-feira",
+  4: "Quinta-feira",
+  5: "Sexta-feira",
+};
 
 function EstadoVazioMenu() {
   return (
-    <div
-      style={{
-        marginTop: "3rem",
-        borderRadius: "1.5rem",
-        border: "1px solid var(--cream-2)",
-        background: "rgba(255,255,255,0.6)",
-        padding: "2rem 3rem",
-      }}
-    >
+    <div style={{ marginTop: "3rem" }}>
       <div
         className="text-center"
-        style={{ maxWidth: "32rem", margin: "0 auto" }}
+        style={{ maxWidth: "32rem", margin: "0 auto 2rem" }}
       >
         <h3
           style={{
@@ -40,41 +38,115 @@ function EstadoVazioMenu() {
       </div>
       <div
         style={{
-          marginTop: "2rem",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-          gap: "1rem",
+          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gap: "1.25rem",
         }}
       >
-        {GALERIA_INDEXES.map((i) => (
-          <div
-            key={i}
-            style={{
-              borderRadius: "1rem",
-              overflow: "hidden",
-              background: "rgba(255,255,255,0.6)",
-            }}
-          >
-            <EditableImage
-              contentKey={`galeria.${i}.image`}
-              altKey={`galeria.${i}.label`}
-              width={1024}
-              height={1024}
-              className="aspect-square w-full object-cover"
-            />
-            <div style={{ padding: "0.625rem 0.75rem" }}>
-              <p
+        {defaultWeek.dias.map((dia) => {
+          const almoco = dia.refeicoes.find((r) => r.tipo === "almoco");
+          const momentoDoce = dia.refeicoes.find((r) => r.tipo === "sobremesa");
+          return (
+            <article
+              key={dia.diaSemana}
+              className="soft-card"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "1.25rem",
+              }}
+            >
+              <div
                 style={{
-                  fontSize: "0.8125rem",
-                  lineHeight: 1.3,
-                  color: "var(--brown-dark)",
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
                 }}
               >
-                <EditableText contentKey={`galeria.${i}.label`} />
+                <div
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "1.25rem",
+                    color: "var(--brown-dark)",
+                  }}
+                >
+                  {DIAS_LABELS[dia.diaSemana]}
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.6875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.18em",
+                    color: "var(--rose-deep)",
+                  }}
+                >
+                  {dia.tema}
+                </div>
+              </div>
+              <p
+                style={{
+                  marginTop: "0.75rem",
+                  fontSize: "0.8125rem",
+                  fontStyle: "italic",
+                  color: "var(--muted)",
+                  lineHeight: 1.4,
+                }}
+              >
+                &ldquo;{dia.frase}&rdquo;
               </p>
-            </div>
-          </div>
-        ))}
+              <div
+                style={{
+                  marginTop: "1rem",
+                  borderTop: "1px solid rgba(238, 223, 208, 0.7)",
+                  paddingTop: "1rem",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.6875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.15em",
+                    color: "var(--muted)",
+                  }}
+                >
+                  Almoço
+                </div>
+                <p
+                  style={{
+                    marginTop: "0.25rem",
+                    fontSize: "0.9375rem",
+                    lineHeight: 1.4,
+                    color: "var(--ink)",
+                  }}
+                >
+                  {almoco?.nome}
+                </p>
+              </div>
+              <div style={{ marginTop: "0.75rem" }}>
+                <div
+                  style={{
+                    fontSize: "0.6875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.15em",
+                    color: "var(--muted)",
+                  }}
+                >
+                  Momento Doce
+                </div>
+                <p
+                  style={{
+                    marginTop: "0.25rem",
+                    fontSize: "0.9375rem",
+                    lineHeight: 1.4,
+                    color: "var(--ink)",
+                  }}
+                >
+                  {momentoDoce?.nome}
+                </p>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   );
