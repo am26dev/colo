@@ -78,6 +78,9 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "menu.title.post": ".",
   "menu.preco.label": "Semana completa",
   "menu.preco.valor": "100.000 Kz",
+  "menu.vazio.titulo": "Estamos a preparar o menu da próxima semana.",
+  "menu.vazio.subtitulo":
+    "Enquanto preparamos o menu da próxima semana, espreita alguns pratos que já fizeram parte da Colo.",
   "menu.0.dia": "Segunda",
   "menu.0.tema": "Leve",
   "menu.0.almoco":

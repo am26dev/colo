@@ -37,11 +37,10 @@ function EstadoVazioMenu({ week }: { week: Week | null }) {
             color: "var(--brown-dark)",
           }}
         >
-          Estamos a preparar o menu da próxima semana.
+          <EditableText contentKey="menu.vazio.titulo" />
         </h3>
         <p style={{ marginTop: "0.75rem", color: "var(--muted)" }}>
-          Enquanto preparamos o menu da próxima semana, espreita alguns pratos
-          que já fizeram parte da Colo.
+          <EditableText contentKey="menu.vazio.subtitulo" />
         </p>
       </div>
       <div
