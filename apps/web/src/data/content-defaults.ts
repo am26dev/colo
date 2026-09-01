@@ -196,6 +196,9 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "citacao.texto":
     "A semana começa antes de segunda-feira. Quando escolhes a Colo, não estás apenas a encomendar refeições — estás a oferecer a ti própria uma semana com menos decisões, menos pressa e mais tempo para o que realmente importa.",
 
+  "nota.mensagem":
+    "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
+
   "footer.tagline": "Menos pressa. Mais cuidado. Mais tempo para ti.",
   "footer.agradecimento": "Obrigada por confiares na Colo.",
   "footer.brand": "Colo",

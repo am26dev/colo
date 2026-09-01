@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useEditMode } from "./EditModeProvider";
 import { apiUrl, getToken } from "../lib/api";
 import { compressImage } from "../lib/image";
+import { toast } from "../components/ui/sonner";
 
 type EditableImageProps = {
   contentKey: string;
@@ -46,7 +47,7 @@ export function EditableImage({
       if (!res.ok) throw new Error(data.erro ?? "Falha no upload");
       setPending(contentKey, data.url);
     } catch (e: any) {
-      alert(`Erro: ${e?.message ?? "Falha no upload"}`);
+      toast(e?.message ?? "Falha no upload", "erro");
     } finally {
       setUploading(false);
     }
