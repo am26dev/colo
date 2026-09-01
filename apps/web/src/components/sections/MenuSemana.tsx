@@ -281,6 +281,42 @@ export function MenuSemana({ week }: MenuSemanaProps) {
             })}
           </div>
         )}
+
+        {!vazio && (
+          <div
+            style={{
+              marginTop: "3rem",
+              textAlign: "center",
+              padding: "2rem 1rem",
+              borderRadius: "1rem",
+              border: "1px dashed var(--cream-2)",
+              background: "rgba(255,255,255,0.4)",
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--serif)",
+                fontSize: "1.125rem",
+                color: "var(--brown-dark)",
+                fontWeight: 500,
+              }}
+            >
+              Estamos a preparar o menu da próxima semana.
+            </p>
+            <p
+              style={{
+                marginTop: "0.5rem",
+                fontSize: "0.875rem",
+                color: "var(--muted)",
+                maxWidth: "36rem",
+                margin: "0.5rem auto 0",
+              }}
+            >
+              Enquanto preparamos o menu da próxima semana, espreita alguns pratos
+              que já fizeram parte da Colo.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );
