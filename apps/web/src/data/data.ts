@@ -152,8 +152,8 @@ export const defaultWeek: Week = {
       tema: "Leveza & Frescura",
       frase: "Que esta refeição te lembre que cuidar de ti também passa pelos pequenos momentos.",
       refeicoes: [
-        { tipo: "almoco", nome: "Beringela recheada com linguiça e salada verde", descricao: "Beringela assada recheada com linguiça e servida com salada verde fresca.", foto: "" },
-        { tipo: "sobremesa", nome: "Overnight oats", descricao: "Aveia hidratada durante a noite com iogurte e fruta.", foto: "" },
+        { tipo: "almoco", nome: "Salada de quinoa com frango grelhado, abacate e molho de iogurte", descricao: "Salada nutritiva com quinoa, frango grelhado, abacate fresco e molho de iogurte.", foto: "" },
+        { tipo: "sobremesa", nome: "Mousse de maracujá", descricao: "Mousse leve e cremosa de maracujá.", foto: "" },
       ],
     },
     {
@@ -161,8 +161,8 @@ export const defaultWeek: Week = {
       tema: "Energia & Estrutura",
       frase: "Às vezes, tudo o que precisamos é de uma pausa à mesa.",
       refeicoes: [
-        { tipo: "almoco", nome: "Ganso ao molho de vinho tinto e alecrim com cuscuz", descricao: "Ganso cozinhado lentamente em vinho tinto e alecrim, servido com cuscuz.", foto: "" },
-        { tipo: "sobremesa", nome: "Mousse de abacate", descricao: "Mousse cremosa de abacate com cacau.", foto: "" },
+        { tipo: "almoco", nome: "Calulu de peixe com funge e legumes salteados", descricao: "Calulu tradicional de peixe servido com funge e legumes salteados.", foto: "" },
+        { tipo: "sobremesa", nome: "Doce de leite cremoso", descricao: "Doce de leite caseiro, cremoso e suave.", foto: "" },
       ],
     },
     {
@@ -170,8 +170,8 @@ export const defaultWeek: Week = {
       tema: "Nutrição Vegetal",
       frase: "O conforto também pode nascer dos ingredientes mais simples.",
       refeicoes: [
-        { tipo: "almoco", nome: "Cannelloni de curgete recheado com ricota e cogumelos", descricao: "Fatias de curgete enroladas com ricota e cogumelos, gratinadas.", foto: "" },
-        { tipo: "sobremesa", nome: "Bolinho Banoffee", descricao: "Bolinho de banana, caramelo e natas.", foto: "" },
+        { tipo: "almoco", nome: "Polvo com cuscuz e cenoura", descricao: "Polvo grelhado servido com cuscuz de cenoura e legumes.", foto: "" },
+        { tipo: "sobremesa", nome: "Bolo de laranja com canela", descricao: "Bolo húmido de laranja com canela.", foto: "" },
       ],
     },
     {
@@ -179,8 +179,8 @@ export const defaultWeek: Week = {
       tema: "Conforto & Presença",
       frase: "Porque cada refeição pode ser um gesto de carinho contigo.",
       refeicoes: [
-        { tipo: "almoco", nome: "Estrogonofe de frango com bulgur", descricao: "Frango ao molho cremoso servido com bulgur.", foto: "" },
-        { tipo: "sobremesa", nome: "Bolo de amêndoa", descricao: "Bolo húmido de amêndoa.", foto: "" },
+        { tipo: "almoco", nome: "Peixe grelhado com feijão-verde", descricao: "Peixe grelhado servido com feijão-verde salteado.", foto: "" },
+        { tipo: "sobremesa", nome: "Caril de grão com abóbora", descricao: "Caril cremoso de grão com abóbora assada.", foto: "" },
       ],
     },
     {
@@ -188,8 +188,8 @@ export const defaultWeek: Week = {
       tema: "Equilíbrio & Encerramento",
       frase: "Termina a semana com o cuidado que mereces.",
       refeicoes: [
-        { tipo: "almoco", nome: "Cestinhos de banana-pão com atum e legumes grelhados", descricao: "Cestinhos de banana-pão recheados com atum e legumes grelhados.", foto: "" },
-        { tipo: "sobremesa", nome: "Cocada cremosa", descricao: "Cocada cremosa de coco.", foto: "" },
+        { tipo: "almoco", nome: "Arroz de pato com legumes assados", descricao: "Arroz de pato tradicional com legumes assados no forno.", foto: "" },
+        { tipo: "sobremesa", nome: "Bolo de laranja com canela", descricao: "Bolo caseiro de laranja com canela.", foto: "" },
       ],
     },
   ],

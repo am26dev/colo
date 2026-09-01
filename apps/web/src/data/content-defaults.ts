@@ -25,15 +25,15 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "galeria.subtitle":
     "Cada prato é montado com calma, em porções generosas e apresentado como se fosse para receber alguém especial. Porque és tu.",
   "galeria.0.image": "/assets/img/comida1.jpeg",
-  "galeria.0.label": "Salada com ovo e cogumelos",
+  "galeria.0.label": "Salada de quinoa com frango grelhado",
   "galeria.1.image": "/assets/img/comida2.jpeg",
-  "galeria.1.label": "Bolo de laranja com canela",
+  "galeria.1.label": "Calulu de peixe com funge",
   "galeria.2.image": "/assets/img/comida3.jpeg",
   "galeria.2.label": "Polvo com cuscuz e cenoura",
   "galeria.3.image": "/assets/img/comida4.jpeg",
   "galeria.3.label": "Peixe grelhado com feijão-verde",
   "galeria.4.image": "/assets/img/hero.jpg",
-  "galeria.4.label": "Caril de grão com abóbora",
+  "galeria.4.label": "Arroz de pato com legumes assados",
 
   "sobre.eyebrow": "Sobre a Colo",
   "sobre.title.pre": "Um serviço pensado para quem já ",
