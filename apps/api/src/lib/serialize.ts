@@ -7,6 +7,17 @@ export async function buildSitePayload() {
     getActiveWeek(),
   ]);
 
+  let fallback = false;
+  let resolvedWeek = week;
+
+  if (!resolvedWeek) {
+    resolvedWeek = await prisma.week.findFirst({
+      orderBy: { dataInicio: "desc" },
+      include: { dias: { orderBy: { diaSemana: "asc" } } },
+    });
+    if (resolvedWeek) fallback = true;
+  }
+
   return {
     config: config
       ? {
@@ -19,19 +30,18 @@ export async function buildSitePayload() {
           modoAutomaticoSemanas: config.modoAutomaticoSemanas,
         }
       : {},
-    week: week
+    week: resolvedWeek
       ? {
-          id: week.id,
-          dataInicio: week.dataInicio,
-          dataFim: week.dataFim,
-          precoSemanal: week.precoSemanal,
-          estado: week.estado,
-          vagasTotais: week.vagasTotais,
-          vagasRestantes: week.vagasRestantes,
-          dias: week.dias.map((d) => ({
+          id: resolvedWeek.id,
+          dataInicio: resolvedWeek.dataInicio,
+          dataFim: resolvedWeek.dataFim,
+          precoSemanal: resolvedWeek.precoSemanal,
+          estado: fallback ? "oculto" : resolvedWeek.estado,
+          vagasTotais: resolvedWeek.vagasTotais,
+          vagasRestantes: resolvedWeek.vagasRestantes,
+          dias: resolvedWeek.dias.map((d) => ({
             diaSemana: d.diaSemana,
             tema: d.tema,
-            // icone: d.icone,
             frase: d.frase,
             refeicoes: d.refeicoes as { tipo: string; nome: string; descricao: string; foto: string }[],
           })),

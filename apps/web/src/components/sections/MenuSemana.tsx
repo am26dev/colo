@@ -1,8 +1,6 @@
 import { EditableText } from "../../edit-mode/EditableText";
-import { EditableImage } from "../../edit-mode/EditableImage";
 import type { Week } from "../../types";
 import { apiUrl } from "../../lib/api";
-import { defaultWeek } from "../../data/data";
 
 interface MenuSemanaProps {
   week: Week | null;
@@ -16,7 +14,8 @@ const DIAS_LABELS: Record<number, string> = {
   5: "Sexta-feira",
 };
 
-function EstadoVazioMenu() {
+function EstadoVazioMenu({ week }: { week: Week | null }) {
+  const dias = week?.dias ?? [];
   return (
     <div
       style={{
@@ -52,10 +51,9 @@ function EstadoVazioMenu() {
           gap: "1.25rem",
         }}
       >
-        {defaultWeek.dias.map((dia) => {
+        {dias.map((dia) => {
           const almoco = dia.refeicoes.find((r) => r.tipo === "almoco");
           const momentoDoce = dia.refeicoes.find((r) => r.tipo === "sobremesa");
-          const galeriaIdx = dia.diaSemana - 1;
           return (
             <article
               key={dia.diaSemana}
@@ -67,13 +65,20 @@ function EstadoVazioMenu() {
               }}
             >
               <div style={{ overflow: "hidden" }}>
-                <EditableImage
-                  contentKey={`galeria.${galeriaIdx}.image`}
-                  altKey={`galeria.${galeriaIdx}.label`}
-                  width={1024}
-                  height={1024}
-                  className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
-                />
+                {almoco?.foto ? (
+                  <img
+                    src={apiUrl(almoco.foto)}
+                    alt={almoco.nome}
+                    width={1024}
+                    height={1024}
+                    className="aspect-square w-full object-cover transition-transform duration-500 hover:scale-[1.04]"
+                  />
+                ) : (
+                  <div
+                    className="aspect-square w-full"
+                    style={{ background: "var(--cream-2)" }}
+                  />
+                )}
               </div>
               <div
                 style={{
@@ -256,7 +261,7 @@ export function MenuSemana({ week }: MenuSemanaProps) {
         </div>
 
         {vazio ? (
-          <EstadoVazioMenu />
+          <EstadoVazioMenu week={week} />
         ) : (
           <div
             style={{
