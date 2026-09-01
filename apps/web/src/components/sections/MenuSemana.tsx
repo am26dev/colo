@@ -42,12 +42,19 @@ function EstadoVazioMenu() {
         style={{
           marginTop: "2rem",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-          gap: "0.75rem",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gap: "1rem",
         }}
       >
         {GALERIA_INDEXES.map((i) => (
-          <div key={i} style={{ borderRadius: "1rem", overflow: "hidden" }}>
+          <div
+            key={i}
+            style={{
+              borderRadius: "1rem",
+              overflow: "hidden",
+              background: "rgba(255,255,255,0.6)",
+            }}
+          >
             <EditableImage
               contentKey={`galeria.${i}.image`}
               altKey={`galeria.${i}.label`}
@@ -55,6 +62,17 @@ function EstadoVazioMenu() {
               height={1024}
               className="aspect-square w-full object-cover"
             />
+            <div style={{ padding: "0.625rem 0.75rem" }}>
+              <p
+                style={{
+                  fontSize: "0.8125rem",
+                  lineHeight: 1.3,
+                  color: "var(--brown-dark)",
+                }}
+              >
+                <EditableText contentKey={`galeria.${i}.label`} />
+              </p>
+            </div>
           </div>
         ))}
       </div>
@@ -279,42 +297,6 @@ export function MenuSemana({ week }: MenuSemanaProps) {
                 </article>
               );
             })}
-          </div>
-        )}
-
-        {!vazio && (
-          <div
-            style={{
-              marginTop: "3rem",
-              textAlign: "center",
-              padding: "2rem 1rem",
-              borderRadius: "1rem",
-              border: "1px dashed var(--cream-2)",
-              background: "rgba(255,255,255,0.4)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--serif)",
-                fontSize: "1.125rem",
-                color: "var(--brown-dark)",
-                fontWeight: 500,
-              }}
-            >
-              Estamos a preparar o menu da próxima semana.
-            </p>
-            <p
-              style={{
-                marginTop: "0.5rem",
-                fontSize: "0.875rem",
-                color: "var(--muted)",
-                maxWidth: "36rem",
-                margin: "0.5rem auto 0",
-              }}
-            >
-              Enquanto preparamos o menu da próxima semana, espreita alguns pratos
-              que já fizeram parte da Colo.
-            </p>
           </div>
         )}
       </div>
