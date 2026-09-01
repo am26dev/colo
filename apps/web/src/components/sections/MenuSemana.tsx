@@ -1,4 +1,5 @@
 import { EditableText } from "../../edit-mode/EditableText";
+import { EditableImage } from "../../edit-mode/EditableImage";
 import type { Week } from "../../types";
 import { apiUrl } from "../../lib/api";
 import { defaultWeek } from "../../data/data";
@@ -14,6 +15,8 @@ const DIAS_LABELS: Record<number, string> = {
   4: "Quinta-feira",
   5: "Sexta-feira",
 };
+
+const GALERIA_INDEXES = [0, 1, 2, 3, 4];
 
 function EstadoVazioMenu() {
   return (
@@ -36,8 +39,48 @@ function EstadoVazioMenu() {
           que já fizeram parte da Colo.
         </p>
       </div>
+
       <div
         style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gap: "1rem",
+        }}
+      >
+        {GALERIA_INDEXES.map((i) => (
+          <div
+            key={i}
+            style={{
+              borderRadius: "1rem",
+              overflow: "hidden",
+              background: "rgba(255,255,255,0.6)",
+            }}
+          >
+            <EditableImage
+              contentKey={`galeria.${i}.image`}
+              altKey={`galeria.${i}.label`}
+              width={1024}
+              height={1024}
+              className="aspect-square w-full object-cover"
+            />
+            <div style={{ padding: "0.625rem 0.75rem" }}>
+              <p
+                style={{
+                  fontSize: "0.8125rem",
+                  lineHeight: 1.3,
+                  color: "var(--brown-dark)",
+                }}
+              >
+                <EditableText contentKey={`galeria.${i}.label`} />
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div
+        style={{
+          marginTop: "2.5rem",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
           gap: "1.25rem",
