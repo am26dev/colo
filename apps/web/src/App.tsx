@@ -10,6 +10,7 @@ import ContaPage from "./pages/gestao/ContaPage";
 import DashboardPage from "./pages/gestao/DashboardPage";
 import InformacoesPage from "./pages/gestao/InformacoesPage";
 import Login from "./pages/gestao/Login";
+import NotFoundPage from "./pages/NotFoundPage";
 import PedidosPage from "./pages/gestao/PedidosPage";
 import { RequireAuth } from "./pages/gestao/RequireAuth";
 import SemanaEditorPage from "./pages/gestao/SemanaEditorPage";
@@ -40,6 +41,7 @@ function App() {
             <Route path="informacoes" element={<InformacoesPage />} />
             <Route path="conta" element={<ContaPage />} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <AdminFab />
       </EditModeProvider>

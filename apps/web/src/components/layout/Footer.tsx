@@ -5,7 +5,7 @@ import { safeExternalUrl } from "../../utils/format";
 import { whatsappLink } from "../../utils/whatsapp";
 
 export function Footer({ config }: { config: SiteConfig }) {
-  const { get } = useEditMode();
+  const { get, isAdmin } = useEditMode();
 
   return (
     <footer
@@ -274,6 +274,17 @@ export function Footer({ config }: { config: SiteConfig }) {
           <div>
             <EditableText contentKey="footer.assinatura" />
           </div>
+          {!isAdmin && (
+            <div>
+              <a
+                href="/gestao/login"
+                style={{ color: "inherit", textDecoration: "none", opacity: 0.3, fontSize: "0.7rem" }}
+                className="hover:opacity-60 transition-opacity"
+              >
+                Gestão
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </footer>

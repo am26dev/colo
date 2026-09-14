@@ -1,5 +1,4 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../lib/api";
 import { site } from "../../data/data";
@@ -10,7 +9,6 @@ import { Label } from "../../components/ui/label";
 
 export default function Login() {
   const { isAuthenticated, login, setup } = useAuth();
-  const navigate = useNavigate();
   const [setupNeeded, setSetupNeeded] = useState<boolean | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +22,10 @@ export default function Login() {
       .catch(() => setSetupNeeded(false));
   }, []);
 
-  if (isAuthenticated) return <Navigate to="/gestao" replace />;
+  if (isAuthenticated) {
+    window.location.href = "/gestao";
+    return null;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -37,7 +38,7 @@ export default function Login() {
     try {
       if (setupNeeded) await setup(email, password);
       else await login(email, password);
-      navigate("/gestao");
+      window.location.href = "/gestao";
     } catch (err) {
       setErro(err instanceof Error ? err.message : "Erro ao entrar.");
     } finally {

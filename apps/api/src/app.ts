@@ -38,5 +38,16 @@ export function createApp() {
   app.use("/api/uploads", uploadRouter);
   app.use("/api/edit-content", contentRouter);
 
+  // Serve React frontend
+  const webDist = path.resolve(process.cwd(), "../web/dist");
+  app.use(express.static(webDist));
+  app.use((_req, res, next) => {
+    if (_req.method === "GET" && !_req.path.startsWith("/api")) {
+      res.sendFile(path.join(webDist, "index.html"));
+    } else {
+      next();
+    }
+  });
+
   return app;
 }

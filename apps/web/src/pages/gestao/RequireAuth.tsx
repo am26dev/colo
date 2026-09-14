@@ -4,6 +4,6 @@ import { useAuth } from "../../context/AuthContext";
 
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return <Navigate to="/gestao/login" replace />;
+  if (!isAuthenticated) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
