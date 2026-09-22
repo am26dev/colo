@@ -20,7 +20,7 @@ export function InfoCard({ config, onSaved, onError }: Props) {
   const [moeda, setMoeda] = useState(config.moeda);
   const [mensagem, setMensagem] = useState(config.mensagemDaSemana);
   const [pagamento, setPagamento] = useState<PagamentoItem[]>(
-    config.pagamento.length ? config.pagamento : [{ etiqueta: "", valor: "" }]
+    (config.pagamento ?? []).length ? config.pagamento : [{ etiqueta: "", valor: "" }]
   );
   const [salvando, setSalvando] = useState(false);
 

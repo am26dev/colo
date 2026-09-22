@@ -17,8 +17,8 @@ export default function SemanasPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   function carregar() {
-    api<{ weeks: WeekListItem[] }>("/api/weeks").then((d) => setWeeks(d.weeks));
-    api<{ config: SiteConfig }>("/api/site").then((d) => setConfig(d.config));
+    api<{ weeks: WeekListItem[] }>("/api/weeks").then((d) => setWeeks(d.weeks ?? []));
+    api<{ config: SiteConfig }>("/api/site").then((d) => setConfig(d.config ?? null));
   }
 
   useEffect(carregar, []);

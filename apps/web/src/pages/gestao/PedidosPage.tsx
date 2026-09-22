@@ -20,7 +20,7 @@ export default function PedidosPage() {
     if (filtroTipo) params.set("tipo", filtroTipo);
     if (filtroEstado) params.set("estado", filtroEstado);
     const qs = params.toString();
-    api<{ orders: Order[] }>(`/api/orders${qs ? `?${qs}` : ""}`).then((d) => setOrders(d.orders));
+    api<{ orders: Order[] }>(`/api/orders${qs ? `?${qs}` : ""}`).then((d) => setOrders(d.orders ?? []));
   }
 
   useEffect(carregar, [filtroTipo, filtroEstado]);
