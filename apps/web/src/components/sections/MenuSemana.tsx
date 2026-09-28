@@ -215,9 +215,9 @@ export function MenuSemana({ week }: MenuSemanaProps) {
           <div>
             <h2>
               <EditableText contentKey="menu.title.pre" />
-              <em style={{ color: "var(--brown-dark)" }}>
+              <span className="accent">
                 <EditableText contentKey="menu.title.em" />
-              </em>
+              </span>
               <EditableText contentKey="menu.title.post" />
             </h2>
             <p className="eyebrow" style={{ marginTop: "0.9rem" }}>
