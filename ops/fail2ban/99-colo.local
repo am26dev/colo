@@ -1,0 +1,33 @@
+# Configuracao do fail2ban, 2026-09-28.
+#
+# Objectivos, por ordem:
+#   1. NUNCA fechar a porta a quem tem trabalho legítimo a fazer. A dona e o
+#      GitHub Actions entram por chave SSH, nunca por palavra-passe, e a dona
+#      entra pelo proxy do alojamento (rede 169.254.0.0/16, que aparece como
+#      `rhost` nas sessoes). Essa rede fica em ignoreip.
+#   2. Castigar os scanners a sério. O ataque ao root vinham de dois IPs
+#      externos, com dozens de tentativas por minuto.
+
+[DEFAULT]
+
+# Locais e o proxy do alojamento (rede link-local 169.254.0.0/16). Sem isto,
+# cinco erros de autenticação da dona boycottavam-na por 10 minutos.
+ignoreip = 127.0.0.1/8 ::1 169.254.0.0/16
+# Ban mais longo que o default de 10 minutos: um scanner que insiste nao deve
+# poder voltar em meia hora.
+bantime  = 1h
+findtime = 10m
+maxretry = 5
+# Registar em ficheiro, para o log sobreviver a um reboot.
+backend  = systemd
+
+[sshd]
+
+enabled = true
+port    = ssh
+mode    = aggressive
+# Palavras-passe ja estao desligadas no sshd, por isso o numero de falhas que
+# um scanner acumula num scanner e' alto: 4 tentativas chega para ser banido.
+maxretry = 4
+findtime = 10m
+bantime  = 24h

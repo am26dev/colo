@@ -11,7 +11,7 @@
 |---|---|
 | Fase do projecto | **Em produção** — `colo.ao` ao vivo desde 2026-07-02, containerizado desde 2026-07-05 |
 | Estado da produção (verificado hoje) | `https://colo.ao` → **200** · `/api/site` → 200 · `/api/health` → 200 |
-| Código em produção | Commit `eca5bd7` (2026-09-22) |
+| Código em produção | Commit `c2be5d6` (2026-09-28) — deploy manual confirmado; o automático está por revalidar (ver §6) |
 | Suíte de testes | **52 testes, 4 ficheiros, 846 linhas — todos a passar** (`npm test` em `apps/api`) |
 | Endpoints API | 23 (22 rotas + `/api/health`) |
 | Modelos Prisma | 6 (Admin, SiteConfig, Week, Day, Order, SiteContent) |
@@ -40,6 +40,8 @@
 | **Rate limit na API** | `middleware/rateLimit` + `trust proxy` (1 salto) — sem isto o Caddy fazia com que todos os clientes contassem como um só e o limite bloqueava o site inteiro | ✅ 2026-09-27/28 |
 | **Suíte de testes** | 52 testes com o runner nativo do Node (`node --test`) sobre reservas, ciclos de pedido/vaga, autorização e rate limit; apanhou 1 bug real (expiração de reservas) | ✅ 2026-09-28 |
 | **Operação** | `deploy-colo` e rotina de backup versionados no repo; `.gitignore` passa a excluir `*.db` | ✅ 2026-09-28 |
+| **Destaque do título do menu** | Pedido da dona: `, já pensada` com a mesma fonte/cor de "mais leve". Trocou `<em style>` por `<span class="accent">` (`.accent` em `styles.css`), porque a CSP bloqueia `style=""` em tags. **Texto visível inalterado** — o pedido foi só de estilo | ✅ 2026-09-28 |
+| **Endurecimento do acesso à VPS** | Palavras-passe desligadas (só chaves); `MaxStartups 30:60:100` e `LoginGraceTime 30` para os scanners não descartarem um deploy legítimo; `fail2ban` activo (estava inactivo) com ban de 24 h; placeholder inválido na `authorized_keys` commenting; configs copiadas para `ops/` | ✅ 2026-09-28 |
 | **Estabilização do build** | Falha de deploy 2026-08-07 (`TS6133: 'statusText' não usado` em `Hero.tsx` — `noUnusedLocals`); correcção commitada 2026-08-14 (`625b249`, inclui também fix de URLs de upload de imagens e eventos de auth) | ✅ corrigido e **deployado** 2026-08-14 |
 
 ---
@@ -104,6 +106,9 @@
 | 2026-09-22 | `MenuSemana` com carousel de dias e modal de detalhe (`1e59c4b`) + null-guards defensivos no painel (`eca5bd7`) — **último commit em produção** |
 | 2026-09-27/28 | Reservas com prazo, `Week.fechadaPorEsgotamento`, rate limit + `trust proxy`, CSP e cabeçalhos de segurança, correcção de `multer`/`qs`; 52 testes que apanharam 1 bug real de expiração |
 | 2026-09-28 | Rotina de backup da BD e `deploy-colo` versionados; primeira cópia verificada (integridade `ok`); migrações ensaiadas contra uma cópia da BD real — dados preservados |
+| 2026-09-28 22:13 | Push `c2be5d6` (destaque do título). O run do GitHub Actions **falhou ao abrir a ligação SSH** — nenhuma ligação chegou ao `sshd`; deploy feito à mão e verificado. Ver §6 |
+| 2026-09-28 22:22 | Deploy manual de `c2be5d6`: containers `colo_api`/`colo_web` recriados, `/api/health` → `{"ok":true}` |
+| 2026-09-28 22:30 | Endurecimento do SSH e `fail2ban`; **zero `Failed password` depois do reload** (o ataque era ~1170 tentativas/dia contra a conta root) |
 
 ---
 
@@ -115,7 +120,7 @@
 | Site | ✅ 200 | servido por `colo_web` (nginx) com os cabeçalhos de segurança |
 | API | ✅ 200 | `/api/health` → `{"ok":true}`, `/api/site` devolve `{ config, week }` |
 | Containers | ✅ up | `colo_api` (3004/tcp) e `colo_web` (80/tcp), na rede `edge` do Caddy |
-| Base de dados | ✅ `apps/api/prisma/dev.db` | 80 KB, bind mount para o container; 86 `SiteContent`, 1 `Week`, 5 `Day`, 1 `Admin`, 3 migrações aplicadas |
+| Base de dados | ✅ `apps/api/prisma/dev.db` | 80 KB, bind mount para o container; 86 `SiteContent`, 1 `Week`, **5** `Day`, 1 `Admin`, 1 `SiteConfig`, **5** migrações aplicadas |
 | Backups da BD | ✅ rotina criada | `scripts/backup-colo-db.py` → `/var/backups/colo/colo_<timestamp>.db`, rotação de 30 cópias, verificação `integrity_check`; primeira cópia feita e verificada em 2026-09-28 |
 | Migrações | ✅ ensaiadas | As 2 migrações novas foram aplicadas contra uma **cópia da BD de produção** antes do deploy: só acresentam colunas e índices, contagens de todas as tabelas preservadas |
 | Deploy | ✅ versionado | `/usr/local/bin/deploy-colo` passou a delegar em `scripts/deploy-colo.sh` (backup → build → migrate → `compose up -d` → health check) |
@@ -132,17 +137,20 @@ desenvolvimento funcional.
 ## 6. Bloqueadores e pendências
 
 ### Externos / de negócio
-1. **Validação visual em browser real** pela dona (fluxo de pedido ponta a ponta, painel `/gestao`, responsividade mobile) — a infraestrutura está confirmada, o ecrã não.
-2. **Confirmar as credenciais da administradora** via painel → Conta, sem partilhar ou registar a password.
-3. **Fotos reais das refeições**: no seed a `foto` fica vazia (a dona preenche no editor de semana, com upload real de imagem).
-4. **Dados de pagamento reais**: o seed traz valores de exemplo ("923 000 000", "Nome da Titular", IBAN fictício) — a dona deve confirmar os dados exibidos no site via painel → Informações.
-5. **Taglines de marca**: confirmar com a dona os textos incorporados no hero/sobre (`data.ts`) ou preferir versões mais curtas.
+1. **A semana em produção expirou — o site está a mostrar "pedidos encerrados".** A única `Week` na BD é `2026-07-13` a `2026-07-19`; hoje é 2026-09-28. Em modo automático (`SiteConfig.modoAutomaticoSemanas`) o site só apresenta a semana cujas datas contêm hoje, portanto `/api/site` devolve a semana com `estado: "oculto"` e o formulário de pedido fica fechado. **Não é bug** — `apps/api/src/lib/activeWeek.ts` está correcto e o painel tem o CRUD completo (`/gestao/semanas`, `/gestao/semanas/nova`, ambos a 200). É preciso **criar a semana da próxima semana pela dona no painel**, com os temas, pratos e fotos reais. Até lá, qualquer demonstração de pedido vai mostrar o site fechado.
+2. **Validação visual em browser real** pela dona (fluxo de pedido ponta a ponta, painel `/gestao`, responsividade mobile) — a infraestrutura está confirmada por `curl`, o ecrã não. Nota: depende do ponto 1 para o fluxo de pedido.
+3. **Confirmar as credenciais da administradora** via painel → Conta, sem partilhar ou registar a password.
+4. **Fotos reais das refeições**: os pratos da semana actual não têm fotografia (`foto` vazia) — a dona preenche no editor de semana, com upload real de imagem.
+5. **Dados de pagamento reais**: o seed traz valores de exemplo ("923 000 000", "Nome da Titular", IBAN fictício) — a dona deve confirmar os dados exibidos no site via painel → Informações.
+6. **Taglines de marca**: confirmar com a dona os textos incorporados no hero/sobre (`data.ts`) ou preferir versões mais curtas.
 
 ### Técnicas
-6. **3 vulnerabilidades `high` da CLI do Prisma** (`deepmerge-ts` via `@prisma/config`) — **decisão: não corrigir agora.** Estão na dependência `prisma`, que é `devDependency`: só corre em build/migração, nunca no servidor. `@prisma/client` não tem dependências próprias, e o caminho de execução da API está limpo. `npm audit fix --force` mexeria na versão do Prisma — risco de build e migração maior do que o problema que resolve. Rever se o Prisma publicar versão sem o problema.
-7. **Cobertura de testes só na API** — o frontend (React) continua sem testes; as regras de negócio de vagas/reservas é que não podem regredir em silêncio.
-8. **Rotina de backup ainda sem automação** — o script existe e foi executado à mão; falta agendamento (cron/systemd timer) e cópia fora da VPS.
-9. **`README.md`** — actualizado com as reservas; confirmar que reflecte o estado actual na próxima revisão.
+7. **O deploy automático do GitHub Actions precisa de ser revalidado.** Em 2026-09-28 às 22:13 um run falhou ao **abrir a ligação** (37 s, `Disparar deploy na VPS`): o `sshd` não registou qualquer tentativa de ligação nessa janela, a porta estava aberta e a chave do CI continuava autorizada — o run anterior, uma hora antes, tinha passado com a mesma configuração. O lado da VPS foi depois testado a correr **exactamente como o Actions o invoca** (chave do CI, `command=` forçado, sem TTY, pela IP pública) e passou com deploy completo. A leitura mais provável é rede transitória entre o runner do GitHub e a VPS, mas **falta um run bem-sucedido para fechar o assunto**. Se voltar a falhar, o log do step é a pista e precisa de acesso de admin ao repositório (a API do GitHub devolve 403 sem permissões).
+8. **3 vulnerabilidades `high` da CLI do Prisma** (`deepmerge-ts` via `@prisma/config`) — **decisão: não corrigir agora.** Estão na dependência `prisma`, que é `devDependency`: só corre em build/migração, nunca no servidor. `@prisma/client` não tem dependências próprias, e o caminho de execução da API está limpo. `npm audit fix --force` mexeria na versão do Prisma — risco de build e migração maior do que o problema que resolve. Rever se o Prisma publicar versão sem o problema.
+9. **`x-content-type-options` duplicado** — o Caddy do edge e o `nginx-web.conf` da app emitem o mesmo cabeçalho, e chegam dois ao browser. Não é perigoso (o `nosniff` é o mesmo nos dois) e **deixou-se como está de propósito**: o cabeçalho está numa config versionada, que acompanha o deploy, e não no Caddy, que é gerido por quem administra a máquina e partilhado por 8 sites. Tocar no Caddy para remover uma linha que já está correcta resolveria o sintoma e criava um ponto de falha partilhado por todos os sites. Se a dona quiser, resolve-se com `header_down -x-content-type-options` no bloco do `colo.caddy`.
+10. **Cobertura de testes só na API** — o frontend (React) continua sem testes; as regras de negócio de vagas/reservas é que não podem regredir em silêncio.
+11. **Rotina de backup ainda sem automação** — o script existe e foi executado à mão; falta agendamento (cron/systemd timer) e cópia fora da VPS.
+12. **`README.md`** — actualizado com as reservas; confirmar que reflecte o estado actual na próxima revisão.
 
 ## 6-bis. Notas de implementação (porquê, não o quê)
 
@@ -165,6 +173,38 @@ endereço do Caddy e o rate limit contava todos os clientes como um só — ou s
 bloqueava o site inteiro. Confiar em 1 salto limita a confiança ao
 `X-Forwarded-For` que o Caddy reescreve, que um cliente não consegue forjar.
 
+**Palavras-passe desligadas só depois de confirmar a via por chave.** O risco de
+esta mudança não é a segurança, é **fechar a porta a quem trabalha**: sem
+palavras-passe, se o `authorized_keys` estivesse errado, ninguém mais entrava.
+Daí a ordem — validar com `sshd -t`, fazer `reload` (nunca `restart`, que corta
+a sessão de quem está ligado), e confirmar que o servidor passa a responder
+`Permission denied (publickey)`. O acesso legítimo da dona e do CI é todo por
+chave, portanto não se perde nada. O acesso pela consola do alojamento é
+link-local (`169.254.0.0/16`) e não depende do `sshd` — ficou também em
+`ignoreip` do `fail2ban`, para que cinco erros de autenticação não a expulsem
+dez minutos.
+
+**`MaxStartups` com folga.** O valor por omissão (10:30:100) descarta ligações
+*não autenticadas* de forma aleatória a partir de 10 em curso. Com scanners a
+bater na porta 22 — e havia — essa ligação descartada pode ser a de um deploy
+legítimo, sem que nada apareça nos logs. Subir para 30:60:100 dá margem sem
+deixar de acautelar o número de ligações a processar.
+
+**O CSP obrigou o `<em style>` a virar classe.** O pedido era "fazer `, já
+pensada` igual a `mais leve`", e a forma rápida era um `<em style={{color}}>`.
+Mas a CSP deste site tem `style-src-attr 'unsafe-inline'` e `style-src` sem
+`unsafe-inline` — o que o browser efectivamente aplicou foi a regra: um atributo
+`style` num tag estrutural chumbado. A solução que cumpre o pedido e a política
+ao mesmo tempo é `.accent` em `styles.css`. Vale a pena saber disto para
+futuros ajustes: **no modo de edição, cor e fonte inline só funcionam em
+atributos React; em HTML vindo do CMS, têm de ir por classe.**
+
+**Cópias das configs do servidor no repo (`ops/`).** Mesmo princípio do
+`deploy-colo.sh`: o que corre em produção tem de ser revisto num ecrã. Se um
+ficheiro em `/etc/ssh/sshd_config.d/` ou `/etc/fail2ban/jail.d/` mudar no
+servidor sem mudar aqui, os dois deixa de dizer a mesma coisa — e ninguém sabe
+qual dos dois é o verdadeiro.
+
 **CSP sem `unsafe-inline` nos scripts.** Fica no `nginx-web.conf` versionado (e
 não no Caddy ou no `index.html`) para acompanhar o deploy. O build do Vite emite
 um único script externo e zero `<style>` em runtime — verificado no bundle real
@@ -179,12 +219,14 @@ a cada pedido; copiar um SQLite em escrita byte a byte pode sair truncado.
 
 ## 7. Próxima acção concreta
 
-1. **Validar em browser real**: fluxo de pedido (incluindo o prazo das reservas),
+1. **Criar a semana da próxima semana no painel** (`/gestao/semanas/nova`), com os temas, pratos e fotos reais — sem isto o site público mostra pedidos encerrados e não há pedido para demonstrar. É o único bloqueador que impede a entrega.
+2. **Fechar o assunto do deploy automático**: confirmar um run bem-sucedido do GitHub Actions (ver §6, ponto 7).
+3. **Validar em browser real**: fluxo de pedido (incluindo o prazo das reservas),
    painel `/gestao`, edição dos formulários, menu com fotos e responsividade
    mobile. A suíte cobre a API, não o ecrã.
-2. **Confirmar credenciais de produção** sem as registar em documentação.
-3. **Agendar o backup** (`cron` diário para `scripts/backup-colo-db.py`) e
+4. **Confirmar credenciais de produção** sem as registar em documentação.
+5. **Agendar o backup** (`cron` diário para `scripts/backup-colo-db.py`) e
    pensar numa cópia fora da VPS — uma cópia na mesma máquina não sobrevive à
    perda da máquina.
-4. **Confirmar com a dona o prazo das 48 h** e o texto que a cliente vê quando
+6. **Confirmar com a dona o prazo das 48 h** e o texto que a cliente vê quando
    a reserva expira.
