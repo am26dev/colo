@@ -14,6 +14,7 @@ export default function PedidosPage() {
   const [filtroTipo, setFiltroTipo] = useState<"" | OrderTipo>("");
   const [filtroEstado, setFiltroEstado] = useState<"" | OrderEstado>("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [erro, setErro] = useState("");
 
   function carregar() {
     const params = new URLSearchParams();
@@ -25,9 +26,17 @@ export default function PedidosPage() {
 
   useEffect(carregar, [filtroTipo, filtroEstado]);
 
+  // Confirmar consome uma vaga e o servidor recusa com 409 se já não houver
+  // nenhuma — o erro tem de chegar ao ecrã, senão a select fica desactualizada
+  // e a dona repete o clique sem perceber.
   async function mudarEstado(id: string, estado: OrderEstado) {
-    await api(`/api/orders/${id}`, { method: "PATCH", body: JSON.stringify({ estado }) });
-    carregar();
+    setErro("");
+    try {
+      await api(`/api/orders/${id}`, { method: "PATCH", body: JSON.stringify({ estado }) });
+      carregar();
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : "Não foi possível mudar o estado do pedido.");
+    }
   }
 
   async function apagar(id: string) {
@@ -39,7 +48,10 @@ export default function PedidosPage() {
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>Pedidos</h1>
-      <p className="text-sm text-[var(--muted-foreground)] mb-6">Pedidos do menu semanal e pedidos especiais.</p>
+      <p className="text-sm text-[var(--muted-foreground)] mb-6">
+        Pedidos do menu semanal e pedidos especiais. Um pedido novo é uma reserva: não ocupa vaga até o
+        marcares como confirmado, e liberta o lugar sozinho se passar o prazo.
+      </p>
 
       <div className="flex flex-wrap gap-4 mb-4">
         <div className="space-y-1">
@@ -54,12 +66,15 @@ export default function PedidosPage() {
           <label className="text-xs font-medium text-[var(--foreground)]">Estado</label>
           <Select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value as "" | OrderEstado)}>
             <option value="">Todos</option>
-            <option value="novo">Novo</option>
+            <option value="novo">Novo (reserva)</option>
             <option value="confirmado">Confirmado</option>
             <option value="cancelado">Cancelado</option>
+            <option value="expirado">Expirado</option>
           </Select>
         </div>
       </div>
+
+      {erro && <div className="form-closed mb-4">{erro}</div>}
 
       {orders === null ? (
         <div className="space-y-3">
@@ -87,6 +102,11 @@ export default function PedidosPage() {
                 {o.ciclo && <p className="text-xs text-[var(--muted-foreground)] mt-1">Ciclo: {o.ciclo}</p>}
                 {o.notas && <p className="text-sm mt-2">{o.notas}</p>}
                 <p className="text-xs text-[var(--muted-foreground)] mt-1">{new Date(o.createdAt).toLocaleString("pt-PT")}</p>
+                {o.estado === "novo" && o.expiresAt && (
+                  <p className="text-xs text-[var(--muted-foreground)] mt-1">
+                    Reserva até {new Date(o.expiresAt).toLocaleString("pt-PT")} — depois disso liberta o lugar.
+                  </p>
+                )}
                 <div className="flex items-center gap-2 mt-3 flex-wrap">
                   <Select
                     value={o.estado}
@@ -96,6 +116,7 @@ export default function PedidosPage() {
                     <option value="novo">Novo</option>
                     <option value="confirmado">Confirmado</option>
                     <option value="cancelado">Cancelado</option>
+                    <option value="expirado">Expirado</option>
                   </Select>
                   <Button variant="ghost" size="sm" className="text-[var(--destructive)] hover:text-[var(--destructive)]" onClick={() => setDeleteId(o.id)}>
                     Remover ✕

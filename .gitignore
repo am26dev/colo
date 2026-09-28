@@ -13,6 +13,13 @@ node_modules/
 dist/
 .cache/
 
+# Bases de dados SQLite (dev, teste e produção). O conteúdo é dado, nunca
+# código: entra no Git por acidente e o git não sabe apagar o que já enviou.
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
 # Variáveis de ambiente (ver .env.example em apps/web e apps/api)
 .env
 !.env.example

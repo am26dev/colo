@@ -90,9 +90,9 @@ export const pedidoSecao = {
   comprovativoLabel: "📤 Enviar comprovativo pelo WhatsApp",
   comprovativoHint: "Abre o WhatsApp da Colo para enviares a imagem do comprovativo.",
   confirmacao: {
-    titulo: "Obrigada, com carinho 💛",
+    titulo: "Pedido recebido, com carinho 💛",
     texto:
-      "Obrigada por confiares no Colo. A partir de agora, nós tratamos das refeições. Tu tratas de encontrar alguns minutos para ti. Mal podemos esperar para fazer parte da tua semana.",
+      "Obrigada por confiares no Colo. Fica guardada a tua vaga e confirmamos contigo no WhatsApp assim que recebermos o comprovativo. A partir daí, nós tratamos das refeições. Tu tratas de encontrar alguns minutos para ti. Mal podemos esperar para fazer parte da tua semana.",
     cta: "Fazer outro pedido",
   },
 };

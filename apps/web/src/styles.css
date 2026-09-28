@@ -1057,6 +1057,25 @@ p { margin: 0 0 1.1rem; }
 }
 .footer-legal { color: rgba(246,237,226,.6); font-size: .81rem; margin: 0; }
 
+/* ----------------------- carrossel de dias ----------------------- */
+/* Estas regras vivem aqui, e não num <style> dentro do componente, para que a
+   Content-Security-Policy possa manter style-src sem 'unsafe-inline'. */
+.day-carousel-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 0.5rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.day-carousel-track::-webkit-scrollbar { display: none; }
+.day-carousel-track > * { scroll-snap-align: start; flex: 0 0 260px; }
+@media (min-width: 768px) {
+  .day-carousel-track > * { flex: 0 0 calc((100% - 4 * 1.25rem) / 5); }
+}
+
 /* ----------------------- responsivo ----------------------- */
 @media (max-width: 860px) {
   .nav { display: none; }

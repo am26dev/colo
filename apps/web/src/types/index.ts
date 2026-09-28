@@ -1,7 +1,7 @@
 export type MenuEstado = "aberto" | "fechado" | "oculto";
 export type TipoRefeicao = "almoco" | "sobremesa";
 export type OrderTipo = "semana" | "especial";
-export type OrderEstado = "novo" | "confirmado" | "cancelado";
+export type OrderEstado = "novo" | "confirmado" | "cancelado" | "expirado";
 
 export interface Refeicao {
   tipo: TipoRefeicao;
@@ -25,7 +25,12 @@ export interface Week {
   precoSemanal: number;
   estado: MenuEstado;
   vagasTotais: number;
+  /** Vagas confirmadas. No painel é este o número que interessa. */
   vagasRestantes: number;
+  /** Lugares prometidos a reservas por confirmar (só no payload público). */
+  reservasPendentes?: number;
+  /** Confirmadas + reservadas: o que o site pode ainda vender. */
+  vagasDisponiveis?: number;
   dias: Day[];
 }
 
@@ -64,6 +69,8 @@ export interface Order {
   notas: string;
   estado: OrderEstado;
   createdAt: string;
+  /** Até quando a reserva bloqueia lugar. Null se não for uma reserva viva. */
+  expiresAt?: string | null;
   week?: { dataInicio: string; dataFim: string } | null;
 }
 

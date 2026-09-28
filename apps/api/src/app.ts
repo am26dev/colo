@@ -13,6 +13,13 @@ import { contentRouter } from "./routes/content.js";
 export function createApp() {
   const app = express();
 
+  // O tráfego chega do Caddy, não directamente do cliente. Sem isto, `req.ip`
+  // seria sempre o endereço do Caddy e o rate limit (ver middleware/rateLimit)
+  // contaria todos os clientes como um só, bloqueando o site inteiro. O `1`
+  // limita a confiança ao primeiro salto, ou seja, o X-Forwarded-For que o
+  // Caddy reescreve — um cabeçalho falsificado pelo cliente não engana.
+  app.set("trust proxy", 1);
+
   app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") ?? "*" }));
   app.use(express.json());
 

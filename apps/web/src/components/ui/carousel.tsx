@@ -98,30 +98,9 @@ export function DayCarousel({ children }: Props) {
         </button>
       )}
 
-      <div
-        ref={trackRef}
-        className="day-carousel-track"
-        style={{
-          display: "flex",
-          gap: "1.25rem",
-          overflowX: "auto",
-          scrollSnapType: "x mandatory",
-          scrollBehavior: "smooth",
-          paddingBottom: "0.5rem",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-        }}
-      >
+      <div ref={trackRef} className="day-carousel-track">
         {children}
       </div>
-
-      <style>{`
-        .day-carousel-track::-webkit-scrollbar { display: none; }
-        .day-carousel-track > * { scroll-snap-align: start; flex: 0 0 260px; }
-        @media (min-width: 768px) {
-          .day-carousel-track > * { flex: 0 0 calc((100% - 4 * 1.25rem) / 5); }
-        }
-      `}</style>
     </div>
   );
 }

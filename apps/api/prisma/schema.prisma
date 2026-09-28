@@ -48,6 +48,12 @@ model Week {
   estado         String   @default("aberto")
   vagasTotais    Int      @default(0)
   vagasRestantes Int      @default(0)
+  // true só quando o *sistema* fechou a semana por esgotamento (a última vaga
+  // foi consumida). Sem esta marca não dá para distinguir um fecho automático
+  // de um fecho feito à mão pela dona, e devolver uma vaga tinha de reabrir a
+  // semana a sério — o que passava por cima de um fecho deliberado.
+  // Qualquer acção manual (toggle, PUT) volta a pôr a false.
+  fechadaPorEsgotamento Boolean @default(false)
   // só relevante quando SiteConfig.modoAutomaticoSemanas = false
   ativaManual    Boolean  @default(false)
   createdAt      DateTime @default(now())
@@ -80,8 +86,18 @@ model Order {
   contacto  String
   ciclo     String   @default("")
   notas     String   @default("") // pedido especial: descrição livre do que a cliente quer
-  estado    String   @default("novo") // novo | confirmado | cancelado
+  // "novo" (reserva activa, ainda sem vaga consumida) | "confirmado" (vaga
+  // consumida) | "cancelado" | "expirado" (reserva que passou o prazo).
+  estado    String   @default("novo")
   createdAt DateTime @default(now())
+  // Reservas "novo" só bloqueiam uma vaga até esta data. Passado o prazo a
+  // reserva é libertada (de forma passiva, nas contagens, e de forma explícita
+  // na varredura preguiçosa) sem perder o pedido: a dona pode continuar a
+  // confirmar à mão. Null em pedidos confirmados ou cancelados.
+  expiresAt DateTime?
+
+  @@index([weekId, estado])
+  @@index([expiresAt])
 }
 
 // Key-value store para o modo edição no local.

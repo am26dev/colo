@@ -22,8 +22,13 @@ export function fmtIntervaloSemana(dataInicio: string, dataFim: string): string 
   return `${diaI} de ${mesI} a ${diaF} de ${mesF}`;
 }
 
+/**
+ * Lugares que o site ainda pode vender. A API envia `vagasDisponiveis` (vagas
+ * confirmadas menos as reservas por confirmar); os defaults locais e o painel
+ * não têm esse campo, por isso cai para `vagasRestantes`.
+ */
 export function vagasRestantes(week: Week): number | null {
-  const v = Number(week.vagasRestantes);
+  const v = Number(week.vagasDisponiveis ?? week.vagasRestantes);
   return Number.isNaN(v) ? null : v;
 }
 

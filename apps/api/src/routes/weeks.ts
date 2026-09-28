@@ -84,7 +84,10 @@ weeksRouter.put("/:id", async (req, res) => {
     await tx.day.deleteMany({ where: { weekId: id } });
     return tx.week.update({
       where: { id },
-      data: { ...dados, dias: { create: dias } },
+      // Guardar a semana pela mão da dona conta como acção manual: limpa a
+      // marca de fecho por esgotamento, para que um cancelamento posterior não
+      // reabra uma semana que ela fechou de propósito.
+      data: { ...dados, fechadaPorEsgotamento: false, dias: { create: dias } },
       include: diasInclude(),
     });
   });
@@ -125,6 +128,11 @@ weeksRouter.post("/:id/toggle-estado", async (req, res) => {
     return;
   }
   const novoEstado = atual.estado === "aberto" ? "fechado" : "aberto";
-  const week = await prisma.week.update({ where: { id }, data: { estado: novoEstado } });
+  const week = await prisma.week.update({
+    where: { id },
+    // Abrir ou fechar à mão tira a semana da gestão automática: a partir de
+    // aqui quem decide o estado é a dona, não o contador de vagas.
+    data: { estado: novoEstado, fechadaPorEsgotamento: false },
+  });
   res.json({ week });
 });

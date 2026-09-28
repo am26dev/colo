@@ -4,8 +4,27 @@ import { z } from "zod";
 import { prisma } from "../db.js";
 import { signToken } from "../lib/jwt.js";
 import { requireAuth } from "../middleware/auth.js";
+import { rateLimit } from "../middleware/rateLimit.js";
 
 export const authRouter = Router();
+
+/**
+ * `bcrypt.compare` corre em cada tentativa, por isso o login é o alvo óbvio
+ * para força bruta. 10 tentativas por 15 minutos por IP trava ataques
+ * automatizados sem atrapalhar quem erra a palavra-passe duas ou três vezes.
+ */
+const loginLimite = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: "Demasiadas tentativas. Espera alguns minutos e tenta novamente.",
+});
+
+/** Só funciona enquanto não existir conta nenhuma (ver rota /setup abaixo). */
+const setupLimite = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  message: "Demasiadas tentativas. Tenta mais tarde.",
+});
 
 const setupSchema = z.object({
   email: z.string().email(),
@@ -13,7 +32,7 @@ const setupSchema = z.object({
 });
 
 /** Só funciona enquanto não existir nenhuma conta — cria a primeira (a dona). */
-authRouter.post("/setup", async (req, res) => {
+authRouter.post("/setup", setupLimite, async (req, res) => {
   const jaExiste = await prisma.admin.findFirst();
   if (jaExiste) {
     res.status(409).json({ erro: "O painel já tem uma conta configurada." });
@@ -35,7 +54,7 @@ const loginSchema = z.object({
   password: z.string().min(1),
 });
 
-authRouter.post("/login", async (req, res) => {
+authRouter.post("/login", loginLimite, async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ erro: "Dados inválidos." });
