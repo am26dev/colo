@@ -65,8 +65,9 @@ export function Incluido() {
               <div
                 style={{
                   marginTop: "0.75rem",
-                  fontFamily: "var(--serif)",
-                  fontSize: "3.5rem",
+                  fontFamily: "var(--sans)",
+                  fontSize: "2.5rem",
+                  fontWeight: 600,
                   color: "var(--brown-dark)",
                 }}
               >

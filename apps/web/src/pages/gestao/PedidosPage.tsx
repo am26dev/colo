@@ -99,7 +99,7 @@ export default function PedidosPage() {
                   {o.contacto}
                   {o.week ? ` · ${fmtIntervaloSemana(o.week.dataInicio, o.week.dataFim)}` : ""}
                 </p>
-                {o.ciclo && <p className="text-xs text-[var(--muted-foreground)] mt-1">Ciclo: {o.ciclo}</p>}
+                {o.ciclo && <p className="text-xs text-[var(--muted-foreground)] mt-1">Personalização: {o.ciclo}</p>}
                 {o.notas && <p className="text-sm mt-2">{o.notas}</p>}
                 <p className="text-xs text-[var(--muted-foreground)] mt-1">{new Date(o.createdAt).toLocaleString("pt-PT")}</p>
                 {o.estado === "novo" && o.expiresAt && (

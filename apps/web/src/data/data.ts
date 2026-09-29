@@ -73,11 +73,12 @@ export const comoFunciona = {
 };
 
 export const cicloOpcoes = [
-  { value: "", label: "Prefiro não indicar" },
-  { value: "Menstrual", label: "Menstrual" },
-  { value: "Folicular", label: "Folicular" },
-  { value: "Ovulatória", label: "Ovulatória" },
-  { value: "Lútea", label: "Lútea" },
+  { value: "", label: "Seleciona uma opção" },
+  { value: "ajuste", label: "Quero ajustar o menu da semana." },
+  { value: "ciclo", label: "Sim, de acordo com a fase do meu ciclo." },
+  { value: "gravida", label: "Estou grávida." },
+  { value: "restricao", label: "Tenho uma restrição alimentar." },
+  { value: "outra", label: "Outra necessidade" },
 ];
 
 export const pedidoSecao = {

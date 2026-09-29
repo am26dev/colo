@@ -27,7 +27,7 @@ export function montarMensagemPedido(input: PedidoInput, moeda: string): string 
   linhas.push(`Nome: ${input.nome}`);
   linhas.push(`Contacto: ${input.contacto}`);
   linhas.push(`Menu semanal: ${fmtPreco(input.semana.precoSemanal, moeda)}`);
-  if (input.ciclo) linhas.push("", `Fase do ciclo: ${input.ciclo}`);
+  if (input.ciclo) linhas.push("", `Personalização do menu: ${input.ciclo}`);
   if (input.notas) linhas.push(`Notas: ${input.notas}`);
   return linhas.join("\n");
 }
