@@ -67,19 +67,21 @@ export function ImageUploadField({ value, onChange, placeholder = "Clique para e
           <div className="flex-1 min-w-0">
             <p className="text-xs text-[var(--muted-foreground)] truncate">{value.split("/").pop()}</p>
           </div>
-          <div className="flex gap-1 shrink-0">
+          <div className="flex shrink-0 gap-1">
             <button
               type="button"
-              className="rounded-md px-2 py-1 text-xs font-medium text-[var(--muted-foreground)] hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)] transition-colors"
+              className="rounded-md px-2 py-1 text-xs font-medium text-[var(--muted-foreground)] transition-colors hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]"
               onClick={() => inputRef.current?.click()}
               disabled={uploading}
+              aria-label="Trocar esta foto"
             >
               {uploading ? "…" : "Trocar"}
             </button>
             <button
               type="button"
-              className="rounded-md px-2 py-1 text-xs font-medium text-[var(--destructive)] hover:bg-[var(--destructive)]/10 transition-colors"
+              className="rounded-md px-2 py-1 text-xs font-medium text-[var(--destructive)] transition-colors hover:bg-[var(--destructive)]/10"
               onClick={remover}
+              aria-label="Remover esta foto"
             >
               ✕
             </button>
@@ -102,6 +104,9 @@ export function ImageUploadField({ value, onChange, placeholder = "Clique para e
           )}
         </button>
       )}
+      <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+        A foto só entra no site depois de guardares a semana. Sem foto, o site mostra um ícone de “ainda sem foto”.
+      </p>
     </div>
   );
 }

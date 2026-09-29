@@ -4,6 +4,8 @@ import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
+import { Dica } from "./Ajuda";
+import { EstadoErro } from "./EstadoErro";
 
 interface Props {
   onSaved: (msg: string) => void;
@@ -15,21 +17,33 @@ export function ContaCard({ onSaved, onError }: Props) {
   const [nova, setNova] = useState("");
   const [nova2, setNova2] = useState("");
   const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
+
+  function validar(): string | null {
+    if (!atual) return "Escreve a palavra-passe atual para confirmar que és tu.";
+    if (nova.length < 6) return "A nova palavra-passe precisa de pelo menos 6 caracteres.";
+    if (nova !== nova2) return "A repetição não coincide com a nova palavra-passe.";
+    if (nova === atual) return "A nova palavra-passe é igual à atual. Escolhe outra.";
+    return null;
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (nova !== nova2) {
-      onError("A confirmação não coincide.");
+    setErro("");
+    const problema = validar();
+    if (problema) {
+      setErro(problema);
       return;
     }
     setSalvando(true);
     try {
       await api("/api/auth/password", { method: "POST", body: JSON.stringify({ atual, nova }) });
-      onSaved("Palavra-passe alterada. ✓");
+      onSaved("Palavra-passe alterada. Vais continuar com a sessão iniciada.");
       setAtual("");
       setNova("");
       setNova2("");
     } catch (err) {
+      setErro(err instanceof Error ? err.message : "Erro ao alterar palavra-passe.");
       onError(err instanceof Error ? err.message : "Erro ao alterar palavra-passe.");
     } finally {
       setSalvando(false);
@@ -39,24 +53,32 @@ export function ContaCard({ onSaved, onError }: Props) {
   return (
     <Card>
       <CardContent className="p-4">
-        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>A minha conta</h2>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+        <h2 className="mb-1 text-lg font-semibold" style={{ fontFamily: "Georgia, serif" }}>A minha conta</h2>
+        <p className="text-sm text-[var(--muted-foreground)]">
+          O painel tem uma única conta de dono. Aqui só mudas a palavra-passe.
+        </p>
+
+        {erro && <EstadoErro titulo="Não foi possível alterar a palavra-passe" mensagem={erro} />}
+
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div className="space-y-2">
-            <Label>Palavra-passe atual</Label>
-            <Input type="password" autoComplete="current-password" value={atual} onChange={(e) => setAtual(e.target.value)} />
+            <Label htmlFor="pass-atual">Palavra-passe atual</Label>
+            <Input id="pass-atual" type="password" autoComplete="current-password" value={atual} onChange={(e) => setAtual(e.target.value)} />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Nova palavra-passe</Label>
-              <Input type="password" autoComplete="new-password" value={nova} onChange={(e) => setNova(e.target.value)} />
+              <Label htmlFor="pass-nova">Nova palavra-passe</Label>
+              <Input id="pass-nova" type="password" autoComplete="new-password" value={nova} onChange={(e) => setNova(e.target.value)} />
+              <Dica>Mínimo 6 caracteres. Usa algo que não uses noutros lados.</Dica>
             </div>
             <div className="space-y-2">
-              <Label>Repetir nova</Label>
-              <Input type="password" autoComplete="new-password" value={nova2} onChange={(e) => setNova2(e.target.value)} />
+              <Label htmlFor="pass-nova2">Repetir nova</Label>
+              <Input id="pass-nova2" type="password" autoComplete="new-password" value={nova2} onChange={(e) => setNova2(e.target.value)} />
+              <Dica>Tem de ser igual à anterior, senão nada é guardado.</Dica>
             </div>
           </div>
           <Button variant="outline" type="submit" disabled={salvando}>
-            Alterar palavra-passe
+            {salvando ? "A alterar…" : "Alterar palavra-passe"}
           </Button>
         </form>
       </CardContent>

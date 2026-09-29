@@ -7,6 +7,8 @@ import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+import { Dica } from "./Ajuda";
 
 interface Props {
   config: SiteConfig;
@@ -31,6 +33,12 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
     ),
   );
   const [salvando, setSalvando] = useState(false);
+  const [guardado, setGuardado] = useState({ visiveis, links });
+
+  /** Só o botão é que guarda: nada muda no site enquanto não carregares nele. */
+  const alterado =
+    JSON.stringify(visiveis) !== JSON.stringify(guardado.visiveis) ||
+    JSON.stringify(links) !== JSON.stringify(guardado.links);
 
   async function guardar() {
     setSalvando(true);
@@ -46,7 +54,8 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
       }
       await api("/api/edit-content", { method: "PUT", body: JSON.stringify({ changes }) });
       await refresh();
-      onSaved("Contactos e links do rodapé actualizados. ✓");
+      setGuardado({ visiveis: { ...visiveis }, links: { ...links } });
+      onSaved("Contactos e links do rodapé actualizados. Já estão no site.");
     } catch (err) {
       onError(err instanceof Error ? err.message : "Erro ao guardar a visibilidade.");
     } finally {
@@ -57,12 +66,13 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
   return (
     <Card>
       <CardContent className="p-4">
-        <h2 className="text-lg font-semibold mb-1" style={{ fontFamily: "Georgia, serif" }}>
+        <h2 className="mb-1 text-lg font-semibold" style={{ fontFamily: "Georgia, serif" }}>
           Contactos e links do rodapé
         </h2>
-        <p className="text-sm text-[var(--muted-foreground)] mb-4">
+        <p className="mb-4 text-sm text-[var(--muted-foreground)]">
           Edita o link de cada contacto e decide o que aparece no rodapé da página. Desligado
-          aqui é o mesmo que não existir para quem visita o site.
+          aqui é o mesmo que não existir para quem visita o site — mas podes voltar a ligá-lo
+          quando quiseres.
         </p>
 
         <div className="space-y-5">
@@ -74,12 +84,13 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
               {RODAPE_ITEMS.filter((i) => i.grupo === grupo.id).map((item) => {
                 const temLink = !!item.contentKeyUrl;
                 const padrao = item.urlPadrao?.(config) ?? "";
+                const valor = (links[item.id] ?? "").trim();
                 return (
-                  <div key={item.id} className="space-y-2 py-2 border-b border-[var(--border)] last:border-0">
+                  <div key={item.id} className="space-y-2 border-b border-[var(--border)] py-2 last:border-0">
                     <div className="flex items-center justify-between gap-4">
                       <span className="text-sm">{item.rotulo}</span>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs text-[var(--muted-foreground)] w-16 text-right">
+                      <div className="flex shrink-0 items-center gap-2">
+                        <span className="w-16 text-right text-xs text-[var(--muted-foreground)]">
                           {visiveis[item.id] ? "Visível" : "Escondido"}
                         </span>
                         <Switch
@@ -91,14 +102,20 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
                     </div>
                     {temLink && (
                       <div className="space-y-1">
+                        <Label htmlFor={`rodape-url-${item.id}`} className="text-xs text-[var(--muted-foreground)]">
+                          Link deste contacto
+                        </Label>
                         <Input
+                          id={`rodape-url-${item.id}`}
                           value={links[item.id] ?? ""}
                           onChange={(e) => setLinks((s) => ({ ...s, [item.id]: e.target.value }))}
-                          placeholder={`Vazio = usa o das Informações do site (${padrao})`}
+                          placeholder={padrao || "https://..."}
                         />
-                        <p className="text-xs text-[var(--muted-foreground)]">
-                          Vazio = usa o contacto definido em «Informações do site».
-                        </p>
+                        <Dica>
+                          {valor
+                            ? <>Vai usar <strong>{valor}</strong>. Para voltar ao das Informações do site, apaga o campo.</>
+                            : <>Vazio: usa o contacto definido em <strong>Informações do site</strong> ({padrao || "sem valor"}).</>}
+                        </Dica>
                       </div>
                     )}
                   </div>
@@ -108,9 +125,16 @@ export function VisibilidadeRodapeCard({ config, onSaved, onError }: Props) {
           ))}
         </div>
 
-        <Button className="mt-4" onClick={guardar} disabled={salvando}>
-          {salvando ? "A guardar…" : "Guardar rodapé"}
-        </Button>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Button onClick={guardar} disabled={salvando || !alterado}>
+            {salvando ? "A guardar…" : "Guardar rodapé"}
+          </Button>
+          {alterado && (
+            <p className="text-xs text-[var(--muted-foreground)]">
+              Tens alterações por guardar — o site ainda está como estava.
+            </p>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
