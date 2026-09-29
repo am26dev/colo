@@ -16,13 +16,33 @@ const cardStyle: React.CSSProperties = {
 };
 
 /**
- * Foto dos dias que ainda não têm imagem no painel. Um prato real, não um
- * bloco de cor: um dia sem foto parece um erro, e o site vende comida. O
- * `buddha bowl` é a escolha mais coerente com a marca (tigela completa, legumes
- * e proteína, a comida anti-inflamatória que a Colo promete). Para trocar,
- * muda só aqui.
+ * Marcação para os dias que ainda não têm foto no painel. Um ícone, não uma
+ * foto: uma imagem de omissão repetiria o mesmo prato nos cinco dias e a
+ * cliente ia achar que era a comida dessa semana. O ícone diz honestamente
+ * "ainda sem foto", e o prato só aparece quando a dona o define.
  */
-const IMAGEM_PADRAO_DIA = "/assets/img/buddha.jpg";
+function SemFoto() {
+  return (
+    <div className="dia-card-sem-foto" role="img" aria-label="Sem foto definida">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="56"
+        height="56"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+        <path d="M7 2v20" />
+        <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
+      </svg>
+    </div>
+  );
+}
 
 function RefeicaoCard({
   refeicao,
@@ -76,23 +96,16 @@ function DiaCard({ dia }: { dia: Day }) {
             className="aspect-[4/3] w-full object-cover"
           />
         ) : (
-          <img
-            src={IMAGEM_PADRAO_DIA}
-            alt=""
-            width={512}
-            height={384}
-            className="aspect-[4/3] w-full object-cover"
-          />
+          <SemFoto />
         )}
-        {dia.tema && <div className="dia-card-media-tema">{dia.tema}</div>}
       </div>
 
       <div className="dia-card-corpo">
         <div className="dia-card-cabecalho">
-          <span className="dia-card-numero">Dia {dia.diaSemana}</span>
           <h3 className="dia-card-nome">
             {diasSemanaLabels[dia.diaSemana] ?? `Dia ${dia.diaSemana}`}
           </h3>
+          {dia.tema && <p className="dia-card-tema">{dia.tema}</p>}
         </div>
 
         {dia.frase && <p className="dia-card-frase">{dia.frase}</p>}
