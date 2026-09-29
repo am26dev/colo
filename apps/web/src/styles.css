@@ -1069,6 +1069,10 @@ p { margin: 0 0 1.1rem; }
   padding-bottom: 0.5rem;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  /* Explícito (é o default do flex) porque é isto que garante que todos os
+     cartões ficam exactamente com a mesma altura, mesmo quando um dia tem
+     descrição e foto e o outro ainda está por preencher. */
+  align-items: stretch;
 }
 .day-carousel-track::-webkit-scrollbar { display: none; }
 .day-carousel-track > * { scroll-snap-align: start; flex: 0 0 260px; }
@@ -1086,7 +1090,10 @@ p { margin: 0 0 1.1rem; }
 
 /* ----------------------- cartão do dia (menu da semana) ----------------------- */
 /* O cartão mostra o dia completo — nome do dia, almoço, momento doce e
-   descrições — para não haver nada escondido atrás de um clique. */
+   descrições — para não haver nada escondido atrás de um clique.
+   Todos os cartões têm a mesma altura: o track estica-os, o corpo usa
+   `flex: 1` e as refeições ficam coladas ao fundo (`margin-top: auto`), para
+   o "Almoço" de um cartão estar exactamente à mesma altura do do vizinho. */
 .dia-card {
   display: flex;
   flex-direction: column;
@@ -1098,7 +1105,7 @@ p { margin: 0 0 1.1rem; }
   transform: translateY(-4px);
   box-shadow: 0 20px 50px -15px rgba(78, 46, 19, .18);
 }
-.dia-card-media { position: relative; overflow: hidden; }
+.dia-card-media { position: relative; overflow: hidden; flex: 0 0 auto; }
 .dia-card-media-tema {
   position: absolute;
   inset: auto 0 0 0;
@@ -1146,6 +1153,8 @@ p { margin: 0 0 1.1rem; }
 }
 .dia-card-refeicoes { display: flex; flex-direction: column; gap: .625rem; margin-top: auto; }
 .dia-card-refeicao { background: var(--cream-3); border-radius: .875rem; padding: .75rem .875rem; }
+/* Alturas mínimas fixas: alinham os blocos entre cartões mesmo quando um dia
+   tem descrição e o outro não, sem cortar o texto. */
 .dia-card-refeicao-label {
   display: flex;
   align-items: center;

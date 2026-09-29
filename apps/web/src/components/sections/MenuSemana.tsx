@@ -15,7 +15,23 @@ const cardStyle: React.CSSProperties = {
   boxShadow: "0 2px 12px rgba(78,46,19,0.06)",
 };
 
-function RefeicaoCard({ refeicao }: { refeicao: Refeicao }) {
+/**
+ * Foto dos dias que ainda não têm imagem no painel. Um prato real, não um
+ * bloco de cor: um dia sem foto parece um erro, e o site vende comida. O
+ * `buddha bowl` é a escolha mais coerente com a marca (tigela completa, legumes
+ * e proteína, a comida anti-inflamatória que a Colo promete). Para trocar,
+ * muda só aqui.
+ */
+const IMAGEM_PADRAO_DIA = "/assets/img/buddha.jpg";
+
+function RefeicaoCard({
+  refeicao,
+  foto,
+}: {
+  refeicao: Refeicao;
+  /** Só a sobremesa tem foto no cartão: a do almoço já está no topo. */
+  foto?: string;
+}) {
   return (
     <div className="dia-card-refeicao">
       <div className="dia-card-refeicao-label">
@@ -28,9 +44,9 @@ function RefeicaoCard({ refeicao }: { refeicao: Refeicao }) {
       </div>
       <p className="dia-card-refeicao-nome">{refeicao.nome}</p>
       {refeicao.descricao && <p className="dia-card-refeicao-desc">{refeicao.descricao}</p>}
-      {refeicao.foto && (
+      {foto && (
         <img
-          src={apiUrl(refeicao.foto)}
+          src={apiUrl(foto)}
           alt={refeicao.nome}
           className="dia-card-refeicao-foto"
           loading="lazy"
@@ -60,7 +76,13 @@ function DiaCard({ dia }: { dia: Day }) {
             className="aspect-[4/3] w-full object-cover"
           />
         ) : (
-          <div className="aspect-[4/3] w-full" style={{ background: "var(--cream-2)" }} />
+          <img
+            src={IMAGEM_PADRAO_DIA}
+            alt=""
+            width={512}
+            height={384}
+            className="aspect-[4/3] w-full object-cover"
+          />
         )}
         {dia.tema && <div className="dia-card-media-tema">{dia.tema}</div>}
       </div>
@@ -77,7 +99,7 @@ function DiaCard({ dia }: { dia: Day }) {
 
         <div className="dia-card-refeicoes">
           {almoco?.nome && <RefeicaoCard refeicao={almoco} />}
-          {sobremesa?.nome && <RefeicaoCard refeicao={sobremesa} />}
+          {sobremesa?.nome && <RefeicaoCard refeicao={sobremesa} foto={sobremesa.foto} />}
         </div>
       </div>
     </article>
