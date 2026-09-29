@@ -1072,9 +1072,93 @@ p { margin: 0 0 1.1rem; }
 }
 .day-carousel-track::-webkit-scrollbar { display: none; }
 .day-carousel-track > * { scroll-snap-align: start; flex: 0 0 260px; }
+/* Com o dia inteiro no cartão, 5 colunas em ecrãs médios ficavam demasiado
+   estreitas para as descrições: daí os degraus de 3 → 4 → 5 dias visíveis. */
 @media (min-width: 768px) {
+  .day-carousel-track > * { flex: 0 0 calc((100% - 2 * 1.25rem) / 3); }
+}
+@media (min-width: 1120px) {
+  .day-carousel-track > * { flex: 0 0 calc((100% - 3 * 1.25rem) / 4); }
+}
+@media (min-width: 1366px) {
   .day-carousel-track > * { flex: 0 0 calc((100% - 4 * 1.25rem) / 5); }
 }
+
+/* ----------------------- cartão do dia (menu da semana) ----------------------- */
+/* O cartão mostra o dia completo — nome do dia, almoço, momento doce e
+   descrições — para não haver nada escondido atrás de um clique. */
+.dia-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.dia-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px -15px rgba(78, 46, 19, .18);
+}
+.dia-card-media { position: relative; overflow: hidden; }
+.dia-card-media-tema {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.75rem 1rem .75rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .5));
+  color: rgba(255, 255, 255, .88);
+  font-size: .6875rem;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+}
+.dia-card-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  flex: 1;
+  padding: 1rem 1.125rem 1.25rem;
+}
+.dia-card-cabecalho { display: flex; flex-direction: column; align-items: flex-start; gap: .375rem; }
+.dia-card-numero {
+  font-size: .625rem;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--rose-deep);
+  background: var(--cream-2);
+  padding: .2rem .6rem;
+  border-radius: 999px;
+}
+.dia-card-nome {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--brown-dark);
+}
+.dia-card-frase {
+  margin: 0;
+  padding-left: .75rem;
+  border-left: 2px solid var(--rose-deep);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.dia-card-refeicoes { display: flex; flex-direction: column; gap: .625rem; margin-top: auto; }
+.dia-card-refeicao { background: var(--cream-3); border-radius: .875rem; padding: .75rem .875rem; }
+.dia-card-refeicao-label {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  margin-bottom: .3rem;
+  font-size: .625rem;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--muted);
+}
+.dia-card-refeicao-nome { margin: 0; font-size: .9375rem; font-weight: 600; line-height: 1.4; color: var(--ink); }
+.dia-card-refeicao-desc { margin: .25rem 0 0; font-size: .8125rem; line-height: 1.5; color: var(--muted); }
+.dia-card-refeicao-foto { margin-top: .625rem; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: .625rem; }
 
 /* ----------------------- responsivo ----------------------- */
 @media (max-width: 860px) {
