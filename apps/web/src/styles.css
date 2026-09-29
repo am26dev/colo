@@ -943,6 +943,21 @@ p { margin: 0 0 1.1rem; }
 
 /* ----------------------- nota da semana ----------------------- */
 .nota { background: var(--cream-3); }
+/* O título entra alinhado com o cartão da nota (mesmos 740px), senão a nota
+   ficava com um cabeçalho mais estreito do que o texto que ele introduz. */
+.nota-cabecalho {
+  max-width: 740px;
+  margin: 0 auto 1.75rem;
+  text-align: center;
+}
+.nota-titulo {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--brown-dark);
+}
 .soft-card {
   background-color: #ffffff;
   border-radius: 1.75rem;
@@ -1106,33 +1121,6 @@ p { margin: 0 0 1.1rem; }
   box-shadow: 0 20px 50px -15px rgba(78, 46, 19, .18);
 }
 .dia-card-media { position: relative; overflow: hidden; flex: 0 0 auto; }
-/* A mensagem da semana em cima do menu: é o que a Colo escreve à cliente
-   antes de ela escolher o prato, por isso entra como frase de entrada, não
-   como um título de secção. */
-.menu-semana-nota {
-  max-width: 46rem;
-  margin: 2.25rem auto 0;
-  text-align: center;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.125rem;
-  line-height: 1.6;
-  color: var(--brown);
-}
-.menu-semana-nota::before {
-  content: "";
-  display: block;
-  width: 2.5rem;
-  height: 1px;
-  margin: 0 auto 1.25rem;
-  background: rgba(107, 63, 31, .35);
-}
-@media (min-width: 768px) {
-  .menu-semana-nota {
-    font-size: 1.25rem;
-  }
-}
-
 /* Marcação para o dia ainda sem foto definida: o ícone diz "por preencher"
    sem inventar um prato que a cliente depois daria como definido. */
 .dia-card-sem-foto {

@@ -12,6 +12,13 @@ export function NotaColo({ mensagem }: { mensagem: string }) {
   return (
     <section className="section nota">
       <div className="container">
+        <Reveal className="nota-cabecalho">
+          {get("nota.titulo").trim() && (
+            <h2 className="nota-titulo">
+              <EditableText contentKey="nota.titulo" />
+            </h2>
+          )}
+        </Reveal>
         <Reveal as="figure" className="note-card">
           <blockquote>
             {isEditing && isAdmin ? (

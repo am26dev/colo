@@ -1,5 +1,4 @@
 import { EditableText } from "../../edit-mode/EditableText";
-import { Reveal } from "../ui/Reveal";
 import { DayCarousel } from "../ui/carousel";
 import { diasSemanaLabels, refeicaoLabels } from "../../data/data";
 import type { Day, Refeicao, Week } from "../../types";
@@ -154,10 +153,6 @@ export function MenuSemana({ week }: MenuSemanaProps) {
             </div>
           </div>
         </div>
-
-        <Reveal delay={1} as="p" className="menu-semana-nota">
-          <EditableText contentKey="nota.mensagem" multiline />
-        </Reveal>
 
         <div style={{ marginTop: "3rem", ...cardStyle, padding: "1.5rem" }}>
           <DayCarousel>

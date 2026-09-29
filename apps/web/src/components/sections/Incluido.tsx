@@ -1,11 +1,9 @@
 import { EditableText } from "../../edit-mode/EditableText";
-import { useEditMode } from "../../edit-mode/EditModeProvider";
 import { Reveal } from "../ui/Reveal";
 
 const INCLUIDO_INDEXES = [0, 1, 2, 3, 4, 5];
 
 export function Incluido() {
-  const { get } = useEditMode();
   return (
     <section className="section" style={{ background: "var(--cream)" }}>
       <div className="container">
@@ -71,7 +69,7 @@ export function Incluido() {
                   color: "var(--brown-dark)",
                 }}
               >
-                {get("menu.preco.valor")}
+                <EditableText contentKey="menu.preco.valor" />
               </div>
               <div
                 style={{

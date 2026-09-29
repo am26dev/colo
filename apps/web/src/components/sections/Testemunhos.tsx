@@ -81,9 +81,13 @@ export function Testemunhos() {
                       fontFamily: "var(--serif)",
                       fontSize: "0.875rem",
                       color: "var(--brown)",
+                      flexShrink: 0,
                     }}
                   >
-                    {iniciaisDe(get(`testemunhos.${i}.nome`))}
+                    <EditableText
+                      contentKey={`testemunhos.${i}.iniciais`}
+                      fallback={iniciaisDe(get(`testemunhos.${i}.nome`))}
+                    />
                   </div>
                   <div style={{ fontSize: "0.9375rem", color: "var(--muted)" }}>
                     <EditableText contentKey={`testemunhos.${i}.nome`} />

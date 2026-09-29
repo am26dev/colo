@@ -143,18 +143,23 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "testemunhos.title.em": "respiram melhor",
   "testemunhos.title.post": " à semana.",
   "testemunhos.0.nome": "Maria S.",
+  "testemunhos.0.iniciais": "",
   "testemunhos.0.texto":
     "Finalmente deixei de pensar no almoço. Sinto que alguém cuida de mim durante a semana.",
   "testemunhos.1.nome": "Isabel N.",
+  "testemunhos.1.iniciais": "",
   "testemunhos.1.texto":
     "A comida chega bonita, cheira a casa. Parece feita pela minha mãe, mas com mais leveza.",
   "testemunhos.2.nome": "Tânia P.",
+  "testemunhos.2.iniciais": "",
   "testemunhos.2.texto":
     "Trabalho até tarde e a Colo devolveu-me as noites. Já não como take-away há dois meses.",
   "testemunhos.3.nome": "Célia M.",
+  "testemunhos.3.iniciais": "",
   "testemunhos.3.texto":
     "É saudável sem ser aborrecido. Adoro que tenha sempre uma sobremesa reconfortante.",
   "testemunhos.4.nome": "Ana F.",
+  "testemunhos.4.iniciais": "",
   "testemunhos.4.texto":
     "Recomendo às minhas amigas. O cuidado nota-se em tudo, desde a embalagem ao sabor.",
 
@@ -196,6 +201,7 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "citacao.texto":
     "A semana começa antes de segunda-feira. Quando escolhes a Colo, não estás apenas a encomendar refeições — estás a oferecer a ti própria uma semana com menos decisões, menos pressa e mais tempo para o que realmente importa.",
 
+  "nota.titulo": "Um bilhete da Colo",
   "nota.mensagem":
     "Esta semana pensei em ti que andas mais cansada. Trouxe pratos quentes, com gengibre e cúrcuma, para acalmar o corpo e reduzir o inchaço. Come devagar, sem pressa. A Colo cuida de ti — começa pelo prato. 💛",
 

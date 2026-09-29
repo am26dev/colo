@@ -6,6 +6,10 @@ type EditableTextProps = {
   as?: ElementType;
   className?: string;
   multiline?: boolean;
+  /** Mostrado enquanto a chave estiver vazia. Só serve de omissão: o valor
+   *  só é gravado quando a cliente escreve, senão apagar a chave e voltar ao
+   *  conteúdo guardado apagava o que não se vê. */
+  fallback?: string;
 };
 
 export function EditableText({
@@ -13,9 +17,11 @@ export function EditableText({
   as: Tag = "span",
   className,
   multiline = false,
+  fallback,
 }: EditableTextProps) {
   const { get, setPending, isEditing, isAdmin } = useEditMode();
-  const value = get(contentKey);
+  const guardada = get(contentKey);
+  const value = guardada.trim() === "" && fallback ? fallback : guardada;
 
   if (!isEditing || !isAdmin) {
     if (multiline) {

@@ -31,6 +31,7 @@ export default function InformacoesPage() {
         onError={(msg) => toast(msg, "erro")}
       />
       <VisibilidadeRodapeCard
+        config={config}
         onSaved={(msg) => toast(msg, "ok")}
         onError={(msg) => toast(msg, "erro")}
       />
