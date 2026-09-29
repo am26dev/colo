@@ -170,8 +170,8 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "form.optional": "(Opcional)",
   "form.placeholder.nome": "Como te chamas?",
   "form.placeholder.telefone": "9XX XXX XXX",
-  "form.placeholder.observacoes": "Alergias, preferências, zona de entrega ou indicação…",
-  "form.submit": "Confirmar pedido",
+  "form.placeholder.observacoes": "Alergias, preferências, zona de entrega ou outra indicação…",
+  "form.submit": "Reservar a minha semana",
   "form.submit.closed": "Avisem-me na próxima semana",
   "form.submitHint":
     "Abre o WhatsApp com o teu pedido já escrito. É só enviares. 💛",
