@@ -98,6 +98,7 @@ function DiaCard({ dia }: { dia: Day }) {
         ) : (
           <SemFoto />
         )}
+        {dia.tema && <div className="dia-card-media-tema">{dia.tema}</div>}
       </div>
 
       <div className="dia-card-corpo">
@@ -105,7 +106,6 @@ function DiaCard({ dia }: { dia: Day }) {
           <h3 className="dia-card-nome">
             {diasSemanaLabels[dia.diaSemana] ?? `Dia ${dia.diaSemana}`}
           </h3>
-          {dia.tema && <p className="dia-card-tema">{dia.tema}</p>}
         </div>
 
         {dia.frase && <p className="dia-card-frase">{dia.frase}</p>}

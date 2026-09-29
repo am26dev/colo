@@ -1125,17 +1125,24 @@ p { margin: 0 0 1.1rem; }
   padding: 1rem 1.125rem 1.25rem;
 }
 .dia-card-cabecalho { display: flex; flex-direction: column; align-items: flex-start; gap: .3rem; }
-/* O tema do dia vive aqui, em vez de sobre a foto: era onde estava antes e
-   ficava cortado pelo degradé, ilegível. Aqui tem contraste e espaço para
-   duas linhas. */
-.dia-card-tema {
-  margin: 0;
-  font-size: .6875rem;
+/* O tema do dia continua sobre a foto, onde sempre esteve, mas como etiqueta
+   sólida: antes era texto branco miúdo sobre um degradé, que se perdia em
+   cima de imagens claras. A etiqueta tem fundo próprio, peso e espaço para
+   duas linhas, e continua legível sobre qualquer foto. */
+.dia-card-media-tema {
+  position: absolute;
+  left: .75rem;
+  bottom: .75rem;
+  right: .75rem;
+  padding: .4rem .7rem;
+  border-radius: .6rem;
+  background: rgba(78, 46, 19, .88);
+  color: var(--cream-3);
+  font-size: .75rem;
   font-weight: 600;
-  line-height: 1.35;
-  letter-spacing: .14em;
+  line-height: 1.4;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--rose-deep);
 }
 .dia-card-nome {
   margin: 0;
