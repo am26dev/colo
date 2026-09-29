@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { InfoCard } from "../../components/gestao/InfoCard";
+import { VisibilidadeRodapeCard } from "../../components/gestao/VisibilidadeRodapeCard";
 import { api } from "../../lib/api";
 import type { SiteConfig } from "../../types";
 import { toast } from "../../components/ui/sonner";
@@ -23,9 +24,13 @@ export default function InformacoesPage() {
   }
 
   return (
-    <div>
+    <div className="space-y-4">
       <InfoCard
         config={config}
+        onSaved={(msg) => toast(msg, "ok")}
+        onError={(msg) => toast(msg, "erro")}
+      />
+      <VisibilidadeRodapeCard
         onSaved={(msg) => toast(msg, "ok")}
         onError={(msg) => toast(msg, "erro")}
       />

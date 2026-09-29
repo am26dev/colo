@@ -212,6 +212,13 @@ export const DEFAULT_CONTENT: Record<string, string> = {
   "footer.contactos.email.url": "mailto:ola@colo.ao",
   "footer.contactos.email.label": "ola@colo.ao",
   "footer.links.label": "Links úteis",
+  "footer.visivel.contatos.whatsapp": "true",
+  "footer.visivel.contatos.instagram": "true",
+  "footer.visivel.contatos.email": "true",
+  "footer.visivel.links.sobre": "true",
+  "footer.visivel.links.menu": "true",
+  "footer.visivel.links.como": "true",
+  "footer.visivel.links.faq": "true",
   "footer.copyright": "Colo. Todos os direitos reservados.",
   "footer.assinatura": "Feito com colo em Luanda.",
 };
