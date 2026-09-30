@@ -11,7 +11,9 @@ import DashboardPage from "./pages/gestao/DashboardPage";
 import InformacoesPage from "./pages/gestao/InformacoesPage";
 import Login from "./pages/gestao/Login";
 import NotFoundPage from "./pages/NotFoundPage";
+import NovaSenhaPage from "./pages/gestao/NovaSenhaPage";
 import PedidosPage from "./pages/gestao/PedidosPage";
+import RecuperarPage from "./pages/gestao/RecuperarPage";
 import { RequireAuth } from "./pages/gestao/RequireAuth";
 import SemanaEditorPage from "./pages/gestao/SemanaEditorPage";
 import SemanasPage from "./pages/gestao/SemanasPage";
@@ -25,6 +27,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/gestao/login" element={<Login />} />
+          <Route path="/gestao/recuperar" element={<RecuperarPage />} />
+          <Route path="/gestao/nova-senha" element={<NovaSenhaPage />} />
           <Route
             path="/gestao"
             element={

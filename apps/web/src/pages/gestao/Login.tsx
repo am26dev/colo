@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../lib/api";
 import { site } from "../../data/data";
@@ -102,6 +103,15 @@ export default function Login() {
                 {loading ? "A entrar…" : setupNeeded ? "Criar painel" : "Entrar"}
               </Button>
             </form>
+            {/* Só depois de haver conta: enquanto o painel está por criar não há
+                nada a recuperar, e o link só ia confundir. */}
+            {setupNeeded === false && (
+              <p className="mt-4 text-center text-xs">
+                <Link to="/gestao/recuperar" className="underline">
+                  Esqueci-me da palavra-passe
+                </Link>
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>
