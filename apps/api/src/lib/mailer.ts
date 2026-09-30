@@ -28,9 +28,19 @@ export function emailConfigurado(): boolean {
   return transporte() !== null;
 }
 
-/** Remetente: `EMAIL_FROM` tem de ser um endereço que o serviço autorize. */
-function remetente(): string {
-  return process.env.EMAIL_FROM ?? "Colo <nao-responder@colo.ao>";
+/**
+ * Remetente: `EMAIL_FROM` tem de ser um endereço que o serviço autorize.
+ *
+ * O nome vai à parte separada (`nomeRemetente`) em vez de embutido no
+ * `EMAIL_FROM`, para que o endereço de resposta possa ser outro qualquer. Se
+ * alguém puser `Colo <geral@colo.ao>` no `EMAIL_FROM` e o Reply-To no nome, o
+ * email sai de um sítio e responde-se para outro — que é o resultado oposto ao
+ * pretendido, e ninguém descobre até alguém responder sem querer.
+ */
+function remetente(email: Email): string {
+  const nome = email.nomeRemetente ?? process.env.EMAIL_FROM_NAME ?? "Colo";
+  const endereco = process.env.EMAIL_FROM ?? "nao-responder@colo.ao";
+  return `${nome} <${endereco}>`;
 }
 
 export interface Email {
@@ -38,6 +48,14 @@ export interface Email {
   assunto: string;
   /** Corpo em texto simples. O HTML sai do mesmo conteúdo, com os parágrafos marcados. */
   texto: string;
+  /**
+   * Nome que aparece no "De". Sem isto, o email chega na caixa de entrada
+   * identificado só pelo endereço — e `nao-responder@colo.ao` não ajuda ninguém
+   * a decidir se deve clicar no botão.
+   */
+  nomeRemetente?: string;
+  /** Endereço de resposta, quando é diferente do `From`. */
+  resposta?: string;
   /**
    * HTML próprio, para quando o conteúdo não é só texto: um link tem de ser um
    * `<a href>`, não uma linha com a URL escrita. Sem isto, o link de recuperação
@@ -71,11 +89,12 @@ async function enviarResend(email: Email): Promise<void> {
     method: "POST",
     headers: { Authorization: `Bearer ${chave}`, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: remetente(),
+      from: remetente(email),
       to: [email.para],
       subject: email.assunto,
       text: email.texto,
       html: email.html ?? paraHtml(email.texto, email.assunto),
+      reply_to: email.resposta,
       // A API do Resend quer o conteúdo em base64 e não conhece o `cid:`; o
       // `content_id` é o que faz o mesmo papel que o nodemailer.
       attachments: email.anexos?.map((a) => ({
@@ -105,11 +124,12 @@ async function enviarSmtp(email: Email): Promise<void> {
         : undefined,
   });
   await transporteSmtp.sendMail({
-    from: remetente(),
+    from: remetente(email),
     to: email.para,
     subject: email.assunto,
     text: email.texto,
     html: email.html ?? paraHtml(email.texto, email.assunto),
+    replyTo: email.resposta,
     attachments: email.anexos?.map((a) => ({
       filename: a.nomeFicheiro,
       content: a.conteudo,

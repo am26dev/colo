@@ -8,9 +8,28 @@ import { requireAuth } from "../middleware/auth.js";
 import { rateLimit } from "../middleware/rateLimit.js";
 import { emailConfigurado, enviarEmail } from "../lib/mailer.js";
 import { anexosDoEmail, cabecalhoEmail } from "../lib/emailLogo.js";
+import { assinaturaEmail, emailDeResposta, type Contactos } from "../lib/emailAssinatura.js";
 import { urlDoSite } from "../lib/appUrl.js";
 
 export const authRouter = Router();
+
+/**
+ * Quem é o Colo para efeitos de email: nome e contactos que a dona pôs no
+ * painel.
+ *
+ * Vai ser lido a cada email em vez de guardado: a dona muda o WhatsApp no painel
+ * e o email seguinte já sai com o novo, sem ninguém se lembrar de reiniciar
+ * nada. Uma configuração que fica desatualizada em silêncio é pior do que
+ * nenhuma configuração.
+ */
+async function identidadeDoColo(): Promise<Contactos> {
+  const config = await prisma.siteConfig.findFirst();
+  return {
+    nome: "Colo",
+    whatsapp: config?.whatsapp,
+    instagram: config?.instagram,
+  };
+}
 
 /**
  * `bcrypt.compare` corre em cada tentativa, por isso o login é o alvo óbvio
@@ -170,9 +189,12 @@ authRouter.post("/email", requireAuth, async (req, res) => {
   // lado nenhum, e um enviado para o novo provaria que o endereço serve.
   // Não é preciso para a conta funcionar, por isso falhar aqui não desfaz a
   // mudança: avisa-se nos logs e segue-se em frente.
+  const identidade = await identidadeDoColo();
   const enviado = await enviarEmail({
     para: email,
     assunto: "O teu email de acesso ao painel da Colo mudou",
+    nomeRemetente: identidade.nome,
+    resposta: emailDeResposta(),
     texto: [
       "O email de acesso ao teu painel da Colo passou a ser este.",
       "",
@@ -181,8 +203,11 @@ authRouter.post("/email", requireAuth, async (req, res) => {
       "A partir daqui, se te esqueceres da palavra-passe, o link de recuperação vai para este endereço.",
       "",
       "Se não foste tu a fazer esta mudança, muda já a palavra-passe e fala com quem te montou o site.",
+      "",
+      "—",
+      assinaturaTexto(identidade),
     ].join("\n"),
-    html: emailAvisoMudanca(email),
+    html: emailAvisoMudanca(email, identidade),
     anexos: anexosDoEmail(),
   });
   if (!enviado) {
@@ -255,9 +280,12 @@ authRouter.post("/recuperar", recuperarLimite, async (req, res) => {
     });
 
     const link = urlDoSite(`/gestao/nova-senha?token=${token}`);
+    const identidade = await identidadeDoColo();
     const enviado = await enviarEmail({
       para: admin.email,
       assunto: "Recuperar a tua palavra-passe — Colo",
+      nomeRemetente: identidade.nome,
+      resposta: emailDeResposta(),
       texto: [
         "Olá! Pediste para escolher uma nova palavra-passe do teu painel da Colo.",
         "",
@@ -268,11 +296,14 @@ authRouter.post("/recuperar", recuperarLimite, async (req, res) => {
         `O link só funciona uma vez e expira em ${VALIDIDADE_TOKEN_HORAS} hora.`,
         "",
         "Se não foste tu a pedir isto, não precisas de fazer nada: fica como está.",
+        "",
+        "—",
+        assinaturaTexto(identidade),
       ].join("\n"),
       // A URL vai escondida em `href` e o botão é o que se vê. Assim não há
       // link escrito à mão para o cliente partir ao meio nem para o
       // destinatário copiar a torto.
-      html: emailRecuperacao(link, VALIDIDADE_TOKEN_HORAS),
+      html: emailRecuperacao(link, VALIDIDADE_TOKEN_HORAS, identidade),
       anexos: anexosDoEmail(),
     });
 
@@ -355,7 +386,7 @@ function sha256(valor: string): string {
 }
 
 /** Corpo HTML do email de recuperação. Só o link e as frases úteis. */
-function emailRecuperacao(link: string, validadeHoras: number): string {
+function emailRecuperacao(link: string, validadeHoras: number, contactos: Contactos): string {
   const alvo = escaparHtml(link);
   return `<!doctype html>
 <html lang="pt-PT">
@@ -370,9 +401,17 @@ function emailRecuperacao(link: string, validadeHoras: number): string {
     <p style="margin:0 0 8px;font-size:13px;color:#7a6a5c">O botão não funciona? Copia este endereço para o navegador:</p>
     <p style="margin:0 0 24px;font-size:13px;word-break:break-all"><a href="${alvo}" style="color:#2b2018">${alvo}</a></p>
     <p style="margin:0;font-size:13px;color:#7a6a5c">O link só funciona uma vez e expira em ${validadeHoras} hora. Se não foste tu a pedir isto, não precisas de fazer nada: fica como está.</p>
+    ${assinaturaEmail(contactos)}
   </div>
 </body>
 </html>`;
+}
+
+/** A mesma assinatura, em texto simples para quem não vê a parte formatada. */
+function assinaturaTexto(contactos: Contactos): string {
+  const linhas = [contactos.nome, urlDoSite("")];
+  if (contactos.whatsapp) linhas.push(`WhatsApp ${contactos.whatsapp}`);
+  return linhas.join("\n");
 }
 
 /**
@@ -383,7 +422,7 @@ function emailRecuperacao(link: string, validadeHoras: number): string {
  * de intrusão — e é isso mesmo que aconteceu. Por isso o texto diz logo o que
  * fazer nesse caso, em vez de o destinatário ter de deduzir.
  */
-function emailAvisoMudanca(email: string): string {
+function emailAvisoMudanca(email: string, contactos: Contactos): string {
   return `<!doctype html>
 <html lang="pt-PT">
 <body style="margin:0;padding:24px;background:#faf7f2;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.5;color:#2b2018">
@@ -396,6 +435,7 @@ function emailAvisoMudanca(email: string): string {
     <p style="margin:0;padding:14px 16px;background:#fdf3e7;border:1px solid #f0d9b5;border-radius:8px;font-size:14px">
       <strong>Não foste tu a mudar isto?</strong> Muda já a palavra-passe e fala com quem te montou o site.
     </p>
+    ${assinaturaEmail(contactos)}
   </div>
 </body>
 </html>`;
