@@ -69,7 +69,15 @@ export function assinaturaEmail(contactos: Contactos): string {
  * Sem isto, um "Responder" ia para `nao-responder@colo.ao`, que ninguém lê — e
  * a dona que desconfiou do email fica sem sítio para desfazer a dúvida. A
  * resposta é lida por quem tem a caixa, e essa pessoa pode falar com a dona.
+ *
+ * Sem valor no ambiente, devolve `undefined` e o email sai sem Reply-To: um
+ * "Responder" vai para o `nao-responder`, que é um sitio morto, mas nenhum
+ * email perde-se. Pôr um endereço aqui que não exista é pior — a mensagem vai
+ * embora e parece que alguém não responde. Já aconteceu com `geral@colo.ao`:
+ * o domínio tem MX no Hostinger, mas o email nunca foi activo nesse domínio, e
+ * o correio devolvia `554 Relay access denied`.
  */
-export function emailDeResposta(): string {
-  return process.env.EMAIL_REPLY_TO ?? "geral@colo.ao";
+export function emailDeResposta(): string | undefined {
+  const configurado = process.env.EMAIL_REPLY_TO?.trim();
+  return configurado ? configurado : undefined;
 }

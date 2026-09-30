@@ -63,7 +63,7 @@ export interface Email {
    * a decidir se deve clicar no botão.
    */
   nomeRemetente?: string;
-  /** Endereço de resposta, quando é diferente do `From`. */
+  /** Endereço de resposta, quando é diferente do `From`. Sem valor, não se põe. */
   resposta?: string;
   /**
    * HTML próprio, para quando o conteúdo não é só texto: um link tem de ser um
