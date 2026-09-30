@@ -38,8 +38,17 @@ export function emailConfigurado(): boolean {
  * pretendido, e ninguém descobre até alguém responder sem querer.
  */
 function remetente(email: Email): string {
-  const nome = email.nomeRemetente ?? process.env.EMAIL_FROM_NAME ?? "Colo";
-  const endereco = process.env.EMAIL_FROM ?? "nao-responder@colo.ao";
+  const configurado = process.env.EMAIL_FROM ?? "nao-responder@colo.ao";
+
+  // O `EMAIL_FROM` pode vir nas duas formas: só o endereço, ou `Nome <email>`
+  // — que é como se escreve à mão e como estava aqui antes de o nome passar a
+  // ter sítio próprio. Sem este desatraso, `Colo <Colo <endereço>>` saía no
+  // cabeçalho e o nome do remetente aparecia duas vezes ao lado do avatar.
+  const comNome = configurado.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+  const nomeConfigurado = comNome?.[1];
+  const endereco = (comNome?.[2] ?? configurado).trim();
+
+  const nome = email.nomeRemetente ?? process.env.EMAIL_FROM_NAME ?? nomeConfigurado ?? "Colo";
   return `${nome} <${endereco}>`;
 }
 
