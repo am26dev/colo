@@ -98,6 +98,97 @@ authRouter.post("/password", requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
+/**
+ * Mudança do email de acesso.
+ *
+ * O email deixou de ser só o nome de utilizador: é também para onde vai o link
+ * de recuperação. Se a dona deixa de controlar a inbox — mudou de fornecedor,
+ * perdeu o acesso — fica trancada lá fora e a única saída volta a ser quem tem
+ * acesso ao servidor. Por isso esta rota existe.
+ *
+ * A palavra-passe atual é o que prova que é ela: quem chegue ao painel com a
+ * sessão aberta não é necessariamente a dona (um navegador partilhado, uma
+ * sessão esquecida num portátil). Confirmação por link para o email novo
+ * obrigaria a esperar por um email antes de poder mudar de email — paradoxal
+ * numa função que se usa justamente quando o email deixou de funcionar.
+ */
+const emailSchemaMudar = z.object({
+  atual: z.string().min(1),
+  email: z.string().email(),
+});
+
+/**
+ * Quem está com a sessão iniciada. A página de conta precisa de mostrar o email
+ * atual para a dona poder ver o que está a mudar — e o email é um dado que muda,
+ * ao contrário do `adminId` do token, que é imutável. Se o email fosse para o
+ * token, a dona teria de sair e voltar a entrar para o ver, e o token ficaria
+ * a dizer o endereço antigo.
+ */
+authRouter.get("/me", requireAuth, async (req, res) => {
+  const admin = await prisma.admin.findUnique({
+    where: { id: req.adminId },
+    select: { email: true },
+  });
+  if (!admin) {
+    res.status(404).json({ erro: "Conta não encontrada." });
+    return;
+  }
+  res.json({ email: admin.email });
+});
+
+authRouter.post("/email", requireAuth, async (req, res) => {
+  const parsed = emailSchemaMudar.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ erro: "Email inválido." });
+    return;
+  }
+  const admin = await prisma.admin.findUnique({ where: { id: req.adminId } });
+  if (!admin || !(await bcrypt.compare(parsed.data.atual, admin.passwordHash))) {
+    res.status(401).json({ erro: "A palavra-passe atual está incorreta." });
+    return;
+  }
+
+  const email = parsed.data.email.toLowerCase();
+  if (email === admin.email) {
+    res.status(400).json({ erro: "Esse já é o teu email." });
+    return;
+  }
+
+  // Só há uma conta. Se o email já pertence a alguém, é porque esse alguém é
+  // esta mesma conta com o email trocado — ou alguém a tentar ocupar a conta
+  // pela porta dos fundos. Recusar é o comportamento seguro em ambos os casos.
+  const ocupado = await prisma.admin.findUnique({ where: { email } });
+  if (ocupado) {
+    res.status(409).json({ erro: "Esse email já está a ser usado." });
+    return;
+  }
+
+  await prisma.admin.update({ where: { id: admin.id }, data: { email } });
+
+  // Um link de recuperação enviado para o email antigo deixaria de chegar a
+  // lado nenhum, e um enviado para o novo provaria que o endereço serve.
+  // Não é preciso para a conta funcionar, por isso falhar aqui não desfaz a
+  // mudança: avisa-se nos logs e segue-se em frente.
+  const enviado = await enviarEmail({
+    para: email,
+    assunto: "O teu email de acesso ao painel da Colo mudou",
+    texto: [
+      "O email de acesso ao teu painel da Colo passou a ser este.",
+      "",
+      `Agora entras com: ${email}`,
+      "",
+      "A partir daqui, se te esqueceres da palavra-passe, o link de recuperação vai para este endereço.",
+      "",
+      "Se não foste tu a fazer esta mudança, muda já a palavra-passe e fala com quem te montou o site.",
+    ].join("\n"),
+  });
+  if (!enviado) {
+    console.error(`[email] aviso de mudança de email para ${email} não saiu; a conta mudou na mesma`);
+  }
+
+  res.json({ ok: true });
+});
+
 // ---------------------------------------------------------------------------
 // Recuperação de palavra-passe.
 //
