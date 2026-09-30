@@ -1,0 +1,14 @@
+# O contexto de build é a raiz do repo, mas os Dockerfiles só copiam
+# package*.json, dist/ e prisma/ — as dependências são instaladas dentro da imagem
+# (`npm ci`). Sem isto, cada `docker compose build` mandava ~500 MB de node_modules
+# e .git para o daemon, de cada vez, sem usar nada disso.
+.git
+.gitignore
+node_modules
+**/node_modules
+**/node_modules.apagar.*
+**/.env
+**/uploads
+**/dev.db
+docs
+*.md
