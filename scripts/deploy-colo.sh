@@ -21,6 +21,33 @@ erro() { printf '\n\033[1;31mFALHOU: %s\033[0m\n' "$*" >&2; }
 
 trap 'erro "passo: ${STEP:-desconhecido}. Estado actual: $(git log --oneline -1 2>/dev/null || echo ?)"; erro "ver os logs: docker compose logs -f api"; exit 1' ERR
 
+# `npm ci` apaga node_modules antes de repor. Se correr enquanto outro processo
+# ainda tem a pasta aberta (um servidor de teste que ficou vivo de uma sessão
+# anterior, por exemplo), a reposição fica a meio, sem o `.bin` — e o `npx`
+# seguinte, não encontrando o prisma local, vai buscá-lo à internet e usar uma
+# versão nova com comandos diferentes. O build falha com um erro que não aponta
+# para a causa, e o deploy fica parado num sitio que não tem nada de errado.
+# Por isso confirmamos os binários e, em falta, repetimos de scratch.
+instalar_deps() {
+  local dir="$1" binarios="$2"
+  cd "$dir"
+  npm ci
+  local ok=0
+  for b in $binarios; do
+    [ -x "node_modules/.bin/$b" ] || ok=1
+  done
+  [ "$ok" -eq 0 ] && return 0
+  log "node_modules ficou incompleto em $dir; a repetir de raiz"
+  rm -rf node_modules
+  npm ci
+  for b in $binarios; do
+    [ -x "node_modules/.bin/$b" ] || { erro "falta o binário $b em $dir depois da segunda tentativa"; return 1; }
+  done
+}
+
+instalar_api() { instalar_deps "$RAIZ/apps/api" "tsc prisma"; }
+instalar_web() { instalar_deps "$RAIZ/apps/web" "tsc vite"; }
+
 # O `git pull` reescreve este mesmo ficheiro. O bash lê scripts por ordem e
 # posiciona o cursor por byte: continuar a ler a versão antiga a seguir à nova
 # dá comportamento imprevisível. Reexecutar a partir do zero com o código
@@ -40,7 +67,7 @@ python3 "$RAIZ/scripts/backup-colo-db.py"
 STEP="build da API"
 log "Dependências e build da API"
 cd "$RAIZ/apps/api"
-npm ci
+instalar_api
 npx prisma generate
 npm run build
 
@@ -52,7 +79,7 @@ npx prisma migrate deploy
 STEP="build da web"
 log "Dependências e build da web"
 cd "$RAIZ/apps/web"
-npm ci
+instalar_web
 npm run build
 
 STEP="docker compose"
