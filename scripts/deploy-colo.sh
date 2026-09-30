@@ -21,42 +21,82 @@ erro() { printf '\n\033[1;31mFALHOU: %s\033[0m\n' "$*" >&2; }
 
 trap 'erro "passo: ${STEP:-desconhecido}. Estado actual: $(git log --oneline -1 2>/dev/null || echo ?)"; erro "ver os logs: docker compose logs -f api"; exit 1' ERR
 
-# Tentar uma vez.
+# Apagar a pasta das dependências.
 #
-# `npm ci` faz o próprio `rm -rf node_modules` antes de repor, e esse `rm` falha
-# com ENOTEMPTY se alguma coisa ainda estiver a usar a pasta — um servidor de
-# teste que ficou vivo de uma sessão anterior, um editor, um `find` demorado.
-# Quando isso acontece, o `npm ci` morre a meio e deixa a pasta pela metade, sem
-# o `.bin`; o `npx` seguinte não encontra o prisma local e vai buscá-lo à
-# internet, a uma versão nova com comandos diferentes. O build falha com um erro
-# que não aponta para a causa nenhuma e o deploy para num sítio que não tem nada
-# de errado.
-#
-# Por isso apagamos a pasta nós (com retentativas, porque o mesmo `rm` também
-# falha) e confirmamos os binários depois de instalar: uma segunda tentativa do
-# mesmo plano não serve para nada, é preciso recomeçar.
-tentar_instalar_deps() {
-  local dir="$1" binarios="$2"
-  cd "$dir"
-  rm -rf node_modules || { erro "não consegui apagar $dir/node_modules"; return 1; }
-  npm ci || return 1
-  for b in $binarios; do
-    [ -x "node_modules/.bin/$b" ] || { erro "falta o binário $b em $dir"; return 1; }
-  done
-  return 0
+# `mv` em vez de `rm`: o rename é instantâneo e atómico, e a partir daí já ninguém
+# escreve dentro da pasta que estamos a apagar. Apagar no sítio deixa a pasta
+# visível durante a travessia inteira, e quem lá chegar no meio encontra-a a meio
+# — foi assim que, com dois deployes em paralelo, o `rm` de um apanhou o `npm ci`
+# do outro a repor ficheiros e morreu com `Directory not empty`, deixando a
+# pasta pela metade e sem `.bin`.
+apagar_node_modules() {
+  local dir="$1" antigo="$1/node_modules.apagar.$$"
+  rm -rf -- "$dir"/node_modules.apagar.* 2>/dev/null || true  # lixo de um deploy que morreu
+  [ -e "$dir/node_modules" ] || return 0  # nunca chegou a instalar
+  mv -- "$dir/node_modules" "$antigo" 2>/dev/null || return 1
+  # A partir daqui o caminho já está livre, que é tudo o que o `npm ci` precisa.
+  # O `rm` pode falhar com ENOTEMPTY e ser mentira: passar a pasta a `node_modules.apagar.*`
+  # deixa um `npm ci` que estava a escrever nela a recriar ficheiros lá dentro. Não
+  # é motivo para chumbar o deploy — sobra lixo, que o próximo deploy apaga logo no
+  # topo desta função. É o que acontecia com a versão anterior, que desistia aqui e
+  # deixava o site na versão anterior só porque um `rm` teimoso não cedeu.
+  rm -rf -- "$antigo" || log "sobrou lixo em $antigo; apago-o no próximo deploy"
 }
 
+# Instalar as dependências de uma app, de raiz se for preciso.
+#
+# O `npm ci` faz o próprio `rm -rf node_modules` antes de repor, e esse `rm` falha
+# com ENOTEMPTY se alguma coisa ainda estiver a usar a pasta. Quando isso acontece
+# o `npm ci` morre a meio e deixa a pasta pela metade, sem o `.bin`; o `npx`
+# seguinte não encontra o prisma local e vai buscá-lo à internet, a uma versão nova
+# com comandos diferentes. O build falha com um erro que não aponta para a causa
+# nenhuma e o deploy para num sítio que não tem nada de errado.
+#
+# Por isso apagamos a pasta nós e confirmamos os binários depois de instalar: uma
+# segunda tentativa do mesmo plano não serve para nada, é preciso recomeçar.
 instalar_deps() {
-  local dir="$1" binarios="$2"
-  if tentar_instalar_deps "$dir" "$binarios"; then
-    return 0
-  fi
-  log "a instalação em $dir falhou; a repetir de raiz"
-  tentar_instalar_deps "$dir" "$binarios"
+  local dir="$1" binarios="$2" tentativa b
+  cd "$dir"
+  for tentativa in 1 2 3; do
+    if [ "$tentativa" != 1 ]; then
+      log "a instalação em $dir falhou; a repetir de raiz (tentativa $tentativa/3)"
+    fi
+    if apagar_node_modules "$dir" && npm ci; then
+      for b in $binarios; do
+        if [ ! -x "node_modules/.bin/$b" ]; then
+          erro "falta o binário $b em $dir"
+          return 1
+        fi
+      done
+      return 0
+    fi
+    [ "$tentativa" = 3 ] || sleep 5
+  done
+  erro "não consegui instalar as dependências em $dir"
+  return 1
 }
 
 instalar_api() { instalar_deps "$RAIZ/apps/api" "tsc prisma"; }
 instalar_web() { instalar_deps "$RAIZ/apps/web" "tsc vite"; }
+
+# Só um deploy de cada vez.
+#
+# Dois deployes em paralelo partilham a mesma pasta de trabalho e não há nada que
+# os separe: o `git pull` de um pode desfazer o commit do outro, e o `npm ci` de um
+# escreve por cima do que o outro está a instalar. Em vez de detectar isso no
+# `rm -rf` (onde a mensagem de erro não diz nada sobre a causa), serializa-se à
+# entrada. Espera-se pelo lock em vez de desistir, para que o commit que disparou
+# este deploy acabe sempre em produção.
+#
+# O descriptor 9 sobrevive ao `exec` do `git pull` abaixo, por isso a segunda
+# passagem não volta a tentar trancar o que já está trancado por nós.
+if [ "${COLO_DEPLOY_REEXEC:-0}" != "1" ]; then
+  exec 9>/var/lock/deploy-colo.lock
+  if ! flock -w 1800 9; then
+    erro "outro deploy continua a correr depois de 30 min; a desistir"
+    exit 1
+  fi
+fi
 
 # O `git pull` reescreve este mesmo ficheiro. O bash lê scripts por ordem e
 # posiciona o cursor por byte: continuar a ler a versão antiga a seguir à nova

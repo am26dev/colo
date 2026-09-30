@@ -7,6 +7,16 @@ on:
 permissions:
   contents: read
 
+# Cada push abre um run, e dois runs a disparar ao mesmo tempo partilham a mesma
+# pasta de trabalho na VPS: o `rm -rf node_modules` de um apanha o `npm ci` do
+# outro a repor ficheiros e morre com `Directory not empty`. Aqui os runs ficam
+# à espera uns dos outros, por ordem de chegada — sem `cancel-in-progress`, para
+# que o commit mais recente acab sempre em produção em vez de o mais antigo
+# chegar depois e desfazê-lo.
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
