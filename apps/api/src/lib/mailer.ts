@@ -45,6 +45,24 @@ export interface Email {
    * quoted-printable, e dependia de o cliente adivinhar onde o recomeçar.
    */
   html?: string;
+  /**
+   * Imagens embutidas no corpo, por identificador `cid:`.
+   *
+   * Preferimos isto a um `<img src="https://…">`: clientes de email bloqueiam
+   * imagens externas por omissão (o Gmail carrega-nas só depois de o
+   * destinatário clicar "mostrar imagens"). O logotipo tem de aparecer sem
+   * esse clique, senão o email chega com um buraco onde devia estar o nome do
+   * Colo — que é precisamente o que faz alguém desconfiar de um email de
+   * recuperação de senha.
+   */
+  anexos?: Anexo[];
+}
+
+export interface Anexo {
+  /** O `cid:` que o HTML refere, ex.: `logo`. */
+  cid: string;
+  nomeFicheiro: string;
+  conteudo: Buffer;
 }
 
 async function enviarResend(email: Email): Promise<void> {
@@ -58,6 +76,14 @@ async function enviarResend(email: Email): Promise<void> {
       subject: email.assunto,
       text: email.texto,
       html: email.html ?? paraHtml(email.texto, email.assunto),
+      // A API do Resend quer o conteúdo em base64 e não conhece o `cid:`; o
+      // `content_id` é o que faz o mesmo papel que o nodemailer.
+      attachments: email.anexos?.map((a) => ({
+        filename: a.nomeFicheiro,
+        content: a.conteudo.toString("base64"),
+        content_id: a.cid,
+        content_disposition: "inline",
+      })),
     }),
   });
   if (!resposta.ok) {
@@ -84,6 +110,12 @@ async function enviarSmtp(email: Email): Promise<void> {
     subject: email.assunto,
     text: email.texto,
     html: email.html ?? paraHtml(email.texto, email.assunto),
+    attachments: email.anexos?.map((a) => ({
+      filename: a.nomeFicheiro,
+      content: a.conteudo,
+      cid: a.cid,
+      contentDisposition: "inline" as const,
+    })),
   });
 }
 

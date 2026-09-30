@@ -7,6 +7,7 @@ import { signToken } from "../lib/jwt.js";
 import { requireAuth } from "../middleware/auth.js";
 import { rateLimit } from "../middleware/rateLimit.js";
 import { emailConfigurado, enviarEmail } from "../lib/mailer.js";
+import { anexosDoEmail, cabecalhoEmail } from "../lib/emailLogo.js";
 import { urlDoSite } from "../lib/appUrl.js";
 
 export const authRouter = Router();
@@ -181,6 +182,8 @@ authRouter.post("/email", requireAuth, async (req, res) => {
       "",
       "Se não foste tu a fazer esta mudança, muda já a palavra-passe e fala com quem te montou o site.",
     ].join("\n"),
+    html: emailAvisoMudanca(email),
+    anexos: anexosDoEmail(),
   });
   if (!enviado) {
     console.error(`[email] aviso de mudança de email para ${email} não saiu; a conta mudou na mesma`);
@@ -270,6 +273,7 @@ authRouter.post("/recuperar", recuperarLimite, async (req, res) => {
       // link escrito à mão para o cliente partir ao meio nem para o
       // destinatário copiar a torto.
       html: emailRecuperacao(link, VALIDIDADE_TOKEN_HORAS),
+      anexos: anexosDoEmail(),
     });
 
     if (!enviado) {
@@ -357,6 +361,7 @@ function emailRecuperacao(link: string, validadeHoras: number): string {
 <html lang="pt-PT">
 <body style="margin:0;padding:24px;background:#faf7f2;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.5;color:#2b2018">
   <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #e8ded0;border-radius:12px;padding:28px">
+    ${cabecalhoEmail()}
     <h1 style="margin:0 0 18px;font-size:19px;font-weight:600">Recuperar a tua palavra-passe</h1>
     <p style="margin:0 0 20px">Pediste para escolher uma nova palavra-passe do teu painel da Colo.</p>
     <p style="margin:0 0 24px">
@@ -365,6 +370,32 @@ function emailRecuperacao(link: string, validadeHoras: number): string {
     <p style="margin:0 0 8px;font-size:13px;color:#7a6a5c">O botão não funciona? Copia este endereço para o navegador:</p>
     <p style="margin:0 0 24px;font-size:13px;word-break:break-all"><a href="${alvo}" style="color:#2b2018">${alvo}</a></p>
     <p style="margin:0;font-size:13px;color:#7a6a5c">O link só funciona uma vez e expira em ${validadeHoras} hora. Se não foste tu a pedir isto, não precisas de fazer nada: fica como está.</p>
+  </div>
+</body>
+</html>`;
+}
+
+/**
+ * Corpo do aviso de mudança de email.
+ *
+ * Este email é o que desfaz uma dúvida perigosa: se alguém abrir a caixa dela
+ * e vir "o teu email mudou" sem nunca ter mudado, a reacção certa é suspectar
+ * de intrusão — e é isso mesmo que aconteceu. Por isso o texto diz logo o que
+ * fazer nesse caso, em vez de o destinatário ter de deduzir.
+ */
+function emailAvisoMudanca(email: string): string {
+  return `<!doctype html>
+<html lang="pt-PT">
+<body style="margin:0;padding:24px;background:#faf7f2;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.5;color:#2b2018">
+  <div style="max-width:520px;margin:0 auto;background:#fff;border:1px solid #e8ded0;border-radius:12px;padding:28px">
+    ${cabecalhoEmail()}
+    <h1 style="margin:0 0 18px;font-size:19px;font-weight:600">O teu email de acesso mudou</h1>
+    <p style="margin:0 0 20px">O email de acesso ao teu painel da Colo passou a ser este. A partir de agora entras com:</p>
+    <p style="margin:0 0 20px;padding:12px 16px;background:#faf7f2;border:1px solid #e8ded0;border-radius:8px;font-size:15px;word-break:break-all">${escaparHtml(email)}</p>
+    <p style="margin:0 0 20px">Se te esqueceres da palavra-passe, o link de recuperação passa também a ir para este endereço.</p>
+    <p style="margin:0;padding:14px 16px;background:#fdf3e7;border:1px solid #f0d9b5;border-radius:8px;font-size:14px">
+      <strong>Não foste tu a mudar isto?</strong> Muda já a palavra-passe e fala com quem te montou o site.
+    </p>
   </div>
 </body>
 </html>`;
