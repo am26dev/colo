@@ -204,7 +204,6 @@ authRouter.post("/email", requireAuth, async (req, res) => {
       "",
       "Se não foste tu a fazer esta mudança, muda já a palavra-passe e fala com quem te montou o site.",
       "",
-      "—",
       assinaturaTexto(identidade),
     ].join("\n"),
     html: emailAvisoMudanca(email, identidade),
@@ -297,7 +296,6 @@ authRouter.post("/recuperar", recuperarLimite, async (req, res) => {
         "",
         "Se não foste tu a pedir isto, não precisas de fazer nada: fica como está.",
         "",
-        "—",
         assinaturaTexto(identidade),
       ].join("\n"),
       // A URL vai escondida em `href` e o botão é o que se vê. Assim não há
