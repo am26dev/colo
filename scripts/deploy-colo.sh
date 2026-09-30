@@ -21,28 +21,38 @@ erro() { printf '\n\033[1;31mFALHOU: %s\033[0m\n' "$*" >&2; }
 
 trap 'erro "passo: ${STEP:-desconhecido}. Estado actual: $(git log --oneline -1 2>/dev/null || echo ?)"; erro "ver os logs: docker compose logs -f api"; exit 1' ERR
 
-# `npm ci` apaga node_modules antes de repor. Se correr enquanto outro processo
-# ainda tem a pasta aberta (um servidor de teste que ficou vivo de uma sessão
-# anterior, por exemplo), a reposição fica a meio, sem o `.bin` — e o `npx`
-# seguinte, não encontrando o prisma local, vai buscá-lo à internet e usar uma
-# versão nova com comandos diferentes. O build falha com um erro que não aponta
-# para a causa, e o deploy fica parado num sitio que não tem nada de errado.
-# Por isso confirmamos os binários e, em falta, repetimos de scratch.
-instalar_deps() {
+# Tentar uma vez.
+#
+# `npm ci` faz o próprio `rm -rf node_modules` antes de repor, e esse `rm` falha
+# com ENOTEMPTY se alguma coisa ainda estiver a usar a pasta — um servidor de
+# teste que ficou vivo de uma sessão anterior, um editor, um `find` demorado.
+# Quando isso acontece, o `npm ci` morre a meio e deixa a pasta pela metade, sem
+# o `.bin`; o `npx` seguinte não encontra o prisma local e vai buscá-lo à
+# internet, a uma versão nova com comandos diferentes. O build falha com um erro
+# que não aponta para a causa nenhuma e o deploy para num sítio que não tem nada
+# de errado.
+#
+# Por isso apagamos a pasta nós (com retentativas, porque o mesmo `rm` também
+# falha) e confirmamos os binários depois de instalar: uma segunda tentativa do
+# mesmo plano não serve para nada, é preciso recomeçar.
+tentar_instalar_deps() {
   local dir="$1" binarios="$2"
   cd "$dir"
-  npm ci
-  local ok=0
+  rm -rf node_modules || { erro "não consegui apagar $dir/node_modules"; return 1; }
+  npm ci || return 1
   for b in $binarios; do
-    [ -x "node_modules/.bin/$b" ] || ok=1
+    [ -x "node_modules/.bin/$b" ] || { erro "falta o binário $b em $dir"; return 1; }
   done
-  [ "$ok" -eq 0 ] && return 0
-  log "node_modules ficou incompleto em $dir; a repetir de raiz"
-  rm -rf node_modules
-  npm ci
-  for b in $binarios; do
-    [ -x "node_modules/.bin/$b" ] || { erro "falta o binário $b em $dir depois da segunda tentativa"; return 1; }
-  done
+  return 0
+}
+
+instalar_deps() {
+  local dir="$1" binarios="$2"
+  if tentar_instalar_deps "$dir" "$binarios"; then
+    return 0
+  fi
+  log "a instalação em $dir falhou; a repetir de raiz"
+  tentar_instalar_deps "$dir" "$binarios"
 }
 
 instalar_api() { instalar_deps "$RAIZ/apps/api" "tsc prisma"; }
